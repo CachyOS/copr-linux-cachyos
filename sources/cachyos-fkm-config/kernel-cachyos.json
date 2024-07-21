@@ -1,0 +1,5 @@
+{
+  "name": "kernel-cachyos",
+  "db_url": "https://raw.githubusercontent.com/sirlucjan/copr-linux-cachyos/master/sources/cachyos-fkm-config/db_kernel_cachy.json",
+  "init_script": "pkexec /usr/lib/fedora-kernel-manager/scripts/kernel-cachyos-init.sh"
+}
