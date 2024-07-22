@@ -74,9 +74,9 @@ sudo systemctl reboot
 
 ## Addons
 We provide a few addons that supplement the kernel packages and system.
-- [`CachyOS-Settings`](https://github.com/CachyOS/CachyOS-Settings) - Settings used in CachyOS (includes modprobe config, udev rules, etc) packaged for Fedora.
-- [`scx-scheds`](https://github.com/sched-ext/scx) - sched-ext schedulers. Provides both `scx-scheds` releases and `scx-scheds-git` package.
-- [`uksmd`](https://github.com/CachyOS/uksmd) - Userspace KSM helper daemon.
+- [CachyOS-Settings](https://github.com/CachyOS/CachyOS-Settings) - Settings used in CachyOS (includes modprobe config, udev rules, etc) packaged for Fedora.
+- [scx-scheds](https://github.com/sched-ext/scx) - sched-ext schedulers. Provides both `scx-scheds` releases and `scx-scheds-git` package.
+- [uksmd](https://github.com/CachyOS/uksmd) - Userspace KSM helper daemon.
 - [ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/) & [cachyos-ananicy-rules](https://github.com/CachyOS/ananicy-rules) - Auto nice daemon with rules support.
 
 ### Installation instructions
