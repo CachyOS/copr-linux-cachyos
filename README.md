@@ -5,6 +5,8 @@
   <p align="center">Goodies from CachyOS ported to Fedora.</p>
 </div>
 
+This repository is maintained by [@1Naim](https://github.com/1Naim), [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
+
 - [List of Packages We Provide](#list-of-ported-packages)
   - [kernel-cachyos & kernel-cachyos-lts](#kernel-cachyos--kernel-cachyos-lts)
   - [CachyOS-Settings](#cachyos-settings)
