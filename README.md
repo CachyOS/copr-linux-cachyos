@@ -9,10 +9,11 @@ This repository is maintained by [@1Naim](https://github.com/1Naim), [@andersrh]
 
 - [List of Packages We Provide](#list-of-ported-packages)
   - [kernel-cachyos & kernel-cachyos-lts](#kernel-cachyos--kernel-cachyos-lts)
-  - [CachyOS-Settings](#cachyos-settings)
-  - [scx-scheds](#scx-scheds)
-  - [uksmd](#uksmd)
-  - [ananicy-cpp](#ananicy-cpp)
+  - [Addons](#addons)
+    - [CachyOS-Settings](#cachyos-settings)
+    - [scx-scheds](#scx-scheds)
+    - [uksmd](#uksmd)
+    - [ananicy-cpp](#ananicy-cpp)
 
 
 # List of Packages We Provide
