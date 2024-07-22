@@ -41,7 +41,7 @@ sudo dnf copr enable bieszczaders/kernel-cachyos # For GCC built kernels
 sudo dnf copr enable bieszczaders/kernel-cachyos-lto # For LLVM-ThinLTO build kernels
 ```
 
-Finally you can install the kernels.
+Now you can install the kernels
 ```bash
 sudo dnf install kernel-cachyos kernel-cachyos-devel-matched # For GCC built kernels
 # or
@@ -53,11 +53,64 @@ sudo dnf install kernel-cachyos-lts kernel-cachyos-lts-devel-matched
 sudo dnf install kernel-cachyos-lts-lto kernel-cachyos-lts-lto-devel-matched
 ```
 
-#### Fedora Silverblue
+Lastly if you use SELinux, you need to enable the necessary policy to be able to load kernel modules.
+```bash
+sudo setsebool -P domain_kernel_load_modules on
+```
+
+##### Fedora Silverblue
 ```bash
 cd /etc/yum.repos.d/
 sudo wget https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos/repo/fedora-$(rpm -E %fedora)/bieszczaders-kernel-cachyos-fedora-$(rpm -E %fedora).repo
 sudo rpm-ostree override remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra --install kernel-cachyos
 sudo systemctl reboot
 ```
+
+## Addons
+We provide a few addons that supplement the kernel packages and system.
+- [`CachyOS-Settings`](https://github.com/CachyOS/CachyOS-Settings) - Settings used in CachyOS (includes modprobe config, udev rules, etc) packaged for Fedora.
+- [`scx-scheds`](https://github.com/sched-ext/scx) - sched-ext schedulers. Provides both `scx-scheds` releases and `scx-scheds-git` package.
+- [`uksmd`](https://github.com/CachyOS/uksmd) - Userspace KSM helper daemon.
+- [ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/) & [cachyos-ananicy-rules](https://github.com/CachyOS/ananicy-rules) - Auto nice daemon with rules support.
+
+### Installation instructions
+First, enable the COPR repository hosting addon packages.
+```bash
+sudo dnf copr enable bieszczaders/kernel-cachyos-addons
+```
+
+Now you can install the addon packages.
+
+#### CachyOS-Settings
+```bash
+sudo dnf install cachyos-settings
+sudo dracut -f
+```
+
+#### scx-scheds
+```bash
+sudo dnf install scx-scheds
+#or
+sudo dnf install scx-scheds-git # For -git package
+
+# Choose which scx scheduler to use by editting `/etc/default/scx`
+sudo nano /etc/default/scx
+
+# Then enable the systemd service to make it persistent across boots
+sudo systemctl enable --now scx.service
+```
+
+#### uksmd
+```bash
+sudo dnf install uksmd
+sudo systemctl enable --now uksmd.service
+```
+
+#### ananicy-cpp
+```bash
+sudo dnf install ananicy-cpp
+sudo systemctl enable --now ananicy-cpp
+```
+
+
 
