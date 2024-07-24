@@ -1,0 +1,41 @@
+{
+  "latest_kernel_version_deter_pkg": "kernel-cachyos",
+  "kernels": [
+    {
+      "name": "CachyOS Default Kernel",
+      "main_package": "kernel-cachyos",
+      "packages": "kernel-cachyos kernel-cachyos-devel-matched",
+      "min_x86_march": "3"
+    },
+    {
+      "name": "CachyOS LTS Kernel",
+      "main_package": "kernel-cachyos-lts",
+      "packages": "kernel-cachyos-lts kernel-cachyos-lts-devel-matched",
+      "min_x86_march": "2"
+    },
+    {
+      "name": "Sched EXT SCX",
+      "main_package": "sched-ext-scx",
+      "packages": "sched-ext-scx",
+      "min_x86_march": "1"
+    },
+    {
+      "name": "UKSMD Daemon",
+      "main_package": "uksmd",
+      "packages": "uksmd",
+      "min_x86_march": "1"
+    },
+    {
+      "name": "CachyOS-Settings",
+      "main_package": "cachyos-settings",
+      "packages": "cachyos-settings",
+      "min_x86_march": "1"
+    },
+    {
+      "name": "Ananicy-CPP",
+      "main_package": "ananicy-cpp",
+      "packages": "ananicy-cpp",
+      "min_x86_march": "1"
+    }
+  ]
+}
