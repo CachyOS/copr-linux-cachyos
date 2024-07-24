@@ -14,9 +14,9 @@
       "min_x86_march": "2"
     },
     {
-      "name": "Sched EXT SCX",
-      "main_package": "sched-ext-scx",
-      "packages": "sched-ext-scx",
+      "name": "SCX scheds",
+      "main_package": "scx-scheds",
+      "packages": "scx-scheds",
       "min_x86_march": "1"
     },
     {
