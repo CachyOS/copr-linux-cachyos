@@ -1,11 +1,12 @@
 %define _disable_source_fetch 0
 
 Name:           cachyos-settings
-Release:        8%{?dist}
+Release:        9%{?dist}
 Version:	    1.0.0
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
+Source0:        %{url}/archive/refs/tags/%{version}.tar.gz
 BuildRequires:  git
 
 Requires: zram-generator
@@ -19,12 +20,12 @@ Obsoletes: bore-sysctl
 CachyOS-Settings for Fedora based systems
 
 %prep
-git clone -b %{version} %{URL} %{_builddir}/cachyos-settings
+%autosetup -n CachyOS-Settings-%{version}
 
 %install
 install -d %{buildroot}/%{_bindir}
 install -d %{buildroot}/%{_prefix}/lib
-cp %{_builddir}/cachyos-settings/usr/{bin,lib} %{buildroot}/%{_prefix} -r
+cp %{_builddir}/CachyOS-Settings-%{version}/usr/{bin,lib} %{buildroot}/%{_prefix} -r
 mv %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia.conf %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia_cachyos.conf
 rm %{buildroot}/%{_bindir}/tunecfs*
 chmod +x %{buildroot}/%{_bindir}/*
