@@ -1,8 +1,9 @@
 %define _disable_source_fetch 0
+%define debug_package %{nil}
 
 Name:           cachyos-settings
-Release:        1%{?dist}
-Version:	    1.0.7
+Release:        2%{?dist}
+Version:        1.0.7
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
