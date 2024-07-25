@@ -1,8 +1,8 @@
 %define _disable_source_fetch 0
 
 Name:           cachyos-settings
-Release:        9%{?dist}
-Version:	    1.0.0
+Release:        1%{?dist}
+Version:	    1.0.7
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
@@ -22,12 +22,18 @@ CachyOS-Settings for Fedora based systems
 %prep
 %autosetup -n CachyOS-Settings-%{version}
 
+git init
+git remote add origin https://github.com/CachyOS/CachyOS-Settings
+git fetch origin
+git checkout %{version} -b remove_ksm -f
+# Revert systemd ksm
+git revert d4db4b7 --no-commit
+
 %install
 install -d %{buildroot}/%{_bindir}
 install -d %{buildroot}/%{_prefix}/lib
 cp %{_builddir}/CachyOS-Settings-%{version}/usr/{bin,lib} %{buildroot}/%{_prefix} -r
 mv %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia.conf %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia_cachyos.conf
-rm %{buildroot}/%{_bindir}/tunecfs*
 chmod +x %{buildroot}/%{_bindir}/*
 
 %files
