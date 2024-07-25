@@ -14,7 +14,6 @@ Provides: zram-generator-defaults
 Provides: kerver
 Obsoletes: zram-generator-defaults
 Obsoletes: bore-sysctl
-Obsoletes: kerver
 
 %description
 CachyOS-Settings for Fedora based systems
