@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-settings
-Release:        2%{?dist}
+Release:        3%{?dist}
 Version:        1.0.7
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
@@ -23,12 +23,14 @@ CachyOS-Settings for Fedora based systems
 %prep
 %autosetup -n CachyOS-Settings-%{version}
 
+%if 0%{?fedora} < 41
 git init
 git remote add origin https://github.com/CachyOS/CachyOS-Settings
 git fetch origin
 git checkout %{version} -b remove_ksm -f
 # Revert systemd ksm
 git revert d4db4b7 --no-commit
+%endif
 
 %install
 install -d %{buildroot}/%{_bindir}
