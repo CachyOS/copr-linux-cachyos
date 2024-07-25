@@ -38,6 +38,7 @@
 %define _nv_ver 555.58.02
 %else
 %define _nv_ver 555.58.02
+%endif
 %define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
 %define flavor cachyos
