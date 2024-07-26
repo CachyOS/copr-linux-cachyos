@@ -35,7 +35,7 @@
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
 %if 0%{?fedora} >= %{_rawhidever}
-%define _nv_ver 555.58.02
+%define _nv_ver 560.28.03
 %else
 %define _nv_ver 555.58.02
 %endif
