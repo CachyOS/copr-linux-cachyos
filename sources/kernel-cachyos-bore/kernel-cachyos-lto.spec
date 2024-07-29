@@ -29,9 +29,16 @@
 %define ltoflavor 1
 %endif
 
+# Define rawhide fedora version
+%define _rawhidever 41
+
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
+%if 0%{?fedora} >= %{_rawhidever}
+%define _nv_ver 560.28.03
+%else
 %define _nv_ver 555.58.02
+%endif
 %define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
 %define flavor cachyos
@@ -69,7 +76,10 @@ Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy-ext.patch
 Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/make-modeset-fbdev-default.patch
+%if 0%{?fedora} >= %{_rawhidever}
+%else
 Patch4: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/gsp-fix-stutter.patch
+%endif
 # Patch to fix kernel builds on rawhide
 Patch10: https://raw.githubusercontent.com/sirlucjan/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/fix-rawhide.patch
 # Dev patches
@@ -282,7 +292,10 @@ patch -p1 -i %{PATCH10}
 
 # Apply patches for nvidia-open
 patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
+%if 0%{?fedora} >= %{_rawhidever}
+%else
 patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
+%endif
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
