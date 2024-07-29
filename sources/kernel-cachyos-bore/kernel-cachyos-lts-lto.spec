@@ -179,6 +179,7 @@ Supplements: %{name} = %{rpmver}
 %description modules
 This package provides kernel modules for the core %{?flavor:%{flavor}} kernel package.
 
+%if %{_nv_build}
 %package nvidia-open
 Summary: Prebuilt nvidia-open kernel modules to match the core kernel
 Group: System Environment/Kernel
@@ -191,6 +192,7 @@ Conflicts: akmod-nvidia
 Recommends: xorg-x11-drv-nvidia >= %{_nv_ver}
 %description nvidia-open
 This package provides prebuilt nvidia-open kernel modules for the core %{?flavor:%{flavor}} kernel package.
+%endif
 
 %package headers
 Summary: Header files for the Linux kernel for use by glibc
@@ -704,11 +706,13 @@ fi
 %exclude /lib/modules/%{kverstr}/symvers.gz
 %exclude /lib/modules/%{kverstr}/build
 %exclude /lib/modules/%{kverstr}/source
+%if %{_nv_build}
 %exclude /lib/modules/%{kverstr}/nvidia
 
 %files nvidia-open
 /lib/modules/%{kverstr}/nvidia
 /usr/share/licenses/nvidia-open/COPYING
+%endif
 
 %files headers
 %defattr (-, root, root)
