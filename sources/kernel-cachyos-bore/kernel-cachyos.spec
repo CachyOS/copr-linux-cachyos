@@ -39,7 +39,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.10
-%define _stablekver 1
+%define _stablekver 2
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -81,7 +81,7 @@ BuildRequires: python3-devel
 BuildRequires: make
 BuildRequires: perl-generators
 BuildRequires: perl-interpreter
-BuildRequires: openssl-devel 
+BuildRequires: openssl-devel
 BuildRequires: bison
 BuildRequires: flex
 BuildRequires: findutils
@@ -111,7 +111,7 @@ BuildRequires: libkcapi-hmaccalc
 BuildRequires: perl-Carp
 BuildRequires: rsync
 BuildRequires: grubby
-BuildRequires: wget 
+BuildRequires: wget
 BuildRequires: gcc
 BuildRequires: gcc-c++
 %if %{llvm_kbuild}
@@ -217,7 +217,7 @@ glibc package.
 Summary: Development package for building kernel modules to match the %{?flavor:%{flavor}} kernel
 Group: System Environment/Kernel
 AutoReqProv: no
-Requires: findutils      
+Requires: findutils
 Requires: perl-interpreter
 Requires: openssl-devel
 Requires: flex
