@@ -680,8 +680,10 @@ fi
 %post modules
 /sbin/depmod -a %{kverstr}
 
+%if %{_nv_build}
 %posttrans nvidia-open
 /sbin/depmod -a %{kverstr}
+%endif
 
 %files core
 %ghost %attr(0600, root, root) /boot/vmlinuz-%{kverstr}
