@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.10
-%define _stablekver 2
+%define _stablekver 3
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -74,7 +74,7 @@ Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
-Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy-ext.patch
+Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/make-modeset-fbdev-default.patch
 %if 0%{?fedora} >= %{_rawhidever}
 %else
