@@ -33,7 +33,7 @@
 %define _rawhidever 41
 
 # Build nvidia-open alongside the kernel
-%define _nv_build 0
+%define _nv_build 1
 %if 0%{?fedora} >= %{_rawhidever}
 %define _nv_ver 560.28.03
 %else
