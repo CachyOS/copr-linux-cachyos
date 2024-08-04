@@ -33,7 +33,7 @@
 %define _rawhidever 41
 
 # Build nvidia-open alongside the kernel
-%define _nv_build 1
+%define _nv_build 0
 %if 0%{?fedora} >= %{_rawhidever}
 %define _nv_ver 560.28.03
 %else
@@ -281,8 +281,11 @@ tar -xzf %{SOURCE2} -C %{_builddir}
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
 
+%if %{llvm_kbuild} && 0%{?fedora} >= %{_rawhidever}
+%else
 # Apply sched-ext patch
 patch -p1 -i %{PATCH1}
+%endif
 
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
@@ -312,6 +315,23 @@ scripts/config -e CACHY
 # Enable BORE Scheduler
 scripts/config -e SCHED_BORE --set-val MIN_BASE_SLICE_NS 1000000
 
+%if %{llvm_kbuild} && 0%{?fedora} >= %{_rawhidever}
+# Disable debug on LTO + Rawhide
+scripts/config -d DEBUG_INFO
+scripts/config -d DEBUG_INFO_BTF
+scripts/config -d DEBUG_INFO_DWARF4
+scripts/config -d DEBUG_INFO_DWARF5
+scripts/config -d PAHOLE_HAS_SPLIT_BTF
+scripts/config -d DEBUG_INFO_BTF_MODULES
+scripts/config -d SLUB_DEBUG
+scripts/config -d PM_DEBUG
+scripts/config -d PM_ADVANCED_DEBUG
+scripts/config -d PM_SLEEP_DEBUG
+scripts/config -d ACPI_DEBUG
+scripts/config -d SCHED_DEBUG
+scripts/config -d LATENCYTOP
+scripts/config -d DEBUG_PREEMPT
+%else
 # Enable sched-ext
 scripts/config -e SCHED_CLASS_EXT
 scripts/config -e BPF
@@ -325,6 +345,7 @@ scripts/config -e FTRACE
 scripts/config -e PAHOLE_HAS_SPLIT_BTF
 scripts/config -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
 scripts/config -e SCHED_DEBUG
+%endif
 
 # Setting tick rate
 scripts/config -d HZ_300
@@ -337,15 +358,6 @@ scripts/config -d DEFAULT_CUBIC
 scripts/config -e TCP_CONG_BBR
 scripts/config -e DEFAULT_BBR
 scripts/config --set-str DEFAULT_TCP_CONG bbr
-
-# Disable DEBUG
-scripts/config -d SLUB_DEBUG
-scripts/config -d PM_DEBUG
-scripts/config -d PM_ADVANCED_DEBUG
-scripts/config -d PM_SLEEP_DEBUG
-scripts/config -d ACPI_DEBUG
-scripts/config -d LATENCYTOP
-scripts/config -d DEBUG_PREEMPT
 
 # Enable x86_64_v3
 # Just to be sure, check:
