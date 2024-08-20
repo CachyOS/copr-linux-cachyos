@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.10
-%define _stablekver 5
+%define _stablekver 6
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -290,7 +290,7 @@ patch -p1 -i %{PATCH1}
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
 
-# Apply patch to fix kernel builds on rawhide
+# Apply patch to fix kernel builds on 41 and above
 %if 0%{?fedora} >= 41
 patch -p1 -i %{PATCH10}
 %endif
