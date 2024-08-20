@@ -8,6 +8,7 @@ Summary:        Sched_ext Schedulers and Tools
 License:        GPL=2.0
 URL:            https://github.com/sched-ext/scx
 Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz
+Patch0:         scx-add-signal-nix.patch
 
 BuildRequires:  gcc
 BuildRequires:  git
@@ -35,7 +36,7 @@ Provides:  sched-ext-scx = %{version}-%{release}
 sched_ext is a Linux kernel feature which enables implementing kernel thread schedulers in BPF and dynamically loading them. This repository contains various scheduler implementations and support utilities.
 
 %prep
-%autosetup -n scx-%{version}
+%autosetup -n scx-%{version} -p1
 
 %build
 %meson \
