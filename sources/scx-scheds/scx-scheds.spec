@@ -8,7 +8,6 @@ Summary:        Sched_ext Schedulers and Tools
 License:        GPL=2.0
 URL:            https://github.com/sched-ext/scx
 Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz
-Patch0:         scx-add-signal-nix.patch
 
 BuildRequires:  gcc
 BuildRequires:  git
