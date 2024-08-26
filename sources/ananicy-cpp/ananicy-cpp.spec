@@ -8,7 +8,7 @@
 %define _disable_source_fetch 0
 
 Name:           ananicy-cpp
-Release:        8%{?dist}
+Release:        9%{?dist}
 Version:	    1.1.1
 Summary:        Rewrite of ananicy in c++ for lower cpu and memory usage
 License:        GPLv3
@@ -34,16 +34,9 @@ Requires:	ananicy-cpp-rules
 %description
 Rewrite of ananicy in c++ for lower cpu and memory usage
 
-%package rules
-Summary: list of rules used to assign specific nice values to specific processes.
-Requires: ananicy-cpp
-%description rules
-list of rules used to assign specific nice values to specific processes.
-
 
 %prep
 %autosetup -n ananicy-cpp-v%{version}
-git clone https://github.com/CachyOS/ananicy-rules.git %{_builddir}/ananicy-cpp-rules 
 
 %build
 %cmake \
@@ -58,12 +51,6 @@ git clone https://github.com/CachyOS/ananicy-rules.git %{_builddir}/ananicy-cpp-
 
 %install
 %ninja_install -C %{_vpath_builddir}
-
-mkdir -p %{buildroot}/etc/ananicy.d/00-default
-cp %{_builddir}/ananicy-cpp-rules/00-default %{buildroot}/etc/ananicy.d/ -r
-cp %{_builddir}/ananicy-cpp-rules/00-cgroups.cgroups %{buildroot}/etc/ananicy.d/ -r
-cp %{_builddir}/ananicy-cpp-rules/00-types.types %{buildroot}/etc/ananicy.d/ -r
-cp %{_builddir}/ananicy-cpp-rules/ananicy.conf %{buildroot}/etc/ananicy.d/ -r
 
 
 
@@ -83,12 +70,6 @@ systemctl disable --now ananicy-cpp
 %doc README.md
 %{_bindir}/ananicy-cpp
 %{_unitdir}/ananicy-cpp.service
-
-%files rules
-%defattr(-,root,root,-)
-/etc/ananicy.d/*
-
-
 
 %changelog
 %autochangelog/*
