@@ -7,7 +7,7 @@
 
 Name:           scx-scheds-git
 Version:        1.0.4
-Release:        1.%{commitdate}.git.%{shortcommit}%{?dist}
+Release:        2.%{commitdate}.git.%{shortcommit}%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
 License:        GPL=2.0
@@ -56,3 +56,4 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/default/scx
 %{_bindir}/*
 %{_prefix}/lib/systemd/system/scx.service
+%{_datadir}/dbus-1/system.d/org.scx.Loader.conf
