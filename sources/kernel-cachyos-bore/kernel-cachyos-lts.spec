@@ -259,7 +259,7 @@ patch -p1 -i %{PATCH0}
 patch -p1 -i %{PATCH1}
 
 # Apply patch to fix kernel builds on rawhide
-%if 0%{?fedora} >= 41
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
 patch -p1 -i %{PATCH10}
 %endif
 
