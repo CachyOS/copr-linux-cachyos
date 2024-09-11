@@ -30,7 +30,7 @@
 %endif
 
 # Define rawhide fedora version
-%define _rawhidever 41
+%define _rawhidever 42
 
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 4
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -277,7 +277,7 @@ tar -xzf %{SOURCE2} -C %{_builddir}
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
 
-%if %{llvm_kbuild} && 0%{?fedora} >= %{_rawhidever}
+%if %{llvm_kbuild} && 0%{?fedora} == 41
 %else
 # Apply sched-ext patch
 patch -p1 -i %{PATCH1}
@@ -286,7 +286,7 @@ patch -p1 -i %{PATCH1}
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
 
-# Apply patch to fix kernel builds on 41 and above
+# Apply patch to fix kernel builds on Fedora 41 and above and EPEL/RHEL 10 and above
 %if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
 patch -p1 -i %{PATCH10}
 %endif
@@ -307,8 +307,8 @@ scripts/config -e CACHY
 # Enable BORE Scheduler
 scripts/config -e SCHED_BORE --set-val MIN_BASE_SLICE_NS 1000000
 
-%if %{llvm_kbuild} && 0%{?fedora} >= %{_rawhidever}
-# Disable debug on LTO + Rawhide
+%if %{llvm_kbuild} && 0%{?fedora} == 41
+# Disable debug on LTO + Fedora 41
 scripts/config -d DEBUG_INFO
 scripts/config -d DEBUG_INFO_BTF
 scripts/config -d DEBUG_INFO_DWARF4

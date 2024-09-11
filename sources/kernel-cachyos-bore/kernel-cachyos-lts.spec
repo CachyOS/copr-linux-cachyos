@@ -30,7 +30,7 @@
 %endif
 
 # Define rawhide fedora version
-%define _rawhidever 41
+%define _rawhidever 42
 
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
@@ -258,7 +258,7 @@ patch -p1 -i %{PATCH0}
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH1}
 
-# Apply patch to fix kernel builds on rawhide
+# Apply patch to fix kernel builds on Fedora 41 and above and EPEL/RHEL 10 and above
 %if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
 patch -p1 -i %{PATCH10}
 %endif
