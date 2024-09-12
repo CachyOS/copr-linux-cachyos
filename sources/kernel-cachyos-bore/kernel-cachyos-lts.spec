@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-LTS Patches
 
 %define _basekver 6.6
-%define _stablekver 50
+%define _stablekver 51
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
