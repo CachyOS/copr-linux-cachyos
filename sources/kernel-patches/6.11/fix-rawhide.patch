@@ -1,0 +1,98 @@
+diff --git a/certs/extract-cert.c b/certs/extract-cert.c
+index 70e9ec89d87d..f5fb74916cee 100644
+--- a/certs/extract-cert.c
++++ b/certs/extract-cert.c
+@@ -21,7 +21,6 @@
+ #include <openssl/bio.h>
+ #include <openssl/pem.h>
+ #include <openssl/err.h>
+-#include <openssl/engine.h>
+ 
+ /*
+  * OpenSSL 3.0 deprecates the OpenSSL's ENGINE API.
+@@ -122,28 +121,8 @@ int main(int argc, char **argv)
+ 		fclose(f);
+ 		exit(0);
+ 	} else if (!strncmp(cert_src, "pkcs11:", 7)) {
+-		ENGINE *e;
+-		struct {
+-			const char *cert_id;
+-			X509 *cert;
+-		} parms;
+-
+-		parms.cert_id = cert_src;
+-		parms.cert = NULL;
+-
+-		ENGINE_load_builtin_engines();
+-		drain_openssl_errors();
+-		e = ENGINE_by_id("pkcs11");
+-		ERR(!e, "Load PKCS#11 ENGINE");
+-		if (ENGINE_init(e))
+-			drain_openssl_errors();
+-		else
+-			ERR(1, "ENGINE_init");
+-		if (key_pass)
+-			ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0), "Set PKCS#11 PIN");
+-		ENGINE_ctrl_cmd(e, "LOAD_CERT_CTRL", 0, &parms, NULL, 1);
+-		ERR(!parms.cert, "Get X.509 from PKCS#11");
+-		write_cert(parms.cert);
++		fprintf(stderr, "Error: pkcs11 not implemented\n");
++		exit(1);
+ 	} else {
+ 		BIO *b;
+ 		X509 *x509;
+
+diff --git a/scripts/sign-file.c b/scripts/sign-file.c
+index 3edb156ae52c..0114ae1dbf7f 100644
+--- a/scripts/sign-file.c
++++ b/scripts/sign-file.c
+@@ -27,7 +27,6 @@
+ #include <openssl/evp.h>
+ #include <openssl/pem.h>
+ #include <openssl/err.h>
+-#include <openssl/engine.h>
+ 
+ /*
+  * OpenSSL 3.0 deprecates the OpenSSL's ENGINE API.
+@@ -99,16 +98,6 @@ static void display_openssl_errors(int l)
+ 	}
+ }
+ 
+-static void drain_openssl_errors(void)
+-{
+-	const char *file;
+-	int line;
+-
+-	if (ERR_peek_error() == 0)
+-		return;
+-	while (ERR_get_error_line(&file, &line)) {}
+-}
+-
+ #define ERR(cond, fmt, ...)				\
+ 	do {						\
+ 		bool __cond = (cond);			\
+@@ -144,22 +133,8 @@ static EVP_PKEY *read_private_key(const char *private_key_name)
+ 	EVP_PKEY *private_key;
+ 
+ 	if (!strncmp(private_key_name, "pkcs11:", 7)) {
+-		ENGINE *e;
+-
+-		ENGINE_load_builtin_engines();
+-		drain_openssl_errors();
+-		e = ENGINE_by_id("pkcs11");
+-		ERR(!e, "Load PKCS#11 ENGINE");
+-		if (ENGINE_init(e))
+-			drain_openssl_errors();
+-		else
+-			ERR(1, "ENGINE_init");
+-		if (key_pass)
+-			ERR(!ENGINE_ctrl_cmd_string(e, "PIN", key_pass, 0),
+-			    "Set PKCS#11 PIN");
+-		private_key = ENGINE_load_private_key(e, private_key_name,
+-						      NULL, NULL);
+-		ERR(!private_key, "%s", private_key_name);
++		fprintf(stderr, "Error: pkcs11 not implemented\n");
++		exit(1);
+ 	} else {
+ 		BIO *b;
+ 
