@@ -356,7 +356,6 @@ scripts/config --set-str DEFAULT_TCP_CONG bbr
 # /lib/ld-linux-x86-64.so.2 --help | grep supported
 # and make sure if your processor supports it:
 # x86-64-v3 (supported, searched)
-scripts/config -d GENERIC_CPU
 scripts/config --set-val X86_64_VERSION 3
 
 # Set O3
