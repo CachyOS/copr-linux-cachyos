@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.11
-%define _stablekver 0
+%define _stablekver 1
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -359,7 +359,7 @@ scripts/config --set-str DEFAULT_TCP_CONG bbr
 # and make sure if your processor supports it:
 # x86-64-v3 (supported, searched)
 scripts/config -d GENERIC_CPU
-scripts/config -e GENERIC_CPU3
+scripts/config --set-val X86_64_VERSION 3
 
 # Set O3
 scripts/config -d CC_OPTIMIZE_FOR_PERFORMANCE
