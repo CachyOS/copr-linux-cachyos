@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 3
+%define customver 4
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -76,6 +76,8 @@ Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch5: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0004-6.11-Add-fix-for-fbdev.patch
 # Patch to fix kernel builds on rawhide
 Patch10: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/fix-rawhide.patch
 # Dev patches
@@ -291,8 +293,13 @@ patch -p1 -i %{PATCH2}
 patch -p1 -i %{PATCH10}
 %endif
 
-# Apply patches for nvidia-open
+### Apply patches for nvidia-open
+# Set modeset and fbdev to default enabled
 patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
+# Fix for Zen5 error print in dmesg
+patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
+# Fix broken fbdev on 6.11
+patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
