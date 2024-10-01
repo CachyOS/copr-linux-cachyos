@@ -3,7 +3,7 @@
 
 Name:           cachyos-settings
 Release:        1%{?dist}
-Version:        1.1.0
+Version:        1.1.1
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
@@ -21,7 +21,7 @@ Obsoletes: bore-sysctl
 CachyOS-Settings for Fedora based systems
 
 %prep
-%autosetup -n CachyOS-Settings-%{version}
+%autosetup -p1 -n CachyOS-Settings-%{version}
 
 %if 0%{?fedora} < 41
 git init
@@ -31,6 +31,8 @@ git checkout %{version} -b remove_ksm -f
 # Revert systemd ksm
 git revert d4db4b7 --no-commit
 %endif
+
+git cherry-pick -n 5ffc0525a09b745590a84d0bea084cf8b9527e08
 
 %install
 install -d %{buildroot}/%{_bindir}
