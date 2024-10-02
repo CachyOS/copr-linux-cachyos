@@ -312,7 +312,7 @@ scripts/config -u LOCALVERSION
 scripts/config -e CACHY
 
 # Enable BORE Scheduler
-scripts/config -e SCHED_BORE --set-val MIN_BASE_SLICE_NS 1000000
+scripts/config -e SCHED_BORE
 
 %if %{llvm_kbuild} && 0%{?fedora} == 41
 # Disable debug on LTO + Fedora 41
