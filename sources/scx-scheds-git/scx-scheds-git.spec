@@ -6,7 +6,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds-git
-Version:        1.0.4.%{commitdate}.git.%{shortcommit}
+Version:        1.0.5.%{commitdate}.git.%{shortcommit}
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
