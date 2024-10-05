@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 2
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -314,23 +314,6 @@ scripts/config -e CACHY
 # Enable BORE Scheduler
 scripts/config -e SCHED_BORE
 
-%if %{llvm_kbuild} && 0%{?fedora} == 41
-# Disable debug on LTO + Fedora 41
-scripts/config -d DEBUG_INFO
-scripts/config -d DEBUG_INFO_BTF
-scripts/config -d DEBUG_INFO_DWARF4
-scripts/config -d DEBUG_INFO_DWARF5
-scripts/config -d PAHOLE_HAS_SPLIT_BTF
-scripts/config -d DEBUG_INFO_BTF_MODULES
-scripts/config -d SLUB_DEBUG
-scripts/config -d PM_DEBUG
-scripts/config -d PM_ADVANCED_DEBUG
-scripts/config -d PM_SLEEP_DEBUG
-scripts/config -d ACPI_DEBUG
-scripts/config -d SCHED_DEBUG
-scripts/config -d LATENCYTOP
-scripts/config -d DEBUG_PREEMPT
-%else
 # Enable sched-ext
 scripts/config -e SCHED_CLASS_EXT
 scripts/config -e BPF
@@ -344,7 +327,6 @@ scripts/config -e FTRACE
 scripts/config -e PAHOLE_HAS_SPLIT_BTF
 scripts/config -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
 scripts/config -e SCHED_DEBUG
-%endif
 
 # Setting tick rate
 scripts/config -d HZ_300
