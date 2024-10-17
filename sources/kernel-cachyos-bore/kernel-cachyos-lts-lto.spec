@@ -316,7 +316,8 @@ scripts/config -d DEBUG_PREEMPT
 # /lib/ld-linux-x86-64.so.2 --help | grep supported
 # and make sure if your processor supports it:
 # x86-64-v2 (supported, searched)
-scripts/config --set-val X86_64_VERSION 2
+scripts/config -d GENERIC_CPU
+scripts/config -e GENERIC_CPU2
 
 # Set O3
 scripts/config -d CC_OPTIMIZE_FOR_PERFORMANCE
