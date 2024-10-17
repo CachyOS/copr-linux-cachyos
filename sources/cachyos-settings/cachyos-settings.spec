@@ -3,7 +3,7 @@
 
 Name:           cachyos-settings
 Release:        1%{?dist}
-Version:        1.1.1
+Version:        1.1.2
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
@@ -31,8 +31,6 @@ git checkout %{version} -b remove_ksm -f
 # Revert systemd ksm
 git revert d4db4b7 --no-commit
 %endif
-
-git cherry-pick -n 5ffc0525a09b745590a84d0bea084cf8b9527e08
 
 %install
 install -d %{buildroot}/%{_bindir}
