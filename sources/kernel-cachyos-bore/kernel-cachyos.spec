@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.11
-%define _stablekver 4
+%define _stablekver 5
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else

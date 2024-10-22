@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-LTS Patches
 
 %define _basekver 6.6
-%define _stablekver 57
+%define _stablekver 58
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-LTS Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 2
+%define customver 1
 %define flaver clts%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -316,8 +316,7 @@ scripts/config -d DEBUG_PREEMPT
 # /lib/ld-linux-x86-64.so.2 --help | grep supported
 # and make sure if your processor supports it:
 # x86-64-v2 (supported, searched)
-scripts/config -d GENERIC_CPU
-scripts/config -e GENERIC_CPU2
+scripts/config --set-val X86_64_VERSION 2
 
 # Set O3
 scripts/config -d CC_OPTIMIZE_FOR_PERFORMANCE
