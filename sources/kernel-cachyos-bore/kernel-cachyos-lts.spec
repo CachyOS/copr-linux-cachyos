@@ -74,12 +74,13 @@ Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
+Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/0001-openssl-provider.patch
+
+# Nvidia Patches
 Patch3: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0001-Make-modeset-and-fbdev-default-enabled.patch
 Patch4: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 Patch5: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0008-silence-event-assert-until-570.patch
 Patch6: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0009-fix-hdmi-names.patch
-# Patch to fix kernel builds on rawhide
-Patch10: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0001-openssl-provider.patch
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
 #Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched-dev/0001-bore-cachy.patch
@@ -261,10 +262,8 @@ patch -p1 -i %{PATCH0}
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH1}
 
-# Apply patch to fix kernel builds on Fedora 41 and above and EPEL/RHEL 10 and above
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 10
-patch -p1 -i %{PATCH10}
-%endif
+# Replace OpenSSL Engine API with Provider API
+patch -p1 -i %{PATCH2}
 
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
