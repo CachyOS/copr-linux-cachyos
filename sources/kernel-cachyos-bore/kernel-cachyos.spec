@@ -46,7 +46,7 @@ Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 %define _basekver 6.11
-%define _stablekver 5
+%define _stablekver 6
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -75,9 +75,11 @@ Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
-Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
-Patch4: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch5: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0004-6.11-Add-fix-for-fbdev.patch
+Patch3: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch5: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0004-6.11-Add-fix-for-fbdev.patch
+Patch6: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0008-silence-event-assert-until-570.patch
+Patch7: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/0009-fix-hdmi-names.patch
 # Patch to fix kernel builds on rawhide
 Patch10: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/%{_basekver}/fix-rawhide.patch
 # Dev patches
@@ -300,6 +302,11 @@ patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
 patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 # Fix broken fbdev on 6.11
 patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
+# Silence Assert warnings
+patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
+# Fix HDMI Names
+patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
+
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
