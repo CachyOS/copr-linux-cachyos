@@ -3,7 +3,7 @@
 
 Name:           cachyos-settings
 Release:        1%{?dist}
-Version:        1.1.2
+Version:        1.1.3
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
@@ -11,6 +11,7 @@ Source0:        %{url}/archive/refs/tags/%{version}.tar.gz
 BuildRequires:  git
 
 Requires: zram-generator
+Requires: lua-luv
 
 Provides: zram-generator-defaults
 Provides: kerver
