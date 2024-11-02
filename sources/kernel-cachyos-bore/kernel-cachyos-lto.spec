@@ -75,7 +75,6 @@ Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
-Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.6/misc/0001-openssl-provider.patch
 
 # Nvidia Patches
 Patch4: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
@@ -287,9 +286,6 @@ patch -p1 -i %{PATCH1}
 
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
-
-# Replace OpenSSL Engine API with Provider API
-patch -p1 -i %{PATCH3}
 
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
