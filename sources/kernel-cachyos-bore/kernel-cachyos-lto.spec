@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 2
+%define customver 3
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -282,11 +282,8 @@ tar -xzf %{SOURCE2} -C %{_builddir}
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
 
-%if %{llvm_kbuild} && 0%{?fedora} == 41
-%else
 # Apply sched-ext patch
 patch -p1 -i %{PATCH1}
-%endif
 
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
