@@ -34,8 +34,8 @@
 
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
-%if 0%{?fedora} >= %{_rawhidever}
-%define _nv_ver 560.35.03
+%if 0%{?fedora} >= 41
+%define _nv_ver 565.57.01
 %else
 %define _nv_ver 560.35.03
 %endif
@@ -55,7 +55,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 2
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
