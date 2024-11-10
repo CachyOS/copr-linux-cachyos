@@ -46,7 +46,7 @@ Summary: The Linux Kernel with Cachyos-LTS Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 3
+%define customver 1
 %define flaver clts%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
