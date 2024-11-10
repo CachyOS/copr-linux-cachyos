@@ -23,7 +23,7 @@
 %endif
 
 # define git branch to make testing easier without merging to master branch
-%define _git_branch upgrade-nvidia-f41
+%define _git_branch master
 
 # whether to build kernel with llvm compiler(clang)
 %define llvm_kbuild 1
