@@ -17,32 +17,27 @@ Source0:        %{url}/-/archive/v%{version}/ananicy-cpp-v%{version}.tar.gz
 
 ExcludeArch:    s390x i686 ppc64le
 
-BuildRequires:  gcc-c++
-BuildRequires:  cmake
-BuildRequires:  ninja-build
-BuildRequires:  systemd-devel
-BuildRequires:  systemd-rpm-macros
-BuildRequires:  zlib-devel
-BuildRequires:  git
 BuildRequires:  bpftool
-BuildRequires:  libbpf-devel
-BuildRequires:  elfutils-libelf
-BuildRequires:  llvm
 BuildRequires:  clang
+BuildRequires:  cmake
 BuildRequires:  fmt-devel
-BuildRequires:  spdlog-devel
 BuildRequires:  json-devel
+BuildRequires:  libbpf-devel
+BuildRequires:  ninja-build
+BuildRequires:  spdlog-devel
+BuildRequires:  systemd-devel
 
 Requires:	ananicy-cpp-rules
+Requires:       elfutils-libelf
+Requires:       fmt
+Requires:       gcc-libs
+Requires:       glibc
 Requires:       libbpf
+Requires:       spdlog
 Requires:       systemd
 Requires:       systemd-libs
 Requires:       zlib-ng-compat
-Requires:       gcc-libs
-Requires:       glibc
-Requires:       fmt
-Requires:       spdlog
-Requires:       elfutils-libelf
+
 
 %description
 Rewrite of ananicy in c++ for lower cpu and memory usage
