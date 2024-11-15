@@ -29,9 +29,20 @@ BuildRequires:  libbpf-devel
 BuildRequires:  elfutils-libelf
 BuildRequires:  llvm
 BuildRequires:  clang
+BuildRequires:  fmt-devel
+BuildRequires:  spdlog-devel
+BuildRequires:  json-devel
 
 Requires:	ananicy-cpp-rules
-Requires: libbpf
+Requires:       libbpf
+Requires:       systemd
+Requires:       systemd-libs
+Requires:       zlib-ng-compat
+Requires:       gcc-libs
+Requires:       glibc
+Requires:       fmt
+Requires:       spdlog
+Requires:       elfutils-libelf
 
 %description
 Rewrite of ananicy in c++ for lower cpu and memory usage
@@ -45,6 +56,9 @@ Rewrite of ananicy in c++ for lower cpu and memory usage
     -GNinja \
     -DENABLE_SYSTEMD=ON \
     -DUSE_BPF_PROC_IMPL=ON \
+    -DUSE_EXTERNAL_FMTLIB=ON \
+    -DUSE_EXTERNAL_JSON=ON \
+    -DUSE_EXTERNAL_SPDLOG=ON \
     -DBPF_BUILD_LIBBPF=OFF \
     -DENABLE_ANANICY_TESTS=ON \
     -DBUILD_SHARED_LIBS=OFF \
