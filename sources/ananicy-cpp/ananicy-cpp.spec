@@ -29,7 +29,9 @@ BuildRequires:  libbpf-devel
 BuildRequires:  elfutils-libelf
 BuildRequires:  llvm
 BuildRequires:  clang
+
 Requires:	ananicy-cpp-rules
+Requires: libbpf
 
 %description
 Rewrite of ananicy in c++ for lower cpu and memory usage
@@ -42,7 +44,7 @@ Rewrite of ananicy in c++ for lower cpu and memory usage
 %cmake \
     -GNinja \
     -DENABLE_SYSTEMD=ON \
-    -DUSE_BPF_PROC_IMPL=OFF \
+    -DUSE_BPF_PROC_IMPL=ON \
     -DBPF_BUILD_LIBBPF=OFF \
     -DENABLE_ANANICY_TESTS=ON \
     -DBUILD_SHARED_LIBS=OFF \
