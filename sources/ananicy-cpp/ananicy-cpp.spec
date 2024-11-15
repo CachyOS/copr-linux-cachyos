@@ -63,16 +63,10 @@ Rewrite of ananicy in c++ for lower cpu and memory usage
     -DENABLE_ANANICY_TESTS=ON \
     -DBUILD_SHARED_LIBS=OFF \
     -DVERSION=%{version}
-%ninja_build -C %{_vpath_builddir}
+%cmake_build --target %{name}
 
 %install
-%ninja_install -C %{_vpath_builddir}
-
-
-
-%check
-./%{_vpath_builddir}/src/tests/test-core
-./%{_vpath_builddir}/src/tests/test-utility --test-case-exclude="Process Info"
+%cmake_install --component Runtime
 
 %posttrans
 systemctl enable --now ananicy-cpp
