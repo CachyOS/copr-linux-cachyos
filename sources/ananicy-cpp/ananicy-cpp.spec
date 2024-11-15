@@ -8,7 +8,7 @@
 %define _disable_source_fetch 0
 
 Name:           ananicy-cpp
-Release:        9%{?dist}
+Release:        10%{?dist}
 Version:	    1.1.1
 Summary:        Rewrite of ananicy in c++ for lower cpu and memory usage
 License:        GPLv3
@@ -27,7 +27,6 @@ BuildRequires:  ninja-build
 BuildRequires:  spdlog-devel
 BuildRequires:  systemd-devel
 
-Requires:	ananicy-cpp-rules
 Requires:       elfutils-libelf
 Requires:       fmt
 Requires:       gcc-libs
@@ -37,6 +36,8 @@ Requires:       spdlog
 Requires:       systemd
 Requires:       systemd-libs
 Requires:       zlib-ng-compat
+
+Recommends:     cachyos-ananicy-rules
 
 
 %description
