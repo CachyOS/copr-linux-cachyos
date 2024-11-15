@@ -56,12 +56,10 @@ Rewrite of ananicy in c++ for lower cpu and memory usage
     -GNinja \
     -DENABLE_SYSTEMD=ON \
     -DUSE_BPF_PROC_IMPL=ON \
+    -DBPF_BUILD_LIBBPF=OFF \
     -DUSE_EXTERNAL_FMTLIB=ON \
     -DUSE_EXTERNAL_JSON=ON \
     -DUSE_EXTERNAL_SPDLOG=ON \
-    -DBPF_BUILD_LIBBPF=OFF \
-    -DENABLE_ANANICY_TESTS=ON \
-    -DBUILD_SHARED_LIBS=OFF \
     -DVERSION=%{version}
 %cmake_build --target %{name}
 
