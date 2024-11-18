@@ -36,8 +36,8 @@
 Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
-%define _basekver 6.11
-%define _stablekver 9
+%define _basekver 6.12
+%define _stablekver 0
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -82,15 +82,13 @@ Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 
 %if "%{_nv_ver}" == "560.35.03"
-Patch4: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
-Patch5: %{_nvidia_patchurl}/0004-6.11-Add-fix-for-fbdev.patch
-Patch6: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
+Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
 %else
-Patch4: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
-Patch6: %{_nvidia_patchurl}/0006-silence-event-assert-until-570.patch
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
 %endif
-Patch7: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch8: %{_nvidia_patchurl}/0009-fix-hdmi-names.patch
+Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
@@ -299,17 +297,11 @@ patch -p1 -i %{PATCH2}
 
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
-patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
-%if "%{_nv_ver}" == "560.35.03"
-# Fix broken fbdev on 6.11
-patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
-%endif
+patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
 # Silence Assert warnings
-patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
+patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 # Fix for Zen5 error print in dmesg
-patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
-# Fix HDMI Names
-patch -p1 -i %{PATCH8} -d %{_builddir}/%{_nv_open_pkg}/
+patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
