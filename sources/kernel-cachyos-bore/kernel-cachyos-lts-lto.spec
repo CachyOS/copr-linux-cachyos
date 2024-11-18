@@ -22,6 +22,9 @@
 %define asmarch x86
 %endif
 
+# define git branch to make testing easier without merging to master branch
+%define _git_branch master
+
 # whether to build kernel with llvm compiler(clang)
 %define llvm_kbuild 1
 %if %{llvm_kbuild}
@@ -29,24 +32,12 @@
 %define ltoflavor 1
 %endif
 
-# Define rawhide fedora version
-%define _rawhidever 42
-
-# Build nvidia-open alongside the kernel
-%define _nv_build 1
-%if 0%{?fedora} >= %{_rawhidever}
-%define _nv_ver 560.35.03
-%else
-%define _nv_ver 560.35.03
-%endif
-%define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
-
 %define flavor cachyos-lts
 Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-LTS Patches
 
 %define _basekver 6.6
-%define _stablekver 59
+%define _stablekver 62
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -59,6 +50,20 @@ Version: %{_basekver}.%{_stablekver}
 %define flaver clts%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
+
+# Define rawhide fedora version
+%define _rawhidever 42
+
+# Build nvidia-open alongside the kernel
+%define _nv_build 1
+%if 0%{?fedora} >= 41
+%define _nv_ver 565.57.01
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
+%else
+%define _nv_ver 560.35.03
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/%{_git_branch}/sources/kernel-patches/nvidia
+%endif
+%define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
 %define rpmver %{version}-%{release}
 %define krelstr %{release}.%{_arch}
@@ -76,11 +81,15 @@ Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/0001-openssl-provider.patch
 
-# Nvidia Patches
-Patch3: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
-Patch4: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch5: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/nvidia/0008-silence-event-assert-until-570.patch
-Patch6: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/master/sources/kernel-patches/nvidia/0009-fix-hdmi-names.patch
+%if "%{_nv_ver}" == "560.35.03"
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
+Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
+%else
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: %{_nvidia_patchurl}/0006-silence-event-assert-until-570.patch
+%endif
+Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch6: %{_nvidia_patchurl}/0009-fix-hdmi-names.patch
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
 #Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched-dev/0001-bore-cachy.patch
@@ -268,9 +277,9 @@ patch -p1 -i %{PATCH2}
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
 patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
-# Fix for Zen5 error print in dmesg
-patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 # Silence Assert warnings
+patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
+# Fix for Zen5 error print in dmesg
 patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
 # Fix HDMI Names
 patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
