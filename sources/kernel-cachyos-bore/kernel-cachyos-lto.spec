@@ -89,6 +89,8 @@ Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
 Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
 %endif
 Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch6: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+Patch7: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0006-nvidia-drm-Set-FOP_UNSIGNED_OFFSET-for-nv_drm_fops.f.patch
 
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
@@ -302,6 +304,9 @@ patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
 patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 # Fix for Zen5 error print in dmesg
 patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
+# Patches for Nvidia on kernel 6.12
+patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
+patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
