@@ -499,7 +499,6 @@ cp -a --parents tools/include/tools/le_byteshift.h %{buildroot}/lib/modules/%{kv
 cp -a --parents tools/include/linux/compiler* %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/include/linux/types.h %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/build/Build.include %{buildroot}/lib/modules/%{kverstr}/build
-cp --parents tools/build/Build %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/build/fixdep.c %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/objtool/sync-check.sh %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/bpf/resolve_btfids %{buildroot}/lib/modules/%{kverstr}/build
