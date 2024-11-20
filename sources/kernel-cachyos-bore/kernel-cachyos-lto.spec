@@ -83,6 +83,7 @@ Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 %if "%{_nv_ver}" == "560.35.03"
 Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
 Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
+Patch8: https://raw.githubusercontent.com/CachyOS/kernel-patches/cd01e95a773a5da2e26ceaf5246a514091aa0d6f/6.12/misc/nvidia/0007-6.12-replace-pageswapcache.patch
 %else
 Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
 Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
@@ -303,6 +304,10 @@ patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
 # Patches for Nvidia on kernel 6.12
 patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
 patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
+# Apply patch to 560, which fixes build error on Linux 6.12
+%if "%{_nv_ver}" == "560.35.03"
+patch -p1 -i %{PATCH8} -d %{_builddir}/%{_nv_open_pkg}/
+%endif
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
