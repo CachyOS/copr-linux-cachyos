@@ -36,8 +36,8 @@
 Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
-%define _basekver 6.11
-%define _stablekver 9
+%define _basekver 6.12
+%define _stablekver 0
 %if %{_stablekver} == 0
 %define _tarkver %{_basekver}
 %else
@@ -78,20 +78,20 @@ Source1: https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-ca
 Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_open_pkg}.tar.gz
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
-Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-sched-ext.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
-Patch3: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.6/misc/0001-openssl-provider.patch
 
 %if "%{_nv_ver}" == "560.35.03"
-Patch4: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
-Patch5: %{_nvidia_patchurl}/0004-6.11-Add-fix-for-fbdev.patch
-Patch6: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
+Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
+Patch8: https://raw.githubusercontent.com/CachyOS/kernel-patches/cd01e95a773a5da2e26ceaf5246a514091aa0d6f/6.12/misc/nvidia/0007-6.12-replace-pageswapcache.patch
+Patch9: %{_nvidia_patchurl}/0010-6.12-drm_output_poll-changed-check.patch
 %else
-Patch4: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
-Patch6: %{_nvidia_patchurl}/0006-silence-event-assert-until-570.patch
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
 %endif
-Patch7: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch8: %{_nvidia_patchurl}/0009-fix-hdmi-names.patch
+Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch6: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+Patch7: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0006-nvidia-drm-Set-FOP_UNSIGNED_OFFSET-for-nv_drm_fops.f.patch
 
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
@@ -292,28 +292,24 @@ tar -xzf %{SOURCE2} -C %{_builddir}
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
 
-# Apply sched-ext patch
-patch -p1 -i %{PATCH1}
-
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
 
-# Replace OpenSSL Engine API with Provider API
-patch -p1 -i %{PATCH3}
-
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
-patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
-%if "%{_nv_ver}" == "560.35.03"
-# Fix broken fbdev on 6.11
-patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
-%endif
+patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
 # Silence Assert warnings
-patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
+patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 # Fix for Zen5 error print in dmesg
+patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
+# Patches for Nvidia on kernel 6.12
+patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
 patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
-# Fix HDMI Names
+# Apply patches to 560, which fix build error on Linux 6.12
+%if "%{_nv_ver}" == "560.35.03"
 patch -p1 -i %{PATCH8} -d %{_builddir}/%{_nv_open_pkg}/
+patch -p1 -i %{PATCH9} -d %{_builddir}/%{_nv_open_pkg}/
+%endif
 
 
 # Fetch the config and move it to the proper directory
@@ -511,7 +507,6 @@ cp -a --parents tools/include/tools/le_byteshift.h %{buildroot}/lib/modules/%{kv
 cp -a --parents tools/include/linux/compiler* %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/include/linux/types.h %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/build/Build.include %{buildroot}/lib/modules/%{kverstr}/build
-cp --parents tools/build/Build %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/build/fixdep.c %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/objtool/sync-check.sh %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/bpf/resolve_btfids %{buildroot}/lib/modules/%{kverstr}/build
