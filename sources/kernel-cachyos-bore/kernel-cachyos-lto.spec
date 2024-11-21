@@ -23,7 +23,7 @@
 %endif
 
 # define git branch to make testing easier without merging to master branch
-%define _git_branch master
+%define _git_branch revert-nvidia-446d0f48
 
 # whether to build kernel with llvm compiler(clang)
 %define llvm_kbuild 1
@@ -46,7 +46,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 2
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -78,6 +78,7 @@ Source1: https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-ca
 Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_open_pkg}.tar.gz
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
+Patch1: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/%{_git_branch}/sources/kernel-patches/revert-nvidia-446d0f48.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 
 %if "%{_nv_ver}" == "560.35.03"
@@ -291,6 +292,8 @@ tar -xzf %{SOURCE2} -C %{_builddir}
 
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
+
+patch -p1 -i %{PATCH1}
 
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH2}
