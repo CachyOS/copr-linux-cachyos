@@ -1,0 +1,60 @@
+--- b/drivers/gpu/drm/drm_probe_helper.c
++++ a/drivers/gpu/drm/drm_probe_helper.c
+@@ -714,7 +714,7 @@
+  * @dev: drm_device whose connector state changed
+  *
+  * This function fires off the uevent for userspace and also calls the
++ * output_poll_changed function, which is most commonly used to inform the fbdev
+- * client hotplug function, which is most commonly used to inform the fbdev
+  * emulation code and allow it to update the fbcon output configuration.
+  *
+  * Drivers should call this from their hotplug handling code when a change is
+@@ -730,7 +730,11 @@
+  */
+ void drm_kms_helper_hotplug_event(struct drm_device *dev)
+ {
++	/* send a uevent + call fbdev */
+ 	drm_sysfs_hotplug_event(dev);
++	if (dev->mode_config.funcs->output_poll_changed)
++		dev->mode_config.funcs->output_poll_changed(dev);
++
+ 	drm_client_dev_hotplug(dev);
+ }
+ EXPORT_SYMBOL(drm_kms_helper_hotplug_event);
+@@ -746,7 +750,11 @@
+ {
+ 	struct drm_device *dev = connector->dev;
+ 
++	/* send a uevent + call fbdev */
+ 	drm_sysfs_connector_hotplug_event(connector);
++	if (dev->mode_config.funcs->output_poll_changed)
++		dev->mode_config.funcs->output_poll_changed(dev);
++
+ 	drm_client_dev_hotplug(dev);
+ }
+ EXPORT_SYMBOL(drm_kms_helper_connector_hotplug_event);
+--- b/include/drm/drm_mode_config.h
++++ a/include/drm/drm_mode_config.h
+@@ -97,6 +97,22 @@
+ 	 */
+ 	const struct drm_format_info *(*get_format_info)(const struct drm_mode_fb_cmd2 *mode_cmd);
+ 
++	/**
++	 * @output_poll_changed:
++	 *
++	 * Callback used by helpers to inform the driver of output configuration
++	 * changes.
++	 *
++	 * Drivers implementing fbdev emulation use drm_kms_helper_hotplug_event()
++	 * to call this hook to inform the fbdev helper of output changes.
++	 *
++	 * This hook is deprecated, drivers should instead implement fbdev
++	 * support with struct drm_client, which takes care of any necessary
++	 * hotplug event forwarding already without further involvement by
++	 * the driver.
++	 */
++	void (*output_poll_changed)(struct drm_device *dev);
++
+ 	/**
+ 	 * @mode_valid:
+ 	 *
