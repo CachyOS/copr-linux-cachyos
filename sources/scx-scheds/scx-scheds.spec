@@ -24,6 +24,7 @@ BuildRequires:  zlib
 BuildRequires:  jq
 BuildRequires:  jq-devel
 BuildRequires:  systemd
+BuildRequires:  bpftool
 Requires:  elfutils-libelf
 Requires:  zlib
 Requires:  jq
@@ -54,3 +55,13 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %{_prefix}/lib/systemd/system/scx.service
 %{_datadir}/dbus-1/system.d/org.scx.Loader.conf
 %{_datadir}/dbus-1/system-services/org.scx.Loader.service
+
+
+%package devel
+Summary:        Development files for %{name}
+
+%description devel
+The %{name}-devel package contains libraries header files for developing applications that use %{name}
+
+%files devel
+%{_includedir}/scx/
