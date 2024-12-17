@@ -1,7 +1,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds
-Version:        1.0.7
+Version:        1.0.8
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
@@ -65,3 +65,4 @@ The %{name}-devel package contains libraries header files for developing applica
 
 %files devel
 %{_includedir}/scx/
+%{_includedir}/lib/
