@@ -3,7 +3,7 @@
 
 Name:           cachyos-settings
 Release:        1%{?dist}
-Version:        1.1.3
+Version:        1.1.5
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPLv3
 URL:            https://github.com/CachyOS/CachyOS-Settings
