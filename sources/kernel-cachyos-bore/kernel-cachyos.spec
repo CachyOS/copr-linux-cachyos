@@ -46,7 +46,7 @@ Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 2
 %define flaver cb%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -57,11 +57,11 @@ Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
 %if 0%{?fedora} >= 41
-%define _nv_ver 565.57.01
+%define _nv_ver 565.77
 %define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
 %else
-%define _nv_ver 560.35.03
-%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/%{_git_branch}/sources/kernel-patches/nvidia
+%define _nv_ver 565.77
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
 %endif
 %define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
@@ -79,20 +79,11 @@ Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
-Patch2: https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/%{_git_branch}/sources/kernel-patches/revert-nvidia-446d0f48.patch
 
-%if "%{_nv_ver}" == "560.35.03"
-Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
-Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
-Patch8: https://raw.githubusercontent.com/CachyOS/kernel-patches/cd01e95a773a5da2e26ceaf5246a514091aa0d6f/6.12/misc/nvidia/0007-6.12-replace-pageswapcache.patch
-Patch9: %{_nvidia_patchurl}/0010-6.12-drm_output_poll-changed-check.patch
-%else
 Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
 Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
-%endif
 Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 Patch6: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
-Patch7: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0006-nvidia-drm-Set-FOP_UNSIGNED_OFFSET-for-nv_drm_fops.f.patch
 
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
@@ -296,11 +287,6 @@ patch -p1 -i %{PATCH0}
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH1}
 
-# Apply patch to the kernel to make compilation of Nvidia closed source driver 560 compile successfully
-%if "%{_nv_ver}" == "560.35.03"
-patch -p1 -i %{PATCH2}
-%endif
-
 ### Apply patches for nvidia-open
 # Set modeset and fbdev to default enabled
 patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
@@ -310,12 +296,6 @@ patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
 patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
 # Patches for Nvidia on kernel 6.12
 patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
-patch -p1 -i %{PATCH7} -d %{_builddir}/%{_nv_open_pkg}/
-# Apply patches to 560, which fix build error on Linux 6.12
-%if "%{_nv_ver}" == "560.35.03"
-patch -p1 -i %{PATCH8} -d %{_builddir}/%{_nv_open_pkg}/
-patch -p1 -i %{PATCH9} -d %{_builddir}/%{_nv_open_pkg}/
-%endif
 
 
 # Fetch the config and move it to the proper directory

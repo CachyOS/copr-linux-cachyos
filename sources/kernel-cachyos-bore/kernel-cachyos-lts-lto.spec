@@ -46,7 +46,7 @@ Summary: The Linux Kernel with Cachyos-LTS Patches
 
 Version: %{_basekver}.%{_stablekver}
 
-%define customver 1
+%define customver 2
 %define flaver clts%{customver}
 
 Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
@@ -57,11 +57,11 @@ Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
 # Build nvidia-open alongside the kernel
 %define _nv_build 1
 %if 0%{?fedora} >= 41
-%define _nv_ver 565.57.01
+%define _nv_ver 565.77
 %define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
 %else
-%define _nv_ver 560.35.03
-%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/%{_git_branch}/sources/kernel-patches/nvidia
+%define _nv_ver 565.77
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
 %endif
 %define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
@@ -81,13 +81,8 @@ Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basek
 Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/0001-openssl-provider.patch
 
-%if "%{_nv_ver}" == "560.35.03"
-Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled-560.patch
-Patch4: %{_nvidia_patchurl}/0008-silence-event-assert-until-570.patch
-%else
 Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
 Patch4: %{_nvidia_patchurl}/0006-silence-event-assert-until-570.patch
-%endif
 Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 Patch6: %{_nvidia_patchurl}/0009-fix-hdmi-names.patch
 # Dev patches
