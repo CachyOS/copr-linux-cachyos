@@ -330,13 +330,6 @@ scripts/config -d HZ_300
 scripts/config -e HZ_1000
 scripts/config --set-val HZ 1000
 
-# Enable bbr3
-scripts/config -m TCP_CONG_CUBIC
-scripts/config -d DEFAULT_CUBIC
-scripts/config -e TCP_CONG_BBR
-scripts/config -e DEFAULT_BBR
-scripts/config --set-str DEFAULT_TCP_CONG bbr
-
 # Enable x86_64_v3
 # Just to be sure, check:
 # /lib/ld-linux-x86-64.so.2 --help | grep supported
