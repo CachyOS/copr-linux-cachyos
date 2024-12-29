@@ -22,21 +22,48 @@
 %define asmarch x86
 %endif
 
+# define git branch to make testing easier without merging to master branch
+%define _git_branch master
+
 # whether to build kernel with llvm compiler(clang)
 %define llvm_kbuild 0
+%if %{llvm_kbuild}
+%define llvm_build_env_vars CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
+%define ltoflavor 1
+%endif
 
 %define flavor cachyos-rt
-Name: kernel%{?flavor:-%{flavor}}
+Name: kernel%{?flavor:-%{flavor}}%{?ltoflavor:-lto}
 Summary: The Linux Kernel with Cachyos-BORE-EEVDF Patches
 
-%define _basekver 6.7
-%define _stablekver 1
+%define _basekver 6.12
+%define _stablekver 7
+%if %{_stablekver} == 0
+%define _tarkver %{_basekver}
+%else
+%define _tarkver %{_basekver}.%{_stablekver}
+%endif
+
 Version: %{_basekver}.%{_stablekver}
 
 %define customver 1
 %define flaver cbrt%{customver}
 
-Release:%{flaver}.0%{?dist}
+Release:%{flaver}.0%{?ltoflavor:.lto}%{?dist}
+
+# Define rawhide fedora version
+%define _rawhidever 42
+
+# Build nvidia-open alongside the kernel
+%define _nv_build 1
+%if 0%{?fedora} >= 41
+%define _nv_ver 565.77
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
+%else
+%define _nv_ver 565.77
+%define _nvidia_patchurl https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia
+%endif
+%define _nv_open_pkg open-gpu-kernel-modules-%{_nv_ver}
 
 %define rpmver %{version}-%{release}
 %define krelstr %{release}.%{_arch}
@@ -46,23 +73,29 @@ License: GPLv2 and Redistributable, no modifications permitted
 Group: System Environment/Kernel
 Vendor: The Linux Community and CachyOS maintainer(s)
 URL: https://cachyos.org
-Source0: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_basekver}.%{_stablekver}.tar.xz
-#Source0: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_basekver}.tar.xz
-Source1: https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos-rt/config
+Source0: https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
+Source1: https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos-rt-bore/config
+Source2: https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_open_pkg}.tar.gz
 # Stable patches
 Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
-Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/0001-rt.patch
-Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/6.6/sched/0001-bore-cachy-rt.patch
+Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
+Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/0001-rt.patch
+
+Patch3: %{_nvidia_patchurl}/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch4: %{_nvidia_patchurl}/0004-silence-event-assert-until-570.patch
+Patch5: %{_nvidia_patchurl}/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch6: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+
 # Dev patches
 #Patch0: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all-dev.patch
-#Patch2: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched-dev/0001-bore-cachy-rt.patch
+#Patch1: https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched-dev/0001-bore-cachy.patch
 %define __spec_install_post /usr/lib/rpm/brp-compress || :
 %define debug_package %{nil}
 BuildRequires: python3-devel
 BuildRequires: make
 BuildRequires: perl-generators
 BuildRequires: perl-interpreter
-BuildRequires: openssl-devel 
+BuildRequires: openssl-devel
 BuildRequires: bison
 BuildRequires: flex
 BuildRequires: findutils
@@ -92,8 +125,9 @@ BuildRequires: libkcapi-hmaccalc
 BuildRequires: perl-Carp
 BuildRequires: rsync
 BuildRequires: grubby
-BuildRequires: wget 
+BuildRequires: wget
 BuildRequires: gcc
+BuildRequires: gcc-c++
 %if %{llvm_kbuild}
 BuildRequires: llvm
 BuildRequires: clang
@@ -102,8 +136,10 @@ BuildRequires: lld
 Requires: %{name}-core-%{rpmver} = %{kverstr}
 Requires: %{name}-modules-%{rpmver} = %{kverstr}
 Provides: %{name}%{_basekver} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-rt >= 6.5.7-cbert1.0 
-Obsoletes: kernel-cachyos-bore-eevdf-rt <= 6.5.9-cbert1.0
+Provides: kernel-cachyos-bore-eevdf >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore <= 6.5.10-cb1
 
 %description
 The kernel-%{flaver} meta package
@@ -130,8 +166,10 @@ Requires: linux-firmware
 Requires: /usr/bin/kernel-install
 Requires: kernel-modules-%{rpmver} = %{kverstr}
 Supplements: %{name} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-rt-core >= 6.5.7-cbert1.0
-Obsoletes: kernel-cachyos-bore-eevdf-rt-core <= 6.5.9-cbert1.0
+Provides: kernel-cachyos-bore-eevdf-core >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-core >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-core <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-core <= 6.5.10-cb1
 %description core
 The kernel package contains the Linux kernel (vmlinuz), the core of any
 Linux operating system.  The kernel handles the basic functions
@@ -149,11 +187,28 @@ Provides: kernel-modules-uname-r = %{kverstr}
 Provides: kernel-modules-%{_arch} = %{rpmver}
 Provides: kernel-modules-%{rpmver} = %{kverstr}
 Provides: %{name}-modules-%{rpmver} = %{kverstr}
-Provides: kernel-cachyos-bore-eevdf-rt-modules >= 6.5.7-cbert1.0
-Obsoletes: kernel-cachyos-bore-eevdf-rt-modules <= 6.5.9-cbert1.0
 Supplements: %{name} = %{rpmver}
+Provides: kernel-cachyos-bore-eevdf-modules >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-modules >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-modules <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-modules <= 6.5.10-cb1
 %description modules
 This package provides kernel modules for the core %{?flavor:%{flavor}} kernel package.
+
+%if %{_nv_build}
+%package nvidia-open
+Summary: Prebuilt nvidia-open kernel modules to match the core kernel
+Group: System Environment/Kernel
+Requires: %{name}-core-%{rpmver} = %{kverstr}
+Requires: %{name}-modules-%{rpmver} = %{kverstr}
+Provides: %{name}%{_basekver} = %{rpmver}
+Provides: nvidia-kmod >= %{_nv_ver}
+Provides: installonlypkg(kernel-module)
+Conflicts: akmod-nvidia
+Recommends: xorg-x11-drv-nvidia >= %{_nv_ver}
+%description nvidia-open
+This package provides prebuilt nvidia-open kernel modules for the core %{?flavor:%{flavor}} kernel package.
+%endif
 
 %package headers
 Summary: Header files for the Linux kernel for use by glibc
@@ -163,8 +218,10 @@ Provides: glibc-kernheaders = 3.0-46
 Provides: kernel-headers%{_isa} = %{kverstr}
 Obsoletes: kernel-headers < %{kverstr}
 Obsoletes: glibc-kernheaders < 3.0-46
-Provides: kernel-cachyos-bore-eevdf-rt-headers >= 6.5.7-cbert1.0
-Obsoletes: kernel-cachyos-bore-eevdf-rt-headers <= 6.5.9-cbert1.0
+Obsoletes: kernel-cachyos-bore-eevdf-headers <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-headers <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-headers >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-headers >= 6.5.7-cb1
 %description headers
 Kernel-headers includes the C header files that specify the interface
 between the Linux kernel and userspace libraries and programs.  The
@@ -176,7 +233,7 @@ glibc package.
 Summary: Development package for building kernel modules to match the %{?flavor:%{flavor}} kernel
 Group: System Environment/Kernel
 AutoReqProv: no
-Requires: findutils      
+Requires: findutils
 Requires: perl-interpreter
 Requires: openssl-devel
 Requires: flex
@@ -199,8 +256,10 @@ Provides: kernel-devel%{_isa} = %{rpmver}
 Provides: kernel-devel-%{rpmver} = %{kverstr}
 Provides: %{name}-devel-%{rpmver} = %{kverstr}
 Provides: %{name}%{_basekver}-devel = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-rt-devel >= 6.5.7-cbert1.0 
-Obsoletes: kernel-cachyos-bore-eevdf-rt-devel <= 6.5.9-cbert1.0
+Provides: kernel-cachyos-bore-eevdf-devel >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-devel >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-devel <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-devel <= 6.5.10-cb1
 %description devel
 This package provides kernel headers and makefiles sufficient to build modules
 against the %{?flavor:%{flavor}} kernel package.
@@ -211,22 +270,37 @@ Requires: %{name}-devel = %{rpmver},
 Requires: %{name}-core = %{rpmver}
 Provides: kernel-devel-matched = %{rpmver}
 Provides: kernel-devel-matched%{_isa} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-rt-devel-matched >= 6.5.7-cbert1.0
-Obsoletes: kernel-cachyos-bore-eevdf-rt-devel-matched <= 6.5.9-cbert1.0
+Provides: kernel-cachyos-bore-eevdf-devel-matched >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-devel-matched >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-devel-matched <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-devel-matched <= 6.5.10-cb1
 %description devel-matched
 This meta package is used to install matching core and devel packages for a given %{?flavor:%{flavor}} kernel.
 
 %prep
-%setup -q -n linux-%{_basekver}.%{_stablekver}
-#%setup -q -n linux-%{_basekver}
+%setup -q -n linux-%{_tarkver}
+
+tar -xzf %{SOURCE2} -C %{_builddir}
 
 # Apply CachyOS patch
 patch -p1 -i %{PATCH0}
 
 # Apply EEVDF and BORE patches
 patch -p1 -i %{PATCH1}
+
+# Apply RT patch
 patch -p1 -i %{PATCH2}
-#patch -p1 -i %{PATCH3}
+
+### Apply patches for nvidia-open
+# Set modeset and fbdev to default enabled
+patch -p1 -i %{PATCH3} -d %{_builddir}/%{_nv_open_pkg}/kernel-open
+# Silence Assert warnings
+patch -p1 -i %{PATCH4} -d %{_builddir}/%{_nv_open_pkg}/
+# Fix for Zen5 error print in dmesg
+patch -p1 -i %{PATCH5} -d %{_builddir}/%{_nv_open_pkg}/
+# Patches for Nvidia on kernel 6.12
+patch -p1 -i %{PATCH6} -d %{_builddir}/%{_nv_open_pkg}/
+
 
 # Fetch the config and move it to the proper directory
 cp %{SOURCE1} .config
@@ -241,51 +315,31 @@ scripts/config -e CACHY
 # Enable BORE Scheduler
 scripts/config -e SCHED_BORE
 
+# Enable sched-ext
+scripts/config -e SCHED_CLASS_EXT
+scripts/config -e BPF
+scripts/config -e BPF_EVENTS
+scripts/config -e BPF_JIT
+scripts/config -e BPF_SYSCALL
+scripts/config -e DEBUG_INFO
+scripts/config -e DEBUG_INFO_BTF
+scripts/config -e DEBUG_INFO_BTF_MODULES
+scripts/config -e FTRACE
+scripts/config -e PAHOLE_HAS_SPLIT_BTF
+scripts/config -e DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+scripts/config -e SCHED_DEBUG
+
 # Setting tick rate
 scripts/config -d HZ_300
 scripts/config -e HZ_1000
 scripts/config --set-val HZ 1000
-
-# Enable bbr3
-scripts/config -m TCP_CONG_CUBIC
-scripts/config -d DEFAULT_CUBIC
-scripts/config -e TCP_CONG_BBR
-scripts/config -e DEFAULT_BBR
-scripts/config --set-str DEFAULT_TCP_CONG bbr
-# Switch into FQ - bbr3 doesn't work properly with FQ_CODEL
-scripts/config -m NET_SCH_FQ_CODEL
-scripts/config -e NET_SCH_FQ
-scripts/config -d DEFAULT_FQ_CODEL
-scripts/config -e DEFAULT_FQ
-scripts/config --set-str DEFAULT_NET_SCH fq
-
-# Disable DEBUG
-scripts/config -d DEBUG_INFO
-scripts/config -d DEBUG_INFO_BTF
-scripts/config -d DEBUG_INFO_DWARF4
-scripts/config -d DEBUG_INFO_DWARF5
-scripts/config -d PAHOLE_HAS_SPLIT_BTF
-scripts/config -d DEBUG_INFO_BTF_MODULES
-scripts/config -d SLUB_DEBUG
-scripts/config -d PM_DEBUG
-scripts/config -d PM_ADVANCED_DEBUG
-scripts/config -d PM_SLEEP_DEBUG
-scripts/config -d ACPI_DEBUG
-scripts/config -d SCHED_DEBUG
-scripts/config -d LATENCYTOP
-scripts/config -d DEBUG_PREEMPT
 
 # Enable x86_64_v3
 # Just to be sure, check:
 # /lib/ld-linux-x86-64.so.2 --help | grep supported
 # and make sure if your processor supports it:
 # x86-64-v3 (supported, searched)
-scripts/config -d GENERIC_CPU
-scripts/config -e GENERIC_CPU3
-
-# Set performance governor
-scripts/config -d CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
-scripts/config -e CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+scripts/config --set-val X86_64_VERSION 3
 
 # Set O3
 scripts/config -d CC_OPTIMIZE_FOR_PERFORMANCE
@@ -327,25 +381,29 @@ scripts/config -e HAVE_GCC_PLUGINS
 scripts/config -u DEFAULT_HOSTNAME
 
 # Enable SELinux (https://github.com/sirlucjan/copr-linux-cachyos/pull/1)
-scripts/config --set-str CONFIG_LSM “lockdown,yama,integrity,selinux,bpf,landlock”
+scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
 
 # Set kernel version string as build salt
 scripts/config --set-str BUILD_SALT "%{kverstr}"
 
 # Finalize the patched config
 #make %{?_smp_mflags} EXTRAVERSION=-%{krelstr} oldconfig
-make %{?_smp_mflags} EXTRAVERSION=-%{krelstr} olddefconfig
+make %{?_smp_mflags} %{?llvm_build_env_vars} EXTRAVERSION=-%{krelstr} olddefconfig
 
 # Save configuration for later reuse
 cat .config > config-linux-bore
 
 %build
+make %{?_smp_mflags} %{?llvm_build_env_vars} EXTRAVERSION=-%{krelstr}
 %if %{llvm_kbuild}
-make CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1 %{?_smp_mflags} EXTRAVERSION=-%{krelstr}
 clang ./scripts/sign-file.c -o ./scripts/sign-file -lssl -lcrypto
 %else
-make %{?_smp_mflags} EXTRAVERSION=-%{krelstr}
 gcc ./scripts/sign-file.c -o ./scripts/sign-file -lssl -lcrypto
+%endif
+
+%if %{_nv_build}
+cd %{_builddir}/%{_nv_open_pkg}
+CFLAGS= CXXFLAGS= LDFLAGS= make %{?llvm_build_env_vars} KERNEL_UNAME=%{kverstr} IGNORE_PREEMPT_RT_PRESENCE=1 IGNORE_CC_MISMATCH=yes SYSSRC=%{_builddir}/linux-%{_tarkver} SYSOUT=%{_builddir}/linux-%{_tarkver} %{?_smp_mflags} modules
 %endif
 
 %install
@@ -357,13 +415,22 @@ mkdir -p %{buildroot}/boot
 cp -v $ImageName %{buildroot}/boot/vmlinuz-%{kverstr}
 chmod 755 %{buildroot}/boot/vmlinuz-%{kverstr}
 
-ZSTD_CLEVEL=19 make %{?_smp_mflags} INSTALL_MOD_PATH=%{buildroot} modules_install mod-fw=
-make %{?_smp_mflags} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+ZSTD_CLEVEL=19 make %{?_smp_mflags} %{?llvm_build_env_vars} INSTALL_MOD_PATH=%{buildroot} INSTALL_MOD_STRIP=1 modules_install mod-fw=
+make %{?_smp_mflags} %{?llvm_build_env_vars} INSTALL_HDR_PATH=%{buildroot}/usr headers_install
+
+%if %{_nv_build}
+cd %{_builddir}/%{_nv_open_pkg}
+install -dm755 "%{buildroot}/lib/modules/%{kverstr}/nvidia"
+install -m644 kernel-open/*.ko "%{buildroot}/lib/modules/%{kverstr}/nvidia"
+install -Dt "%{buildroot}/usr/share/licenses/nvidia-open" -m644 COPYING
+find "%{buildroot}" -name '*.ko' -exec zstd --rm -19 {} +
+%endif
 
 # prepare -devel files
 ### all of the things here are derived from the Fedora kernel.spec
 ### see
 ##### https://src.fedoraproject.org/rpms/kernel/blob/rawhide/f/kernel.spec
+cd %{_builddir}/linux-%{_tarkver}
 rm -f %{buildroot}/lib/modules/%{kverstr}/build
 rm -f %{buildroot}/lib/modules/%{kverstr}/source
 mkdir -p %{buildroot}/lib/modules/%{kverstr}/build
@@ -423,7 +490,6 @@ cp -a --parents tools/include/tools/le_byteshift.h %{buildroot}/lib/modules/%{kv
 cp -a --parents tools/include/linux/compiler* %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/include/linux/types.h %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/build/Build.include %{buildroot}/lib/modules/%{kverstr}/build
-cp --parents tools/build/Build %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/build/fixdep.c %{buildroot}/lib/modules/%{kverstr}/build
 cp --parents tools/objtool/sync-check.sh %{buildroot}/lib/modules/%{kverstr}/build
 cp -a --parents tools/bpf/resolve_btfids %{buildroot}/lib/modules/%{kverstr}/build
@@ -631,8 +697,10 @@ fi
 %post modules
 /sbin/depmod -a %{kverstr}
 
-%postun modules
+%if %{_nv_build}
+%posttrans nvidia-open
 /sbin/depmod -a %{kverstr}
+%endif
 
 %files core
 %ghost %attr(0600, root, root) /boot/vmlinuz-%{kverstr}
@@ -642,7 +710,6 @@ fi
 %ghost %attr(0644, root, root) /boot/config-%{kverstr}
 /boot/.vmlinuz-%{kverstr}.hmac
 %dir /lib/modules/%{kverstr}/
-%dir /lib/modules/%{kverstr}/kernel/
 /lib/modules/%{kverstr}/.vmlinuz.hmac
 /lib/modules/%{kverstr}/config
 /lib/modules/%{kverstr}/vmlinuz
@@ -650,8 +717,7 @@ fi
 /lib/modules/%{kverstr}/symvers.gz
 
 %files modules
-%defattr (-, root, root)
-/lib/modules/%{kverstr}/*
+/lib/modules/%{kverstr}/
 %exclude /lib/modules/%{kverstr}/.vmlinuz.hmac
 %exclude /lib/modules/%{kverstr}/config
 %exclude /lib/modules/%{kverstr}/vmlinuz
@@ -659,6 +725,13 @@ fi
 %exclude /lib/modules/%{kverstr}/symvers.gz
 %exclude /lib/modules/%{kverstr}/build
 %exclude /lib/modules/%{kverstr}/source
+%if %{_nv_build}
+%exclude /lib/modules/%{kverstr}/nvidia
+
+%files nvidia-open
+/lib/modules/%{kverstr}/nvidia
+/usr/share/licenses/nvidia-open/COPYING
+%endif
 
 %files headers
 %defattr (-, root, root)
