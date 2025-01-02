@@ -136,10 +136,10 @@ BuildRequires: lld
 Requires: %{name}-core-%{rpmver} = %{kverstr}
 Requires: %{name}-modules-%{rpmver} = %{kverstr}
 Provides: %{name}%{_basekver} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore >= 6.5.7-cb1
-Obsoletes: kernel-cachyos-bore-eevdf <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt <= 6.5.10-cb1
 
 %description
 The kernel-%{flaver} meta package
@@ -166,10 +166,10 @@ Requires: linux-firmware
 Requires: /usr/bin/kernel-install
 Requires: kernel-modules-%{rpmver} = %{kverstr}
 Supplements: %{name} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-core >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore-core >= 6.5.7-cb1
-Obsoletes: kernel-cachyos-bore-eevdf-core <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore-core <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt-core >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt-core >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt-core <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt-core <= 6.5.10-cb1
 %description core
 The kernel package contains the Linux kernel (vmlinuz), the core of any
 Linux operating system.  The kernel handles the basic functions
@@ -188,10 +188,10 @@ Provides: kernel-modules-%{_arch} = %{rpmver}
 Provides: kernel-modules-%{rpmver} = %{kverstr}
 Provides: %{name}-modules-%{rpmver} = %{kverstr}
 Supplements: %{name} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-modules >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore-modules >= 6.5.7-cb1
-Obsoletes: kernel-cachyos-bore-eevdf-modules <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore-modules <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt-modules >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt-modules >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt-modules <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt-modules <= 6.5.10-cb1
 %description modules
 This package provides kernel modules for the core %{?flavor:%{flavor}} kernel package.
 
@@ -218,10 +218,10 @@ Provides: glibc-kernheaders = 3.0-46
 Provides: kernel-headers%{_isa} = %{kverstr}
 Obsoletes: kernel-headers < %{kverstr}
 Obsoletes: glibc-kernheaders < 3.0-46
-Obsoletes: kernel-cachyos-bore-eevdf-headers <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore-headers <= 6.5.10-cb1
-Provides: kernel-cachyos-bore-eevdf-headers >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore-headers >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt-headers <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt-headers <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt-headers >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt-headers >= 6.5.7-cb1
 %description headers
 Kernel-headers includes the C header files that specify the interface
 between the Linux kernel and userspace libraries and programs.  The
@@ -256,10 +256,10 @@ Provides: kernel-devel%{_isa} = %{rpmver}
 Provides: kernel-devel-%{rpmver} = %{kverstr}
 Provides: %{name}-devel-%{rpmver} = %{kverstr}
 Provides: %{name}%{_basekver}-devel = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-devel >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore-devel >= 6.5.7-cb1
-Obsoletes: kernel-cachyos-bore-eevdf-devel <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore-devel <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt-devel >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt-devel >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt-devel <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt-devel <= 6.5.10-cb1
 %description devel
 This package provides kernel headers and makefiles sufficient to build modules
 against the %{?flavor:%{flavor}} kernel package.
@@ -270,10 +270,10 @@ Requires: %{name}-devel = %{rpmver},
 Requires: %{name}-core = %{rpmver}
 Provides: kernel-devel-matched = %{rpmver}
 Provides: kernel-devel-matched%{_isa} = %{rpmver}
-Provides: kernel-cachyos-bore-eevdf-devel-matched >= 6.5.7-cbe1
-Provides: kernel-cachyos-bore-devel-matched >= 6.5.7-cb1
-Obsoletes: kernel-cachyos-bore-eevdf-devel-matched <= 6.5.10-cbe1
-Obsoletes: kernel-cachyos-bore-devel-matched <= 6.5.10-cb1
+Provides: kernel-cachyos-bore-eevdf-rt-devel-matched >= 6.5.7-cbe1
+Provides: kernel-cachyos-bore-rt-devel-matched >= 6.5.7-cb1
+Obsoletes: kernel-cachyos-bore-eevdf-rt-devel-matched <= 6.5.10-cbe1
+Obsoletes: kernel-cachyos-bore-rt-devel-matched <= 6.5.10-cb1
 %description devel-matched
 This meta package is used to install matching core and devel packages for a given %{?flavor:%{flavor}} kernel.
 
