@@ -1,3 +1,0 @@
-[Unit]
-Wants=akmods-keygen@.service
-PartOf=akmods.service

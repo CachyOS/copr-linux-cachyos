@@ -1,8 +1,0 @@
-# Also see:
-# https://fedoraproject.org/wiki/Starting_services_by_default
-
-# Installing presets is not the preferred solution but until another one
-# presents itself:
-# https://bugzilla.rpmfusion.org/show_bug.cgi?id=3713
-enable akmods.service
-#enable akmods-shutdown.service
