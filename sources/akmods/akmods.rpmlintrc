@@ -1,0 +1,3 @@
+addFilter("W: non-standard-.*")
+addFilter("W: no-manual-page-for-binary .*")
+addFilter("W: empty-%postun")
