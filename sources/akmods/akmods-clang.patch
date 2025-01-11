@@ -1,0 +1,91 @@
+From 583cd6c0a27553d5cd7d3faf8122da0734bc805c Mon Sep 17 00:00:00 2001
+From: Eric Naim <dnaim@cachyos.org>
+Date: Sat, 11 Jan 2025 23:51:55 +0700
+Subject: [PATCH 1/2] akmods: Support building kernel modules with clang
+
+Detect whether kernel was built with clang  by checking whether CONFIG_CC_IS_CLANG is available in the
+kernel config. This check allows akmods to export build flags to use clang when the kernel is built with clang.
+
+Signed-off-by: Eric Naim <dnaim@cachyos.org>
+---
+ akmods | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/akmods b/akmods
+index b0ed55f..6c90500 100644
+--- a/akmods
++++ b/akmods
+@@ -292,6 +292,7 @@ buildinstall_kmod()
+ 	local this_kmodname=${2}
+ 	local this_kmodsrpm=${3}
+ 	local this_kmodverrel=${4}
++	unset CC CXX LD LLVM LLVM_IAS
+ 
+ 	if [[ ! -r "${this_kmodsrpm}" ]] ; then
+ 		akmods_echo 2 1 "ERROR: ${this_kmodsrpm} not found."
+@@ -323,6 +324,16 @@ buildinstall_kmod()
+ 		return 1
+ 	fi
+ 
++	if -e "/lib/modules/${this_kernelver}/build/.config"; then
++		if grep -q CONFIG_CC_IS_CLANG=y "/lib/modules/${this_kernelver}/build/.config"; then
++			export CC=clang
++			export CXX=clang++
++			export LD=ld.lld
++			export LLVM=1
++			export LLVM_IAS=1
++		fi
++	fi
++
+ 	# akmods_echo will log to this file from now on as well
+ 	kmodlogfile="/var/cache/akmods/${this_kmodname}/.last.log"
+ 
+-- 
+2.48.0
+
+
+From fb2f9f7a2cf9e2e1f76bf1016d69651201002100 Mon Sep 17 00:00:00 2001
+From: Eric Naim <dnaim@cachyos.org>
+Date: Sat, 11 Jan 2025 23:54:34 +0700
+Subject: [PATCH 2/2] akmods-ostree: Support building kernel modules with clang
+
+Detect whether kernel was built with clang  by checking whether CONFIG_CC_IS_CLANG is available in the
+kernel config. This check allows akmods to export build flags to use clang when the kernel is built with clang.
+
+The code at its current state is very ugly but it has been confirmed to work. A cleaner patch will be used
+once everything is confirmed to be working.
+
+Signed-off-by: Eric Naim <dnaim@cachyos.org>
+---
+ akmods-ostree-post | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/akmods-ostree-post b/akmods-ostree-post
+index 517e1b3..524a07d 100644
+--- a/akmods-ostree-post
++++ b/akmods-ostree-post
+@@ -76,10 +76,20 @@ kernels="$(ls /lib/modules)"
+ create_tmpdir
+ 
+ for kernel in ${kernels} ; do
++	kernel_config=/lib/modules/$kernel/build/.config
++
+ 	echo "Building ${srpm} for kernel ${kernel}"
+ 	# Note: This builds as root, but this is pretty safe because its happening in the ostree %post sandbox.
+ 	#       In fact, given that /usr is a rofiles-fuse mount no other user can access /usr in this sandbox anyway.
+-	akmodsbuild --quiet --kernels ${kernel} --outputdir ${tmpdir}results --logfile "${tmpdir}/akmodsbuild.log" "${srpm}"  2>&1
++	if [ -e "$kernel_config" ]; then
++		if grep -q CONFIG_CC_IS_CLANG=y "$kernel_config"; then
++			env CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1 akmodsbuild --quiet --kernels ${kernel} --outputdir ${tmpdir}results --logfile "${tmpdir}/akmodsbuild.log" "${srpm}"  2>&1
++		else
++			akmodsbuild --quiet --kernels ${kernel} --outputdir ${tmpdir}results --logfile "${tmpdir}/akmodsbuild.log" "${srpm}"  2>&1
++		fi
++	else
++		akmodsbuild --quiet --kernels ${kernel} --outputdir ${tmpdir}results --logfile "${tmpdir}/akmodsbuild.log" "${srpm}"  2>&1
++	fi
+ 	returncode=$?
+ 	if (( ! ${returncode} == 0 )); then
+ 		finally 1
+-- 
+2.48.0
+
