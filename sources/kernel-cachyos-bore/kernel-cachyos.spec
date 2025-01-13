@@ -14,6 +14,12 @@
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
+# Define various build flags that can
+# be used to customize the building process
+# Build a minimal a kernel via modprobed.db
+# file to reduce build times.
+%define _build_minimal 0
+
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
@@ -22,7 +28,7 @@
 Name:           kernel-cachyos
 Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos5%{?dist}
+Release:        cachyos6%{?dist}
 License:        GPL-2.0-Only
 URL:            https://cachyos.org
 
@@ -60,6 +66,13 @@ Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{version}.ta
 #Source0:       https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%_basekver.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
 
+%if %{_build_minimal}
+# The default modprobed.db provided is used for linux-cachyos CI.
+# This should not be used for production and ideally should only be used for compile tests.
+# Note that any modprobed.db file is accepted
+Source2:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/modprobed.db
+%endif
+
 Patch0:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 
@@ -81,6 +94,10 @@ Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     scripts/config --set-val X86_64_VERSION 3
     scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
     scripts/config -u DEFAULT_HOSTNAME
+
+    %if %{_build_minimal}
+        make LSMOD=%{SOURCE2} localmodconfig
+    %endif
 
     make olddefconfig
     diff -u %{SOURCE1} .config || :
