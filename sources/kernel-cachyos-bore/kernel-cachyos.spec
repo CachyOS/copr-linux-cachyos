@@ -46,7 +46,7 @@ BuildRequires:  make
 BuildRequires:  openssl
 BuildRequires:  openssl-devel
 BuildRequires:  perl-Carp
-BuildRequires:  perl-devel,
+BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
@@ -65,7 +65,6 @@ Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
 
 %description
     The meta package for %{name}.
-
 
 %prep
     %setup -q -n linux-%{version}
@@ -189,6 +188,14 @@ Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     ln -s %{_devel_dir} %{buildroot}%{_kernel_dir}/build
     ln -s %{_kernel_dir}/build %{buildroot}%{_kernel_dir}/source
 
+    # Create stub initramfs to inflate disk space requirements.
+    # This should hopefully prevent some initramfs failures due to
+    # insufficient space in /boot (#bz #530778)
+    # 90 seems to be a safe value nowadays. It is slightly inflated than the
+    # measured average to also account for installed vmlinuz in /boot
+    install -dm755 %{buildroot}/boot
+    dd if=/dev/zero of=%{buildroot}/boot/initramfs-%{_kver}.img bs=1M count=90
+
 %package core
 Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and improvements
 Provides:       kernel-core-uname-r = %{_kver}
@@ -226,6 +233,7 @@ Requires:       kmod
 
 %files core
     %dir %{_kernel_dir}
+    %ghost /boot/initramfs-%{_kver}.img
     %{_kernel_dir}/vmlinuz
     %{_kernel_dir}/modules.builtin
     %{_kernel_dir}/modules.builtin.modinfo
