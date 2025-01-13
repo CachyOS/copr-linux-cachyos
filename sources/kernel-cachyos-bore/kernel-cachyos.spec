@@ -307,6 +307,17 @@ Requires:       gcc
 %files devel
     %{_devel_dir}
 
+%package devel-matched
+Summary:        Meta package to install matching core and devel packages for %{name}
+Provides:       kernel-devel-matched = %{_rpmver}
+Requires:       %{name}-core = %{_rpmver}
+Requires:       %{name}-devel = %{_rpmver}
+
+%description devel-matched
+    This meta package is used to install matching core and devel packages for %{name}.
+
+%files devel-matched
+
 %files
 
 
