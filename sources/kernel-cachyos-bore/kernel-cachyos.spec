@@ -5,6 +5,7 @@
 %define _default_patch_fuzz 2
 %define _disable_source_fetch 0
 %define debug_package %{nil}
+%define make_build make %{?_build_args} %{?_smp_mflags}
 %undefine _auto_set_build_flags
 %undefine _include_frame_pointers
 
@@ -14,21 +15,29 @@
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
-# Define various build flags that can
-# be used to customize the building process
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times.
 %define _build_minimal 0
+
+# Builds the kernel with clang and enables
+# ThinLTO
+%define _build_lto 0
 
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
 %define _devel_dir /usr/src/kernels/%{_kver}
 
-Name:           kernel-cachyos
-Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and improvements.
+%if %{_build_lto}
+    # Define build environment variables to build the kernel with clang
+    %define _build_args CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
+    %define _is_lto 1
+%endif
+
+Name:           kernel-cachyos%{?_is_lto:-lto}
+Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos6%{?dist}
+Release:        cachyos7%{?_is_lto:.lto}%{?dist}
 License:        GPL-2.0-Only
 URL:            https://cachyos.org
 
@@ -62,6 +71,12 @@ BuildRequires:  tar
 BuildRequires:  xz
 BuildRequires:  zstd
 
+%if %{_build_lto}
+BuildRequires:  clang
+BuildRequires:  lld
+BuildRequires:  llvm
+%endif
+
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{version}.tar.xz
 #Source0:       https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%_basekver.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
@@ -75,6 +90,10 @@ Source2:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/m
 
 Patch0:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
+
+%if %{_build_lto}
+Patch2:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/dkms-clang.patch
+%endif
 
 %description
     The meta package for %{name}.
@@ -95,23 +114,27 @@ Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
     scripts/config -u DEFAULT_HOSTNAME
 
-    %if %{_build_minimal}
-        make LSMOD=%{SOURCE2} localmodconfig
+    %if %{_build_lto}
+        scripts/config -e LTO_CLANG_THIN
     %endif
 
-    make olddefconfig
+    %if %{_build_minimal}
+        %make_build LSMOD=%{SOURCE2} localmodconfig
+    %endif
+
+    %make_build olddefconfig
     diff -u %{SOURCE1} .config || :
 
 %build
-    make %{?_smp_mflags} EXTRAVERSION=-%{release}.%{_arch} all
-    make -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
+    %make_build EXTRAVERSION=-%{release}.%{_arch} all
+    %make_build -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
 
 %install
-    install -Dm644 "$(make -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
+    install -Dm644 "$(%make_build -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
     zstdmt -19 < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.zst
 
     # Modules
-    ZSTD_CLEVEL=19 make %{?_smp_mflags} INSTALL_MOD_PATH="%{buildroot}" INSTALL_MOD_STRIP=1 DEPMOD=/doesnt/exist modules_install
+    ZSTD_CLEVEL=19 %make_build INSTALL_MOD_PATH="%{buildroot}" INSTALL_MOD_STRIP=1 DEPMOD=/doesnt/exist modules_install
 
     # -devel files
     install -Dt %{buildroot}%{_devel_dir} -m644 .config Makefile Module.symvers System.map tools/bpf/bpftool/vmlinux.h
@@ -304,7 +327,14 @@ Requires:       elfutils-libelf-devel
 Requires:       bison
 Requires:       flex
 Requires:       make
+
+%if %{_build_lto}
+Requires:       clang
+Requires:       lld
+Requires:       llvm
+%else
 Requires:       gcc
+%endif
 
 %description devel
     This package provides kernel headers and makefiles sufficient to build modules against %{name}.
