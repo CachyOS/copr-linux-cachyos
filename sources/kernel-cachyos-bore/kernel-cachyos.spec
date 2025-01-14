@@ -15,6 +15,12 @@
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
+%if %{_stablekver} == 0
+    %define _tarkver %{_basekver}
+%else
+    %define _tarkver %{version}
+%endif
+
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times.
 %define _build_minimal 0
@@ -40,7 +46,7 @@
     %define _is_lto 1
 %endif
 
-%define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{version} SYSOUT=%{_builddir}/linux-%{version}
+%define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{_tarkver} SYSOUT=%{_builddir}/linux-%{_tarkver}
 
 Name:           kernel-cachyos%{?_is_lto:-lto}
 Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
@@ -90,8 +96,7 @@ BuildRequires:  gcc-c++
 %endif
 
 # Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
-Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{version}.tar.xz
-#Source0:       https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%_basekver.tar.xz
+Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
 
 %if %{_build_minimal}
@@ -124,9 +129,9 @@ Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
 
 %prep
     %if %{_build_nv}
-        %setup -q -b 10 -n linux-%{version}
+        %setup -q -b 10 -n linux-%{_tarkver}
     %else
-        %setup -q -n linux-%{version}
+        %setup -q -n linux-%{_tarkver}
     %endif
 
     %autopatch -p1 -v -M 9
