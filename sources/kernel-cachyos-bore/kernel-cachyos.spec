@@ -1,11 +1,12 @@
 # Maintainer: Eric Naim <dnaim@cachyos.org>
 
 # Fedora bits
-%define __spec_install_post /usr/lib/rpm/brp-compress || :
+%define __spec_install_post %{__os_install_post}
 %define _default_patch_fuzz 2
 %define _disable_source_fetch 0
 %define debug_package %{nil}
 %define make_build make %{?_build_args} %{?_smp_mflags}
+%undefine __brp_mangle_shebangs
 %undefine _auto_set_build_flags
 %undefine _include_frame_pointers
 
@@ -80,6 +81,7 @@ BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
 BuildRequires:  python3-pyyaml
+BuildRequires:  python-srpm-macros
 BuildRequires:  redhat-rpm-config
 BuildRequires:  tar
 BuildRequires:  xz
