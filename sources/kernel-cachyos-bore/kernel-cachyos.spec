@@ -53,7 +53,7 @@ Name:           kernel-cachyos%{?_is_lto:-lto}
 Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
 Release:        cachyos8%{?_is_lto:.lto}%{?dist}
-License:        GPL-2.0-Only
+License:        GPL-2.0-only
 URL:            https://cachyos.org
 
 Requires:       kernel-core-uname-r = %{_kver}
@@ -328,6 +328,7 @@ Requires:       kmod
 
 %files core
     %dir %{_kernel_dir}
+    %license COPYING
     %ghost /boot/initramfs-%{_kver}.img
     %{_kernel_dir}/vmlinuz
     %{_kernel_dir}/modules.builtin
