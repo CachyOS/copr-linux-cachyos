@@ -2,7 +2,7 @@
 
 Name:           akmods
 Version:        0.6.0
-Release:        cachyos2%{?dist}
+Release:        21%{?dist}
 Summary:        Automatic kmods build and install tool
 
 License:        MIT

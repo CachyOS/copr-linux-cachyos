@@ -27,7 +27,7 @@ index b0ed55f..6c90500 100644
  		return 1
  	fi
  
-+	if -e "/lib/modules/${this_kernelver}/build/.config"; then
++	if [ -e "/lib/modules/${this_kernelver}/build/.config" ]; then
 +		if grep -q CONFIG_CC_IS_CLANG=y "/lib/modules/${this_kernelver}/build/.config"; then
 +			export CC=clang
 +			export CXX=clang++
