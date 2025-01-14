@@ -23,6 +23,12 @@
 # ThinLTO
 %define _build_lto 0
 
+# Builds nvidia-open kernel modules with
+# the kernel.
+%define _build_nv 1
+%define _nv_ver 565.77
+%define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
+
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
@@ -34,10 +40,12 @@
     %define _is_lto 1
 %endif
 
+%define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{version} SYSOUT=%{_builddir}/linux-%{version}
+
 Name:           kernel-cachyos%{?_is_lto:-lto}
 Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos7%{?_is_lto:.lto}%{?dist}
+Release:        cachyos8%{?_is_lto:.lto}%{?dist}
 License:        GPL-2.0-Only
 URL:            https://cachyos.org
 
@@ -77,6 +85,11 @@ BuildRequires:  lld
 BuildRequires:  llvm
 %endif
 
+%if %{_build_nv}
+BuildRequires:  gcc-c++
+%endif
+
+# Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{version}.tar.xz
 #Source0:       https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%_basekver.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
@@ -88,6 +101,10 @@ Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/l
 Source2:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/modprobed.db
 %endif
 
+%if %{_build_nv}
+Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_pkg}.tar.gz
+%endif
+
 Patch0:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
 Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
 
@@ -95,11 +112,23 @@ Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
 Patch2:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/dkms-clang.patch
 %endif
 
+%if %{_build_nv}
+Patch10:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch11:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch12:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0004-silence-event-assert-until-570.patch
+Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+%endif
+
 %description
     The meta package for %{name}.
 
 %prep
-    %setup -q -n linux-%{version}
+    %if %{_build_nv}
+        %setup -q -b 10 -n linux-%{version}
+    %else
+        %setup -q -n linux-%{version}
+    %endif
+
     %autopatch -p1 -v -M 9
 
     cp %{SOURCE1} .config
@@ -125,9 +154,21 @@ Patch2:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     %make_build olddefconfig
     diff -u %{SOURCE1} .config || :
 
+    %if %{_build_nv}
+        cd %{_builddir}/%{_nv_pkg}/kernel-open
+        %patch -P 10 -p1
+        cd ..
+        %autopatch -p1 -v -m 11 -M 19
+    %endif
+
 %build
     %make_build EXTRAVERSION=-%{release}.%{_arch} all
     %make_build -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
+
+    %if %{_build_nv}
+        cd %{_builddir}/%{_nv_pkg}
+        CFLAGS= CXXFLAGS= LDFLAGS= %make_build %{_module_args} IGNORE_CC_MISMATCH=yes modules
+    %endif
 
 %install
     install -Dm644 "$(%make_build -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
@@ -235,6 +276,13 @@ Patch2:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     # measured average to also account for installed vmlinuz in /boot
     install -dm755 %{buildroot}/boot
     dd if=/dev/zero of=%{buildroot}/boot/initramfs-%{_kver}.img bs=1M count=90
+
+    %if %{_build_nv}
+        cd %{_builddir}/%{_nv_pkg}
+        install -Dt %{buildroot}%{_kernel_dir}/nvidia -m644 kernel-open/*.ko
+        find %{buildroot}%{_kernel_dir}/nvidia -name '*.ko' -exec zstd --rm -19 {} +
+        install -Dt %{buildroot}/usr/share/licenses/%{name}-nvidia-open -m644 COPYING
+    %endif
 
 %package core
 Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and improvements
@@ -364,6 +412,26 @@ Requires:       %{name}-devel = %{_rpmver}
     This meta package is used to install matching core and devel packages for %{name}.
 
 %files devel-matched
+
+%if %{_build_nv}
+%package nvidia-open
+Summary:        nvidia-open %{_nv_ver} kernel modules for %{name}
+Provides:       nvidia-kmod >= %{_nv_ver}
+Provides:       installonlypkg(kernel-module)
+Requires:       kernel-uname-r = %{_kver}
+Conflicts:      akmod-nvidia
+Recommends:     xorg-x11-drv-nvidia >= %{_nv_ver}
+
+%description nvidia-open
+    This package provides nvidia-open %{_nv_ver} kernel modules for %{name}.
+
+%post nvidia-open
+    /sbin/depmod -a %{_kver}
+
+%files nvidia-open
+    %license /usr/share/licenses/%{name}-nvidia-open/COPYING
+    %{_kernel_dir}/nvidia
+%endif
 
 %files
 
