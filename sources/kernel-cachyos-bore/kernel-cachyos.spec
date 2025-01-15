@@ -36,6 +36,12 @@
 %define _nv_ver 565.77
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 
+# Define the tickrate used by the kernel
+# Valid values: 100, 250, 300, 500, 600, 750 and 1000
+# An invalid value will not fail and continue to use
+# 1000Hz tickrate.
+%define _hz_tick 1000
+
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
@@ -143,12 +149,17 @@ Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     # Must always enable configs
     scripts/config -e CACHY
     scripts/config -e SCHED_BORE
-    scripts/config -d HZ_300
-    scripts/config -e HZ_1000
-    scripts/config --set-val HZ 1000
     scripts/config --set-val X86_64_VERSION 3
     scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
     scripts/config -u DEFAULT_HOSTNAME
+
+    case %{_hz_tick} in
+        100|250|300|500|600|750|1000)
+            scripts/config -e HZ_%{_hz_tick} --set-val HZ %{_hz_tick};;
+        *)
+            echo "Invalid tickrate value, using default 1000"
+            scripts/config -e HZ_1000 --set-val HZ 1000;;
+    esac
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
