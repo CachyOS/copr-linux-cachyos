@@ -23,7 +23,7 @@
 %endif
 
 # Build a minimal a kernel via modprobed.db
-# file to reduce build times.
+# file to reduce build times
 %define _build_minimal 0
 
 # Builds the kernel with clang and enables
@@ -31,7 +31,7 @@
 %define _build_lto 0
 
 # Builds nvidia-open kernel modules with
-# the kernel.
+# the kernel
 %define _build_nv 1
 %define _nv_ver 565.77
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
@@ -39,7 +39,7 @@
 # Define the tickrate used by the kernel
 # Valid values: 100, 250, 300, 500, 600, 750 and 1000
 # An invalid value will not fail and continue to use
-# 1000Hz tickrate.
+# 1000Hz tickrate
 %define _hz_tick 1000
 
 # Defines the x86_64 ISA level used
@@ -79,13 +79,11 @@ Provides:       kernel-uname-r = %{_kver}
 
 BuildRequires:  bc
 BuildRequires:  bison
-BuildRequires:  cpio
 BuildRequires:  dwarves
 BuildRequires:  elfutils-devel
 BuildRequires:  flex
 BuildRequires:  gcc
 BuildRequires:  gettext-devel
-BuildRequires:  kernel-rpm-macros
 BuildRequires:  kmod
 BuildRequires:  make
 BuildRequires:  openssl
@@ -97,10 +95,6 @@ BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
 BuildRequires:  python3-pyyaml
 BuildRequires:  python-srpm-macros
-BuildRequires:  redhat-rpm-config
-BuildRequires:  tar
-BuildRequires:  xz
-BuildRequires:  zstd
 
 %if %{_build_lto}
 BuildRequires:  clang
@@ -155,10 +149,16 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
 
     cp %{SOURCE1} .config
 
-    # Must always enable configs
-    scripts/config -e CACHY
-    scripts/config -e SCHED_BORE
+    # Default configs to always enable
+    # Enable CACHY sauce and the scheduler
+    # used in the default linux-cachyos kernel
+    scripts/config -e CACHY -e SCHED_BORE
+
+    # Use SElinux by default
+    # https://github.com/sirlucjan/copr-linux-cachyos/pull/1
     scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
+
+    # Do not change the system's hostname
     scripts/config -u DEFAULT_HOSTNAME
 
     case %{_hz_tick} in
@@ -182,9 +182,10 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
 
     %if %{_build_minimal}
         %make_build LSMOD=%{SOURCE2} localmodconfig
+    %else
+        %make_build olddefconfig
     %endif
 
-    %make_build olddefconfig
     diff -u %{SOURCE1} .config || :
 
     %if %{_build_nv}
@@ -204,13 +205,14 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     %endif
 
 %install
+    echo "Installing the kernel image..."
     install -Dm644 "$(%make_build -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
     zstdmt -19 < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.zst
 
-    # Modules
+    echo "Installing kernel modules..."
     ZSTD_CLEVEL=19 %make_build INSTALL_MOD_PATH="%{buildroot}" INSTALL_MOD_STRIP=1 DEPMOD=/doesnt/exist modules_install
 
-    # -devel files
+    echo "Installing files for the development package..."
     install -Dt %{buildroot}%{_devel_dir} -m644 .config Makefile Module.symvers System.map tools/bpf/bpftool/vmlinux.h
     cp .config %{buildroot}%{_kernel_dir}/config
     cp System.map %{buildroot}%{_kernel_dir}/System.map
@@ -290,6 +292,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     cp -a --parents tools/objtool/arch/x86/ %{buildroot}%{_devel_dir}
 
     # Final cleanups ala Fedora
+    echo "Cleaning up development files..."
     find %{buildroot}%{_devel_dir}/scripts \( -iname "*.o" -o -iname "*.cmd" \) -exec rm -f {} +
     find %{buildroot}%{_devel_dir}/tools \( -iname "*.o" -o -iname "*.cmd" \) -exec rm -f {} +
     touch -r %{buildroot}%{_devel_dir}/Makefile \
@@ -307,11 +310,13 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     # insufficient space in /boot (#bz #530778)
     # 90 seems to be a safe value nowadays. It is slightly inflated than the
     # measured average to also account for installed vmlinuz in /boot
+    echo "Creating stub initramfs..."
     install -dm755 %{buildroot}/boot
     dd if=/dev/zero of=%{buildroot}/boot/initramfs-%{_kver}.img bs=1M count=90
 
     %if %{_build_nv}
         cd %{_builddir}/%{_nv_pkg}
+        echo "Installing NVIDIA open kernel modules..."
         install -Dt %{buildroot}%{_kernel_dir}/nvidia -m644 kernel-open/*.ko
         find %{buildroot}%{_kernel_dir}/nvidia -name '*.ko' -exec zstd --rm -19 {} +
         install -Dt %{buildroot}/%{_defaultlicensedir}/%{name}-nvidia-open -m644 COPYING
