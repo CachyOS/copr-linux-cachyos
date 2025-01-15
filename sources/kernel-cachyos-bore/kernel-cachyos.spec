@@ -5,7 +5,7 @@
 %define _default_patch_fuzz 2
 %define _disable_source_fetch 0
 %define debug_package %{nil}
-%define make_build make %{?_build_args} %{?_smp_mflags}
+%define make_build make %{?_lto_args} %{?_smp_mflags}
 %undefine __brp_mangle_shebangs
 %undefine _auto_set_build_flags
 %undefine _include_frame_pointers
@@ -58,16 +58,15 @@
 
 %if %{_build_lto}
     # Define build environment variables to build the kernel with clang
-    %define _build_args CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
-    %define _is_lto 1
+    %define _lto_args CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
 %endif
 
 %define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{_tarkver} SYSOUT=%{_builddir}/linux-%{_tarkver}
 
-Name:           kernel-cachyos%{?_is_lto:-lto}
-Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
+Name:           kernel-cachyos%{?_lto_args:-lto}
+Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos9%{?_is_lto:.lto}%{?dist}
+Release:        cachyos9%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -139,12 +138,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     The meta package for %{name}.
 
 %prep
-    %if %{_build_nv}
-        %setup -q -b 10 -n linux-%{_tarkver}
-    %else
-        %setup -q -n linux-%{_tarkver}
-    %endif
-
+    %setup -q %{?SOURCE10:-b 10} -n linux-%{_tarkver}
     %autopatch -p1 -v -M 9
 
     cp %{SOURCE1} .config
