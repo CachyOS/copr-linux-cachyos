@@ -54,6 +54,8 @@
 %define _kernel_dir /lib/modules/%{_kver}
 %define _devel_dir /usr/src/kernels/%{_kver}
 
+%define _patch_src https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}
+
 %if %{_build_lto}
     # Define build environment variables to build the kernel with clang
     %define _build_args CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
@@ -125,18 +127,18 @@ Source2:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/m
 Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_pkg}.tar.gz
 %endif
 
-Patch0:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/all/0001-cachyos-base-all.patch
-Patch1:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/sched/0001-bore-cachy.patch
+Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
+Patch1:         %{_patch_src}/sched/0001-bore-cachy.patch
 
 %if %{_build_lto}
-Patch2:         https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/dkms-clang.patch
+Patch2:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
 %if %{_build_nv}
-Patch10:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
-Patch11:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch12:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0004-silence-event-assert-until-570.patch
-Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch11:        %{_patch_src}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
+Patch12:        %{_patch_src}/misc/nvidia/0004-silence-event-assert-until-570.patch
+Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
 %endif
 
 %description
