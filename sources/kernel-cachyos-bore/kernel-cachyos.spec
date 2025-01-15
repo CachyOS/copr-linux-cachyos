@@ -42,6 +42,13 @@
 # 1000Hz tickrate.
 %define _hz_tick 1000
 
+# Defines the x86_64 ISA level used
+# to compile the kernel
+# Valid values are 1-4
+# An invalid value will continue and use
+# x86_64_v3
+%define _x86_64_lvl 3
+
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
@@ -149,7 +156,6 @@ Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
     # Must always enable configs
     scripts/config -e CACHY
     scripts/config -e SCHED_BORE
-    scripts/config --set-val X86_64_VERSION 3
     scripts/config --set-str CONFIG_LSM lockdown,yama,integrity,selinux,bpf,landlock
     scripts/config -u DEFAULT_HOSTNAME
 
@@ -160,6 +166,13 @@ Patch13:        https://raw.githubusercontent.com/CachyOS/kernel-patches/master/
             echo "Invalid tickrate value, using default 1000"
             scripts/config -e HZ_1000 --set-val HZ 1000;;
     esac
+
+    %if %{_x86_64_lvl} < 5 && %{_x86_64_lvl} > 0
+        scripts/config --set-val X86_64_VERSION %{_x86_64_lvl}
+    %else
+        echo "Invalid x86_64 ISA Level. Using x86_64_v3"
+        scripts/config --set-val X86_64_VERSION 3
+    %endif
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
