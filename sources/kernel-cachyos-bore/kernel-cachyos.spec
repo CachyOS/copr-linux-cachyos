@@ -52,7 +52,7 @@
 # Define variables for directory paths
 # to be used during packaging
 %define _kernel_dir /lib/modules/%{_kver}
-%define _devel_dir /usr/src/kernels/%{_kver}
+%define _devel_dir %{_usrsrc}/kernels/%{_kver}
 
 %define _patch_src https://raw.githubusercontent.com/CachyOS/kernel-patches/master/%{_basekver}
 
@@ -67,7 +67,7 @@
 Name:           kernel-cachyos%{?_is_lto:-lto}
 Summary:        Linux BORE %{?_is_lto:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos8%{?_is_lto:.lto}%{?dist}
+Release:        cachyos9%{?_is_lto:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -314,7 +314,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
         cd %{_builddir}/%{_nv_pkg}
         install -Dt %{buildroot}%{_kernel_dir}/nvidia -m644 kernel-open/*.ko
         find %{buildroot}%{_kernel_dir}/nvidia -name '*.ko' -exec zstd --rm -19 {} +
-        install -Dt %{buildroot}/usr/share/licenses/%{name}-nvidia-open -m644 COPYING
+        install -Dt %{buildroot}/%{_defaultlicensedir}/%{name}-nvidia-open -m644 COPYING
     %endif
 
 %package core
@@ -463,7 +463,7 @@ Recommends:     xorg-x11-drv-nvidia >= %{_nv_ver}
     /sbin/depmod -a %{_kver}
 
 %files nvidia-open
-    %license /usr/share/licenses/%{name}-nvidia-open/COPYING
+    %license %{_defaultlicensedir}/%{name}-nvidia-open/COPYING
     %{_kernel_dir}/nvidia
 %endif
 
