@@ -66,7 +66,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -344,11 +344,13 @@ Recommends:     linux-firmware
 
 %posttrans core
     rm -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{_kver}
-    /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
-    if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
-        cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
-        if command -v restorecon &>/dev/null; then
-            restorecon "/boot/symvers-%{_kver}.zst"
+    if [ ! -f /run/ostree-booted ]; then
+        /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
+        if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
+            cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
+            if command -v restorecon &>/dev/null; then
+                restorecon "/boot/symvers-%{_kver}.zst"
+            fi
         fi
     fi
 
