@@ -66,7 +66,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos3%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -344,11 +344,13 @@ Recommends:     linux-firmware
 
 %posttrans core
     rm -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{_kver}
-    /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
-    if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
-        cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
-        if command -v restorecon &>/dev/null; then
-            restorecon "/boot/symvers-%{_kver}.zst"
+    if [ ! -e /run/ostree-booted ]; then
+        /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
+        if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
+            cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
+            if command -v restorecon &>/dev/null; then
+                restorecon "/boot/symvers-%{_kver}.zst"
+            fi
         fi
     fi
 
@@ -387,10 +389,12 @@ Requires:       kernel-uname-r = %{_kver}
     fi
 
 %posttrans modules
-    if [ -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver} ]; then
-        rm -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver}
-        echo "Running: dracut -f --kver %{_kver}"
-        dracut -f --kver "%{_kver}" || exit $?
+    rm -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver}
+    if [ ! -e /run/ostree-booted ]; then
+        if [ -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver} ]; then
+            echo "Running: dracut -f --kver %{_kver}"
+            dracut -f --kver "%{_kver}" || exit $?
+        fi
     fi
 
 %postun modules
