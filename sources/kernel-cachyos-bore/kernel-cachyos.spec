@@ -74,7 +74,6 @@ Requires:       kernel-core-uname-r = %{_kver}
 Requires:       kernel-modules-uname-r = %{_kver}
 Requires:       kernel-modules-core-uname-r = %{_kver}
 Provides:       installonlypkg(kernel)
-Provides:       kernel-uname-r = %{_kver}
 
 BuildRequires:  bc
 BuildRequires:  bison
@@ -318,12 +317,20 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
 
 %package core
 Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and improvements
+AutoReq:        no
+Conflicts:      xfsprogs < 4.3.0-1
+Conflicts:      xorg-x11-drv-vmmouse < 13.0.99
 Provides:       kernel-core-uname-r = %{_kver}
+Provides:       kernel-uname-r = %{_kver}
 Provides:       installonlypkg(kernel)
 Requires:       kernel-modules-uname-r = %{_kver}
-Requires:       coreutils
-Requires:       dracut
-Requires:       kmod
+Requires(pre):  /usr/bin/kernel-install
+Requires(pre):  coreutils
+Requires(pre):  dracut >= 027
+Requires(pre):  systemd >= 203-2
+Requires(pre):  ((linux-firmware >= 20150904-56.git6ebf5d57) if linux-firmware)
+Requires(preun):systemd >= 200
+Recommends:     linux-firmware
 
 %description core
     The kernel package contains the Linux kernel (vmlinuz), the core of any
