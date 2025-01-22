@@ -11,8 +11,8 @@
 %undefine _include_frame_pointers
 
 # Linux Kernel Versions
-%define _basekver 6.12
-%define _stablekver 10
+%define _basekver 6.13
+%define _stablekver 0
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -66,7 +66,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos4%{?_lto_args:.lto}%{?dist}
+Release:        cachyos1%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -131,6 +131,11 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-en
 Patch11:        %{_patch_src}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 Patch12:        %{_patch_src}/misc/nvidia/0004-silence-event-assert-until-570.patch
 Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+Patch14:        %{_patch_src}/misc/nvidia/0006-crypto-Add-fix-for-6.13-Module-compilation.patch
+Patch15:        %{_patch_src}/misc/nvidia/0007-nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
+Patch16:        %{_patch_src}/misc/nvidia/0008-Kbuild-Use-absolute-paths-for-symbolic-links.patch
+Patch17:        %{_patch_src}/misc/nvidia/0009-FROM-AOSC-Use-linux-aperture.c-for-removing-conflict.patch
+Patch18:        %{_patch_src}/misc/nvidia/0010-FROM-AOSC-TTM-fbdev-emulation-for-Linux-6.13.patch
 %endif
 
 %description

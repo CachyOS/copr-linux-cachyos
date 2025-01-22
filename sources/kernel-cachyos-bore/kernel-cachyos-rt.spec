@@ -11,8 +11,8 @@
 %undefine _include_frame_pointers
 
 # Linux Kernel Versions
-%define _basekver 6.12
-%define _stablekver 10
+%define _basekver 6.13
+%define _stablekver 0
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -121,7 +121,7 @@ Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_
 
 Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
 Patch1:         %{_patch_src}/sched/0001-bore-cachy.patch
-Patch2:         %{_patch_src}/misc/0001-rt.patch
+Patch2:         %{_patch_src}/misc/0001-rt-i915.patch
 
 %if %{_build_lto}
 Patch2:         %{_patch_src}/misc/dkms-clang.patch
@@ -132,6 +132,11 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-en
 Patch11:        %{_patch_src}/misc/nvidia/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
 Patch12:        %{_patch_src}/misc/nvidia/0004-silence-event-assert-until-570.patch
 Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
+Patch14:        %{_patch_src}/misc/nvidia/0006-crypto-Add-fix-for-6.13-Module-compilation.patch
+Patch15:        %{_patch_src}/misc/nvidia/0007-nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
+Patch16:        %{_patch_src}/misc/nvidia/0008-Kbuild-Use-absolute-paths-for-symbolic-links.patch
+Patch17:        %{_patch_src}/misc/nvidia/0009-FROM-AOSC-Use-linux-aperture.c-for-removing-conflict.patch
+Patch18:        %{_patch_src}/misc/nvidia/0010-FROM-AOSC-TTM-fbdev-emulation-for-Linux-6.13.patch
 %endif
 
 %description
@@ -156,7 +161,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     scripts/config -u DEFAULT_HOSTNAME
 
     # Enable PREEMPT_RT
-    scripts/config -d PREEMPT_DYNAMIC -d PREEMPT
+    scripts/config -e PREEMPT_LAZY
     scripts/config -e PREEMPT_RT
 
     case %{_hz_tick} in
