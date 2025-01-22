@@ -369,7 +369,6 @@ if [ -x /usr/sbin/weak-modules ]; then
 fi
 
 %files core
-%dir %{_kernel_dir}
 %license COPYING
 %ghost /boot/initramfs-%{_kver}.img
 %{_kernel_dir}/vmlinuz
@@ -406,6 +405,7 @@ fi
 fi
 
 %files modules
+%dir %{_kernel_dir}
 %{_kernel_dir}/modules.builtin
 %{_kernel_dir}/modules.builtin.modinfo
 %{_kernel_dir}/modules.order
