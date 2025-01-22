@@ -66,14 +66,16 @@
 Name:           kernel-cachyos-lts%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachylts2%{?_lto_args:.lto}%{?dist}
+Release:        cachylts3%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
 Requires:       kernel-core-uname-r = %{_kver}
 Requires:       kernel-modules-uname-r = %{_kver}
 Requires:       kernel-modules-core-uname-r = %{_kver}
+Provides:       kernel-cachyos-lts%{?_lto_args:-lto} > 6.6.71-clts1.0%{?_lto_args:.lto}%{?dist}
 Provides:       installonlypkg(kernel)
+Obsoletes:      kernel-cachyos-lts%{?_lto_args:-lto} <= 6.6.71-clts1.0%{?_lto_args:.lto}%{?dist}
 
 BuildRequires:  bc
 BuildRequires:  bison
