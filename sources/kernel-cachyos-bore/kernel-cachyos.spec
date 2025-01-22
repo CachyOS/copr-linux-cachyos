@@ -66,7 +66,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos3%{?_lto_args:.lto}%{?dist}
+Release:        cachyos4%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -320,6 +320,7 @@ Summary:        Linux BORE Cachy Sauce Kernel by CachyOS with other patches and 
 AutoReq:        no
 Conflicts:      xfsprogs < 4.3.0-1
 Conflicts:      xorg-x11-drv-vmmouse < 13.0.99
+Provides:       kernel = %{_rpmver}
 Provides:       kernel-core-uname-r = %{_kver}
 Provides:       kernel-uname-r = %{_kver}
 Provides:       installonlypkg(kernel)
@@ -372,7 +373,9 @@ Recommends:     linux-firmware
     %{_kernel_dir}/System.map
 
 %package modules
-Summary:        Kernel modules package for %{name}.
+Summary:        Kernel modules package for %{name}
+Provides:       kernel-modules = %{_rpmver}
+Provides:       kernel-modules-core = %{_rpmver}
 Provides:       kernel-modules-uname-r = %{_kver}
 Provides:       kernel-modules-core-uname-r = %{_kver}
 Provides:       installonlypkg(kernel-module)
@@ -408,6 +411,7 @@ Requires:       kernel-uname-r = %{_kver}
 
 %package devel
 Summary:        Development package for building kernel modules to match %{name}
+Provides:       kernel-devel = %{_rpmver}
 Provides:       kernel-devel-uname-r = %{_kver}
 Provides:       installonlypkg(kernel)
 AutoReqProv:    no
