@@ -385,8 +385,10 @@ fi
 Summary:Kernel modules package for %{name}
 Provides:   kernel-modules = %{_rpmver}
 Provides:   kernel-modules-core = %{_rpmver}
+Provides:   kernel-modules-extra = %{_rpmver}
 Provides:   kernel-modules-uname-r = %{_kver}
 Provides:   kernel-modules-core-uname-r = %{_kver}
+Provides:   kernel-modules-extra-uname-r = %{_kver}
 Provides:   installonlypkg(kernel-module)
 Requires:   kernel-uname-r = %{_kver}
 
