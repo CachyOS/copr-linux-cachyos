@@ -66,7 +66,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -371,8 +371,6 @@ Recommends:     linux-firmware
     %license COPYING
     %ghost /boot/initramfs-%{_kver}.img
     %{_kernel_dir}/vmlinuz
-    %{_kernel_dir}/modules.builtin
-    %{_kernel_dir}/modules.builtin.modinfo
     %{_kernel_dir}/symvers.zst
     %{_kernel_dir}/config
     %{_kernel_dir}/System.map
@@ -405,10 +403,9 @@ Requires:       kernel-uname-r = %{_kver}
         fi
     fi
 
-%postun modules
-    /sbin/depmod -a %{_kver}
-
 %files modules
+    %{_kernel_dir}/modules.builtin
+    %{_kernel_dir}/modules.builtin.modinfo
     %{_kernel_dir}/modules.order
     %{_kernel_dir}/build
     %{_kernel_dir}/source
