@@ -47,7 +47,7 @@
 # Valid values are 1-4
 # An invalid value will continue and use
 # x86_64_v3
-%define _x86_64_lvl 3
+%define _x86_64_lvl 2
 
 # Define variables for directory paths
 # to be used during packaging
@@ -66,7 +66,7 @@
 Name:   kernel-cachyos-lts%{?_lto_args:-lto}
 Summary:Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:%{_basekver}.%{_stablekver}
-Release:cachylts3%{?_lto_args:.lto}%{?dist}
+Release:cachylts4%{?_lto_args:.lto}%{?dist}
 License:GPL-2.0-only
 URL:https://cachyos.org
 
