@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-ksm-settings
-Release:        1%{?dist}
+Release:        2%{?dist}
 Version:        1
 Summary:        Package for easy configuration of KSM via systemd
 URL:            https://github.com/CachyOS/CachyOS-PKGBUILDS
@@ -33,8 +33,8 @@ Requires:       systemd >= 256
     install -Dm755 %{SOURCE3} "%{buildroot}/%{_bindir}/ksmstats"
 
 %files
-    %{_bindir}
-    %{_prefix}/lib
+    %{_bindir}/*
+    %{_prefix}/lib/*
 
 %changelog
 %autochangelog
