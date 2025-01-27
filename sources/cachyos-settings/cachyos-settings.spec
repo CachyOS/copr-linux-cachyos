@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-settings
-Release:        1%{?dist}
+Release:        2%{?dist}
 Version:        1.1.8
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPL-3.0-or-later
@@ -31,8 +31,8 @@ Obsoletes:      bore-sysctl
     chmod +x %{buildroot}/%{_bindir}/*
 
 %files
-    %{_bindir}
-    %{_prefix}/lib/
+    %{_bindir}/*
+    %{_prefix}/lib/*
 
 %changelog
 %autochangelog
