@@ -114,6 +114,9 @@ sudo systemctl enable --now uksmd.service
 ```
 
 #### ananicy-cpp
+
+> [It is advised against running `ananicy-cpp` and a scheduler from the `sched-ext` framework *simultaneously*. Use one but not the other.](https://wiki.cachyos.org/configuration/sched-ext/#disable-ananicy-cpp)
+
 ```bash
 sudo dnf install ananicy-cpp
 sudo systemctl enable --now ananicy-cpp
