@@ -139,8 +139,8 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
     The meta package for %{name}.
 
 %prep
-    %setup -q %{?SOURCE10:-b 10} -n linux-%{_tarkver}
-    %autopatch -p1 -v -M 9
+%setup -q %{?SOURCE10:-b 10} -n linux-%{_tarkver}
+%autopatch -p1 -v -M 9
 
     cp %{SOURCE1} .config
 
@@ -183,12 +183,12 @@ Patch13:        %{_patch_src}/misc/nvidia/0005-nvkms-Sanitize-trim-ELD-product-n
 
     diff -u %{SOURCE1} .config || :
 
-    %if %{_build_nv}
-        cd %{_builddir}/%{_nv_pkg}/kernel-open
-        %patch -P 10 -p1
-        cd ..
-        %autopatch -p1 -v -m 11 -M 19
-    %endif
+%if %{_build_nv}
+cd %{_builddir}/%{_nv_pkg}/kernel-open
+%patch -P 10 -p1
+cd ..
+%autopatch -p1 -v -m 11 -M 19
+%endif
 
 %build
     %make_build EXTRAVERSION=-%{release}.%{_arch} all
