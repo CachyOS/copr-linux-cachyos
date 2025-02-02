@@ -372,6 +372,8 @@ Recommends:     linux-firmware
     %license COPYING
     %ghost /boot/initramfs-%{_kver}.img
     %{_kernel_dir}/vmlinuz
+    %{_kernel_dir}/modules.builtin
+    %{_kernel_dir}/modules.builtin.modinfo
     %{_kernel_dir}/symvers.zst
     %{_kernel_dir}/config
     %{_kernel_dir}/System.map
@@ -391,7 +393,6 @@ Requires:       kernel-uname-r = %{_kver}
     This package provides kernel modules for the %{name}-core kernel package.
 
 %post modules
-    /sbin/depmod -a %{_kver}
     if [ ! -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{_kver} ]; then
         mkdir -p %{_localstatedir}/lib/rpm-state/%{name}
         touch %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver}
@@ -399,6 +400,7 @@ Requires:       kernel-uname-r = %{_kver}
 
 %posttrans modules
     rm -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver}
+    /sbin/depmod -a %{_kver}
     if [ ! -e /run/ostree-booted ]; then
         if [ -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{_kver} ]; then
             echo "Running: dracut -f --kver %{_kver}"
@@ -408,8 +410,6 @@ Requires:       kernel-uname-r = %{_kver}
 
 %files modules
     %dir %{_kernel_dir}
-    %{_kernel_dir}/modules.builtin
-    %{_kernel_dir}/modules.builtin.modinfo
     %{_kernel_dir}/modules.order
     %{_kernel_dir}/build
     %{_kernel_dir}/source
