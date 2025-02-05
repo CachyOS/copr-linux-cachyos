@@ -65,4 +65,3 @@ The %{name}-devel package contains libraries header files for developing applica
 
 %files devel
 %{_includedir}/scx/
-%{_includedir}/lib/
