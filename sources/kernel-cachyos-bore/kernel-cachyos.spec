@@ -121,7 +121,7 @@ Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/l
 # The default modprobed.db provided is used for linux-cachyos CI.
 # This should not be used for production and ideally should only be used for compile tests.
 # Note that any modprobed.db file is accepted
-Source2:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/modprobed.db
+Source2:        https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-config/%{_basekver}/minimal-modprobed.db
 %endif
 
 %if %{_build_nv}
