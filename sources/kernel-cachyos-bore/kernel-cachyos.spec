@@ -25,7 +25,7 @@
 
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times
-%define _build_minimal 0
+%define _build_minimal 1
 
 # Builds the kernel with clang and enables
 # ThinLTO
@@ -33,12 +33,11 @@
 
 # Builds nvidia-open kernel modules with
 # the kernel
+%define _build_nv 1
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 42
-    %define _build_nv 0
     %define _nv_ver 570.86.16
 %else
-    %define _build_nv 1
     %define _nv_ver 565.77
     %define _nv_old 1
 %endif
@@ -73,7 +72,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -210,6 +209,7 @@ cd ..
 
     %if %{_build_nv}
         cd %{_builddir}/%{_nv_pkg}
+        export CC+=" -std=gnu17"
         CFLAGS= CXXFLAGS= LDFLAGS= %make_build %{_module_args} IGNORE_CC_MISMATCH=yes modules
     %endif
 
