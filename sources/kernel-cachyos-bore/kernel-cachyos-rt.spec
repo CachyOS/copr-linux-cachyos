@@ -221,7 +221,7 @@ cd ..
 %install
     echo "Installing the kernel image..."
     install -Dm644 "$(%make_build -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
-    zstdmt -19 < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.zst
+    xz -c9 < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.xz
 
     echo "Installing kernel modules..."
     ZSTD_CLEVEL=19 %make_build INSTALL_MOD_PATH="%{buildroot}" INSTALL_MOD_STRIP=1 DEPMOD=/doesnt/exist modules_install
@@ -368,10 +368,10 @@ Recommends:     linux-firmware
     rm -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{_kver}
     if [ ! -e /run/ostree-booted ]; then
         /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
-        if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
-            cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
+        if [[ ! -e "/boot/symvers-%{_kver}.xz" ]]; then
+            cp "%{_kernel_dir}/symvers.xz" "/boot/symvers-%{_kver}.xz"
             if command -v restorecon &>/dev/null; then
-                restorecon "/boot/symvers-%{_kver}.zst"
+                restorecon "/boot/symvers-%{_kver}.xz"
             fi
         fi
     fi
@@ -388,7 +388,7 @@ Recommends:     linux-firmware
     %{_kernel_dir}/vmlinuz
     %{_kernel_dir}/modules.builtin
     %{_kernel_dir}/modules.builtin.modinfo
-    %{_kernel_dir}/symvers.zst
+    %{_kernel_dir}/symvers.xz
     %{_kernel_dir}/config
     %{_kernel_dir}/System.map
 
