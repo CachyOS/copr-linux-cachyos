@@ -216,7 +216,7 @@ cd ..
 %install
     echo "Installing the kernel image..."
     install -Dm644 "$(%make_build -s image_name)" "%{buildroot}%{_kernel_dir}/vmlinuz"
-    xz -c9 < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.xz
+    xz -c9e < Module.symvers > %{buildroot}%{_kernel_dir}/symvers.xz
 
     echo "Installing kernel modules..."
     ZSTD_CLEVEL=19 %make_build INSTALL_MOD_PATH="%{buildroot}" INSTALL_MOD_STRIP=1 DEPMOD=/doesnt/exist modules_install
