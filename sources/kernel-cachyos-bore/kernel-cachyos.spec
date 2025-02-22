@@ -379,8 +379,8 @@ Recommends:     linux-firmware
 
 %files core
     %license COPYING
-    %ghost /boot/initramfs-%{_kver}.img
-    %ghost /boot/symvers-%{_kver}.zst
+    %ghost %attr(0600, root, root) /boot/initramfs-%{_kver}.img
+    %ghost %attr(0644, root, root) /boot/symvers-%{_kver}.zst
     %{_kernel_dir}/vmlinuz
     %{_kernel_dir}/modules.builtin
     %{_kernel_dir}/modules.builtin.modinfo
