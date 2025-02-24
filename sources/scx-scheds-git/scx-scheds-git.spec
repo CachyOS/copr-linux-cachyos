@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
-%global commitdate 20250205
-%global commit fef8e5ebbbef3b4eb8acb3a71dcc24f99bf06554
+%global commitdate 20250224
+%global commit 5af7fdddb1a712f66119327900653448b5b0046f
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
@@ -34,6 +34,11 @@ Requires:  elfutils-libelf
 Requires:  zlib
 Requires:  jq
 Conflicts: scx-scheds
+Conflicts: scx_layered
+Conflicts: scx_rustland
+Conflicts: scx_rusty
+Conflicts: scx_c_schedulers
+Conflicts: rust-scx_utils-devel
 
 %description
 sched_ext is a Linux kernel feature which enables implementing kernel thread schedulers in BPF and dynamically loading them. This repository contains various scheduler implementations and support utilities.
