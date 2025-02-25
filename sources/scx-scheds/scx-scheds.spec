@@ -34,7 +34,6 @@ Conflicts: scx_rustland
 Conflicts: scx_rusty
 Conflicts: scx_c_schedulers
 Conflicts: rust-scx_utils-devel
-Provides: scx-scheds
 Provides: scx_layered
 Provides: scx_rustland
 Provides: scx_rusty
