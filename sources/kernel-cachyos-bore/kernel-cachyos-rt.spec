@@ -137,17 +137,7 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
 %if %{_build_nv}
-Patch10:        %{_patch_src}/misc/nvidia/%{?_nv_old:565}/0001-Make-modeset-and-fbdev-default-enabled.patch
-%if 0%{?fedora} < 42
-Patch11:        %{_patch_src}/misc/nvidia/565/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch12:        %{_patch_src}/misc/nvidia/565/0004-silence-event-assert-until-570.patch
-Patch13:        %{_patch_src}/misc/nvidia/565/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
-Patch14:        %{_patch_src}/misc/nvidia/565/0006-crypto-Add-fix-for-6.13-Module-compilation.patch
-Patch15:        %{_patch_src}/misc/nvidia/565/0007-nvidia-nv-Convert-symbol-namespace-to-string-literal.patch
-Patch16:        %{_patch_src}/misc/nvidia/565/0008-Kbuild-Use-absolute-paths-for-symbolic-links.patch
-Patch17:        %{_patch_src}/misc/nvidia/565/0009-FROM-AOSC-Use-linux-aperture.c-for-removing-conflict.patch
-Patch18:        %{_patch_src}/misc/nvidia/565/0010-FROM-AOSC-TTM-fbdev-emulation-for-Linux-6.13.patch
-%endif
+Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
 %endif
 
 %description

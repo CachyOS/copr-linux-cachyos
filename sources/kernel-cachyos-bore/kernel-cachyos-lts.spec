@@ -136,12 +136,7 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
 %if %{_build_nv}
-Patch10:        %{_patch_src}/misc/nvidia/%{?_nv_old:565}/0001-Make-modeset-and-fbdev-default-enabled.patch
-%if 0%{?fedora} < 42
-Patch11:        %{_patch_src}/misc/nvidia/565/0002-Do-not-error-on-unkown-CPU-Type-and-add-Zen5-support.patch
-Patch12:        %{_patch_src}/misc/nvidia/565/0004-silence-event-assert-until-570.patch
-Patch13:        %{_patch_src}/misc/nvidia/565/0005-nvkms-Sanitize-trim-ELD-product-name-strings.patch
-%endif
+Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
 %endif
 
 %description
