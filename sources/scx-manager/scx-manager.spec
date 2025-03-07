@@ -47,7 +47,7 @@ Simple GUI for managing sched-ext schedulers via scx_loader.
 %{_libdir}/cmake/scxctl-ui/scxctl-ui-targets-release.cmake
 %{_libdir}/libscxctl-ui.so
 %{_libdir}/libscxctl-ui.so.1
-%{_libdir}/libscxctl-ui.so.1.14.1
+%{_libdir}/libscxctl-ui.so.%{version}
 %{_prefix}/share/applications/org.cachyos.scx-manager.desktop
 %{_prefix}/share/icons/hicolor/scalable/apps/org.cachyos.scx-manager.png
 
