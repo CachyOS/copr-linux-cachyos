@@ -2,8 +2,8 @@
 %global _build_id_links none
 
 Name: scx-manager
-Version: 1.14.1
-Release: 2%{?dist}
+Version: 1.14.2
+Release: 1%{?dist}
 Summary: Simple GUI for managing sched-ext schedulers via scx_loader
 
 License:        GPL-3.0
