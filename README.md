@@ -107,6 +107,9 @@ sudo nano /etc/default/scx
 # Then enable the systemd service to make it persistent across boots
 sudo systemctl enable --now scx.service
 ```
+Along with the release of scx-scheds 1.0.11 (this is already possible in scx-scheds-git), 
+it will be available to use [scxctl](https://github.com/sched-ext/scx/blob/main/tools/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
+
 #### scx-manager
 
 ```
