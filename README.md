@@ -12,9 +12,9 @@ This repository is maintained by [@1Naim](https://github.com/1Naim), [@andersrh]
   - [Addons](#addons)
     - [CachyOS-Settings](#cachyos-settings)
     - [scx-scheds](#scx-scheds)
+    - [scx-manager](#scx-manager)
     - [uksmd](#uksmd)
     - [ananicy-cpp](#ananicy-cpp)
-
 
 # List of Packages We Provide
 ## `kernel-cachyos` & `kernel-cachyos-lts`
