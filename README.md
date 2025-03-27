@@ -107,6 +107,11 @@ sudo nano /etc/default/scx
 # Then enable the systemd service to make it persistent across boots
 sudo systemctl enable --now scx.service
 ```
+#### scx-manager
+
+```
+sudo dnf install scx-manager
+```
 
 #### uksmd
 ```bash
