@@ -1,7 +1,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds
-Version:        1.0.10
+Version:        1.0.11
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
@@ -34,11 +34,13 @@ Conflicts: scx_rustland
 Conflicts: scx_rusty
 Conflicts: scx_c_schedulers
 Conflicts: rust-scx_utils-devel
+Obsoletes: scxctl
 Provides: scx_layered
 Provides: scx_rustland
 Provides: scx_rusty
 Provides: scx_c_schedulers
 Provides: rust-scx_utils-devel
+Provides: scxctl = %{version}
 
 %description
 sched_ext is a Linux kernel feature which enables implementing kernel thread schedulers in BPF and dynamically loading them. This repository contains various scheduler implementations and support utilities.
