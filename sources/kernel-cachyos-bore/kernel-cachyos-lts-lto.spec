@@ -137,6 +137,9 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
+%if !%{_build_lto}
+Patch11:        %{_patch_src}/misc/nvidia/0008-kbuild-Add-workaround-for-GCC-15-Compilation.patch
+%endif
 %endif
 
 %description
