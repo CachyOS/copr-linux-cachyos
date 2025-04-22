@@ -136,7 +136,7 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
 %if %{_build_nv}
-Patch10:        %{_patch_src}/misc/nvidia/0001-Make-modeset-and-fbdev-default-enabled.patch
+Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
 %endif
 
 %description
