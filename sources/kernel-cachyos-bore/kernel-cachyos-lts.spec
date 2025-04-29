@@ -137,8 +137,14 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
+Patch11:        %{_patch_src}/misc/nvidia/0002-Add-IBT-support.patch
+Patch12:        %{_patch_src}/misc/nvidia/0003-Kbuild-Convert-EXTRA_CFLAGS-to-ccflags-y.patch
+Patch13:        %{_patch_src}/misc/nvidia/0004-kernel-open-nvidia-Use-new-timer-functions-for-6.15.patch
+Patch14:        %{_patch_src}/misc/nvidia/0005-nvidia-uvm-Use-__iowrite64_hi_lo.patch
+Patch15:        %{_patch_src}/misc/nvidia/0006-nvidia-uvm-Use-page_pgmap.patch
+Patch16:        %{_patch_src}/misc/nvidia/0007-nvidia-uvm-Convert-make_device_exclusive_range-to-ma.patch
 %if !%{_build_lto}
-Patch11:        %{_patch_src}/misc/nvidia/0008-kbuild-Add-workaround-for-GCC-15-Compilation.patch
+Patch17:        %{_patch_src}/misc/nvidia/0008-kbuild-Add-workaround-for-GCC-15-Compilation.patch
 %endif
 %endif
 
