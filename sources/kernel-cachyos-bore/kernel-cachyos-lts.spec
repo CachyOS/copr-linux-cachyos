@@ -39,7 +39,7 @@
     %define _nv_ver 575.51.02
 %else
     %define _build_nv 1
-    %define _nv_ver 570.133.07
+    %define _nv_ver 570.144
     %define _nv_old 1
 %endif
 
