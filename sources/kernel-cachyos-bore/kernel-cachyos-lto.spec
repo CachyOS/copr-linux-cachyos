@@ -13,7 +13,7 @@
 
 # Linux Kernel Versions
 %define _basekver 6.14
-%define _stablekver 3
+%define _stablekver 4
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -39,7 +39,7 @@
     %define _nv_ver 575.51.02
 %else
     %define _build_nv 1
-    %define _nv_ver 570.133.07
+    %define _nv_ver 570.144
     %define _nv_old 1
 %endif
 
@@ -73,7 +73,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -137,6 +137,9 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
+%if !%{_build_lto}
+Patch11:        https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/nvidia-gcc15-patch/sources/kernel-cachyos-bore/patches/nvidia/%{_nv_ver}/nvidia-gcc15.patch
+%endif
 %endif
 
 %description
