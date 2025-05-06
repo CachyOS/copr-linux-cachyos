@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-ksm-settings
-Release:        2%{?dist}
+Release:        3%{?dist}
 Version:        1
 Summary:        Package for easy configuration of KSM via systemd
 URL:            https://github.com/CachyOS/CachyOS-PKGBUILDS
