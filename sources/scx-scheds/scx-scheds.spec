@@ -1,7 +1,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds
-Version:        1.0.11
+Version:        1.0.12
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
@@ -25,6 +25,7 @@ BuildRequires:  jq
 BuildRequires:  jq-devel
 BuildRequires:  systemd
 BuildRequires:  bpftool
+BuildRequires:  protobuf
 Requires:  elfutils-libelf
 Requires:  zlib
 Requires:  jq
