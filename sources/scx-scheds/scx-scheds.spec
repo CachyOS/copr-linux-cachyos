@@ -2,7 +2,7 @@
 
 Name:           scx-scheds
 Version:        1.0.12
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
 License:        GPL=2.0
@@ -26,7 +26,10 @@ BuildRequires:  jq-devel
 BuildRequires:  systemd
 BuildRequires:  bpftool
 BuildRequires:  protobuf-compiler
+BuildRequires:  libseccomp-devel
 Requires:  elfutils-libelf
+Requires:  libseccomp-devel
+Requires:  protobuf-compiler
 Requires:  zlib
 Requires:  jq
 Conflicts: scx-scheds-git
@@ -35,7 +38,7 @@ Conflicts: scx_rustland
 Conflicts: scx_rusty
 Conflicts: scx_c_schedulers
 Conflicts: rust-scx_utils-devel
-Obsoletes: scxctl
+Obsoletes: scxctl >= 0.3.4
 Provides: scx_layered
 Provides: scx_rustland
 Provides: scx_rusty

@@ -7,7 +7,7 @@
 
 Name:           scx-scheds-git
 Version:        1.0.12.%{commitdate}.git.%{shortcommit}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
 License:        GPL=2.0
@@ -31,10 +31,13 @@ BuildRequires:  jq-devel
 BuildRequires:  systemd
 BuildRequires:  bpftool
 BuildRequires:  protobuf-compiler
+BuildRequires:  libseccomp-devel
 Requires:  elfutils-libelf
+Requires:  libseccomp-devel
+Requires:  protobuf-compiler
 Requires:  zlib
 Requires:  jq
-Obsoletes: scxctl
+Obsoletes: scxctl >= 0.3.4
 Conflicts: scx-scheds
 Conflicts: scx_layered
 Conflicts: scx_rustland
