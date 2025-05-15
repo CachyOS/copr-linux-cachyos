@@ -1,5 +1,3 @@
-# Maintainer: Eric Naim <dnaim@cachyos.org>
-
 # Fedora bits
 %define __spec_install_post %{__os_install_post}
 %define _build_id_links none

@@ -5,7 +5,7 @@
   <p align="center">Goodies from CachyOS ported to Fedora.</p>
 </div>
 
-This repository is maintained by [@1Naim](https://github.com/1Naim), [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
+This repository is maintained by [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
 
 - [List of Packages We Provide](#list-of-ported-packages)
   - [kernel-cachyos & kernel-cachyos-lts](#kernel-cachyos--kernel-cachyos-lts)
@@ -77,7 +77,7 @@ sudo systemctl reboot
 We provide a few addons that supplement the kernel packages and system.
 - [CachyOS-Settings](https://github.com/CachyOS/CachyOS-Settings) - Settings used in CachyOS (includes modprobe config, udev rules, etc) packaged for Fedora.
 - [scx-scheds](https://github.com/sched-ext/scx) - sched-ext schedulers. Provides both `scx-scheds` releases and `scx-scheds-git` package.
-- [scx-manager](https://github.com/CachyOS/scx-manager/) - Simple GUI for managing sched-ext schedulers via scx_loader. 
+- [scx-manager](https://github.com/CachyOS/scx-manager/) - Simple GUI for managing sched-ext schedulers via scx_loader.
 - [uksmd](https://github.com/CachyOS/uksmd) - Userspace KSM helper daemon.
 - [ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/) & [cachyos-ananicy-rules](https://github.com/CachyOS/ananicy-rules) - Auto nice daemon with rules support.
 
@@ -107,7 +107,7 @@ sudo nano /etc/default/scx
 # Then enable the systemd service to make it persistent across boots
 sudo systemctl enable --now scx.service
 ```
-Along with the release of scx-scheds 1.0.11 (this is already possible in scx-scheds-git), 
+Along with the release of scx-scheds 1.0.11 (this is already possible in scx-scheds-git),
 it will be available to use [scxctl](https://github.com/sched-ext/scx/blob/main/tools/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
 
 #### scx-manager
