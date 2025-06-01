@@ -8,7 +8,7 @@
 This repository is maintained by [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
 
 - [List of Packages We Provide](#list-of-ported-packages)
-  - [kernel-cachyos & kernel-cachyos-lts](#kernel-cachyos--kernel-cachyos-lts)
+  - [kernel-cachyos, kernel-cachyos-lts & kernel-cachyos-server](#kernel-cachyos-kernel-cachyos-lts--kernel-cachyos-server)
   - [Addons](#addons)
     - [CachyOS-Settings](#cachyos-settings)
     - [scx-scheds](#scx-scheds)
@@ -16,12 +16,12 @@ This repository is maintained by [@andersrh](https://github.com/andersrh) and [@
     - [ananicy-cpp](#ananicy-cpp)
 
 # List of Packages We Provide
-## `kernel-cachyos` & `kernel-cachyos-lts`
-### A port of the default `linux-cachyos` and LTS `linux-cachyos-lts` kernels for Fedora.
+## `kernel-cachyos`, `kernel-cachyos-lts` & `kernel-cachyos-server`
+### A port of the `linux-cachyos`, `linux-cachyos-lts` and `linux-cachyos-server` kernels for Fedora.
 #### :arrow_heading_down: Features
 - Choose between `GCC` and `LLVM-ThinLTO`
-- Optimized for `x86-64v3` CPUs for `kernel-cachyos` and `x86-64v2` for `kernel-cachyos-lts`
-- BORE scheduler with sched-ext support (sched-ext support only for `kernel-cachyos`)
+- Optimized for `x86-64v3` CPUs for `kernel-cachyos` and `x86-64v2` for `kernel-cachyos-lts` and `kernel-cachyos-server`
+- BORE scheduler with sched-ext support (excl. `kernel-cachyos-server`, sched-ext support only for `kernel-cachyos`)
 - AMD P-State Preferred Core, AMD CPB Switch and upstream `amd-pstate` enchancements (exclusive to `kernel-cachyos`)
 - Cachy Sauce - Provides tweaks for the scheduler and other settings
 - Prebuilt `nvidia-open` kernel modules
@@ -57,6 +57,9 @@ sudo dnf install kernel-cachyos-lto kernel-cachyos-lto-devel-matched # For LLVM-
 sudo dnf install kernel-cachyos-lts kernel-cachyos-lts-devel-matched
 # or
 sudo dnf install kernel-cachyos-lts-lto kernel-cachyos-lts-lto-devel-matched
+
+## Server Kernel
+sudo dnf install kernel-cachyos-server kernel-cachyos-server-devel-matched
 ```
 
 Lastly if you use SELinux, you need to enable the necessary policy to be able to load kernel modules.
