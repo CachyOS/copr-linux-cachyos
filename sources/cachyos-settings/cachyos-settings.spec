@@ -2,8 +2,8 @@
 %define debug_package %{nil}
 
 Name:           cachyos-settings
-Release:        3%{?dist}
-Version:        1.1.8
+Release:        1%{?dist}
+Version:        1.2.5
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPL-3.0-or-later
 URL:            https://github.com/CachyOS/CachyOS-Settings
