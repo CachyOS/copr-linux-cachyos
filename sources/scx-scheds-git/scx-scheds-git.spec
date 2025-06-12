@@ -1,12 +1,12 @@
 %global _default_patch_fuzz 2
 %global commitdate 20250612
-%global commit bb6eeb407b4f8be7fe791a00e2a00907795bf694
+%global commit c1507b0cc57be922834f27417a4052b2f3c4cd2c
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-scheds-git
-Version:        1.0.12.%{commitdate}.git.%{shortcommit}
+Version:        1.0.13.%{commitdate}.git.%{shortcommit}
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
