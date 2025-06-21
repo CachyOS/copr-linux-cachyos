@@ -34,10 +34,10 @@
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 43
     %define _build_nv 1
-    %define _nv_ver 575.57.08
+    %define _nv_ver 575.64
 %else
     %define _build_nv 1
-    %define _nv_ver 575.57.08
+    %define _nv_ver 575.64
     %define _nv_old 1
 %endif
 
@@ -71,7 +71,7 @@
 Name:           kernel-cachyos-rt%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyrt1%{?_lto_args:.lto}%{?dist}
+Release:        cachyrt2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
