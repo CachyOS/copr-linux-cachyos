@@ -34,10 +34,10 @@
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 43
     %define _build_nv 1
-    %define _nv_ver 575.57.08
+    %define _nv_ver 575.64
 %else
     %define _build_nv 1
-    %define _nv_ver 575.57.08
+    %define _nv_ver 575.64
     %define _nv_old 1
 %endif
 
