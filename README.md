@@ -7,10 +7,10 @@
 
 This repository is maintained by [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
 
-- [Kernels](#kernels)
-  - [Features](#features)
-  - [Installation Instructions](#installation-instructions)
-- [Addons](#addons)
+- [Kernels](#-kernels)
+  - [Features](#-features)
+  - [Installation Instructions](#%EF%B8%8F-installation-instructions)
+- [Addons](#-addons)
   - [CachyOS-Settings](#cachyos-settings)
   - [scx-scheds](#scx-scheds)
   - [scx-manager](#scx-manager)
