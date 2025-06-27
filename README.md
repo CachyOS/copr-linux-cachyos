@@ -66,10 +66,8 @@ sudo dnf install kernel-cachyos-lts kernel-cachyos-lts-devel-matched
 # or
 sudo dnf install kernel-cachyos-lts-lto kernel-cachyos-lts-lto-devel-matched
 
-## Realtime Kernel
+## Real-time Kernel
 sudo dnf install kernel-cachyos-rt kernel-cachyos-rt-devel-matched
-# or
-sudo dnf install kernel-cachyos-rt-lto kernel-cachyos-rt-lto-devel-matched
 
 ## Server Kernel
 sudo dnf install kernel-cachyos-server kernel-cachyos-server-devel-matched
