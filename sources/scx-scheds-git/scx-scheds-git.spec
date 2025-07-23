@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
-%global commitdate 20250722
-%global commit d51a73b8bea145868a95db479413d295d385a0ee
+%global commitdate 20250723
+%global commit acf17e1619e216c39e8f273e8933f24535981272
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
@@ -61,8 +61,7 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %build
 %meson \
  -Dsystemd=enabled \
- -Dopenrc=disabled \
- -Dlibalpm=disabled
+ -Dopenrc=disabled
 %meson_build
 
 
