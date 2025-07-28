@@ -10,8 +10,8 @@
 %undefine _include_frame_pointers
 
 # Linux Kernel Versions
-%define _basekver 6.15
-%define _stablekver 8
+%define _basekver 6.16
+%define _stablekver 0
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
