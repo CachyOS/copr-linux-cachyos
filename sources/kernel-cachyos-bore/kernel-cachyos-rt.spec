@@ -35,6 +35,8 @@
 %if 0%{?fedora} >= 43
     %define _build_nv 1
     %define _nv_ver 575.64.05
+%elif 0%{?rhel}
+    %define _build_nv 0
 %else
     %define _build_nv 1
     %define _nv_ver 575.64.05
