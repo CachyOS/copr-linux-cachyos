@@ -27,11 +27,14 @@ BuildRequires:  systemd
 BuildRequires:  bpftool
 BuildRequires:  protobuf-compiler
 BuildRequires:  libseccomp-devel
+BuildRequires:  libbpf-devel
 Requires:  elfutils-libelf
 Requires:  libseccomp
 Requires:  protobuf
 Requires:  zlib
 Requires:  jq
+Requires:  libbpf
+Requires:  bpftool
 Conflicts: scx-scheds-git
 Conflicts: scx_layered
 Conflicts: scx_rustland
@@ -56,7 +59,9 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %meson \
  -Dsystemd=enabled \
  -Dopenrc=disabled \
- -Dlibalpm=disabled
+ -Dlibalpm=disabled \
+ -Dlibbpf_a=disabled \
+ -Dbpftool=disabled
 %meson_build
 
 
