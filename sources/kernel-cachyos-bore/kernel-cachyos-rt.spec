@@ -71,7 +71,7 @@
 Name:           kernel-cachyos-rt%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyrt1%{?_lto_args:.lto}%{?dist}
+Release:        cachyrt2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -177,6 +177,13 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
         echo "Invalid x86_64 ISA Level. Using x86_64_v3"
         scripts/config --set-val X86_64_VERSION 3
     %endif
+
+    # Enable Secure boot support
+    scripts/config -e CONFIG_IMA_SECURE_AND_OR_TRUSTED_BOOT
+    scripts/config -e CONFIG_IMA
+    scripts/config -e CONFIG_IMA_APPRAISE_BOOTPARAM
+    scripts/config -e CONFIG_IMA_APPRAISE
+    scripts/config -e CONFIG_IMA_ARCH_POLICY
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
