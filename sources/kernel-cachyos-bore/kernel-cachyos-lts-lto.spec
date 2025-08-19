@@ -11,7 +11,7 @@
 
 # Linux Kernel Versions
 %define _basekver 6.12
-%define _stablekver 41
+%define _stablekver 42
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -34,7 +34,7 @@
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 43
     %define _build_nv 1
-    %define _nv_ver 575.64.05
+    %define _nv_ver 580.76.05
 %elif 0%{?rhel}
     %define _build_nv 0
 %else
@@ -54,7 +54,11 @@
 # Valid values are 1-4
 # An invalid value will continue and use
 # x86_64_v3
+%if 0%{?rhel} >= 10
+%define _x86_64_lvl 3
+%else
 %define _x86_64_lvl 2
+%endif
 
 # Define variables for directory paths
 # to be used during packaging
