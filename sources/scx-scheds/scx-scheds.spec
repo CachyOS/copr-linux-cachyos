@@ -1,7 +1,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds
-Version:        1.0.14
+Version:        1.0.15
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
@@ -55,8 +55,7 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %build
 %meson \
  -Dsystemd=enabled \
- -Dopenrc=disabled \
- -Dlibalpm=disabled
+ -Dopenrc=disabled
 %meson_build
 
 
@@ -71,6 +70,7 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 %{_prefix}/lib/systemd/system/scx.service
 %{_datadir}/dbus-1/system.d/org.scx.Loader.conf
 %{_datadir}/dbus-1/system-services/org.scx.Loader.service
+%{_datadir}/scx_loader/config.toml
 
 
 %package devel
