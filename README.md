@@ -161,3 +161,10 @@ sudo dnf install scx-manager
 sudo dnf install ananicy-cpp
 sudo systemctl enable --now ananicy-cpp
 ```
+
+<div align="center">
+  <img width="240" height="240" alt="yippecachy" src="https://github.com/user-attachments/assets/9791c653-374b-486d-96be-a771cb88415b" />
+</div>
+
+
+
