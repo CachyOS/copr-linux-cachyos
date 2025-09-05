@@ -1,7 +1,7 @@
 %define _disable_source_fetch 0
 
 Name:           scx-scheds
-Version:        1.0.15
+Version:        1.0.16
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
