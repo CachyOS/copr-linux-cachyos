@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
 %global commitdate 20250912
-%global commit f016e6a52c894f5306e4c71641bed02d3d2942ad
+%global commit c3b6b3c066ad5e8997c5aabd068c4718cd9f5f48
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
@@ -70,7 +70,6 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 
 
 %files
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/default/scx
 %{_bindir}/*
 %{_prefix}/lib/systemd/system/scx_loader.service
 %{_prefix}/lib/systemd/system/scx.service
