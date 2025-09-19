@@ -128,7 +128,7 @@ Now you can install the addon packages.
 
 ### CachyOS-Settings
 ```bash
-sudo dnf install cachyos-settings
+sudo dnf swap zram-generator-defaults cachyos-settings
 sudo dracut -f
 ```
 
