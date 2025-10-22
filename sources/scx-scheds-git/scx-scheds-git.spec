@@ -1,13 +1,13 @@
 %global _default_patch_fuzz 2
 %global commitdate 20251022
-%global commit e1019dd558fc872dbcb4c7313dd16626ae08d5b2
+%global commit e47bf90658f121b2c33bcd1312339f548b5ae9b9
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-scheds-git
 Version:        1.0.17.%{commitdate}.git.%{shortcommit}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
 License:        GPL=2.0
@@ -60,6 +60,7 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 
 %build
 %meson \
+ -Dforce_meson=true \
  -Dsystemd=enabled \
  -Dopenrc=disabled
 %meson_build
