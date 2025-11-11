@@ -11,7 +11,6 @@ Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  git
-BuildRequires:  meson >= 1.2
 BuildRequires:  python
 BuildRequires:  cargo
 BuildRequires:  rust
@@ -36,41 +35,43 @@ Conflicts: scx-scheds-git
 Conflicts: scx_layered
 Conflicts: scx_rustland
 Conflicts: scx_rusty
-Conflicts: scx_c_schedulers
 Conflicts: rust-scx_utils-devel
 Provides: scx_layered
 Provides: scx_rustland
 Provides: scx_rusty
-Provides: scx_c_schedulers
 Provides: rust-scx_utils-devel
 
 %description
 sched_ext is a Linux kernel feature which enables implementing kernel thread schedulers in BPF and dynamically loading them. This repository contains various scheduler implementations and support utilities.
 
 %prep
-%autosetup -n scx-%{version} -p1
+%autosetup -n scx-%{version}
+
 
 %build
-%meson \
- -Dforce_meson=true \
- -Dsystemd=enabled \
- -Dopenrc=disabled
-%meson_build
-
+export CARGO_HOME=%{_builddir}/.cargo
+cargo fetch --locked
+cargo build \
+     --release \
+     --frozen \
+     --all-features \
+     --workspace \
+     --exclude scx_rlfifo \
+     --exclude scx_mitosis \
+     --exclude scx_wd40 \
+     --exclude xtask \
+     --exclude scxcash \
+     --exclude vmlinux_docify \
+     --exclude scx_arena_selftests
 
 %install
-%meson_install
 
+# Install all built executables (skip .so and .d files)
+find target/release \
+    -maxdepth 1 -type f -executable ! -name '*.so' \
+    -exec install -Dm755 -t %{buildroot}%{_bindir} {} +
 
 %files
+
+# Binaries
 %{_bindir}/*
-
-
-%package devel
-Summary:        Development files for %{name}
-
-%description devel
-The %{name}-devel package contains libraries header files for developing applications that use %{name}
-
-%files devel
-%{_includedir}/scx/
