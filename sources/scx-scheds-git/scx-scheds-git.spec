@@ -1,12 +1,12 @@
 %global _default_patch_fuzz 2
-%global commitdate 20251030
-%global commit d645aad7d70b828a58e569be1aae9bb2f395aa49
+%global commitdate 20251111
+%global commit 6ddcb07bcdab8d2451f7543e4f98180e677c7b21
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-scheds-git
-Version:        1.0.17.%{commitdate}.git.%{shortcommit}
+Version:        1.0.18.%{commitdate}.git.%{shortcommit}
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
@@ -37,7 +37,6 @@ Requires:  libseccomp
 Requires:  protobuf
 Requires:  zlib
 Requires:  jq
-Obsoletes: scxctl >= 0.3.4
 Conflicts: scx-scheds
 Conflicts: scx_layered
 Conflicts: scx_rustland
@@ -45,7 +44,6 @@ Conflicts: scx_rusty
 Conflicts: scx_c_schedulers
 Conflicts: rust-scx_utils-devel
 Provides: scx-scheds = %{version}
-Provides: scxctl = %{version}
 Provides: scx_layered
 Provides: scx_rustland
 Provides: scx_rusty
@@ -72,11 +70,6 @@ sched_ext is a Linux kernel feature which enables implementing kernel thread sch
 
 %files
 %{_bindir}/*
-%{_prefix}/lib/systemd/system/scx_loader.service
-%{_datadir}/dbus-1/system.d/org.scx.Loader.conf
-%{_datadir}/dbus-1/system-services/org.scx.Loader.service
-%{_datadir}/scx_loader/config.toml
-
 
 %package devel
 Summary:        Development files for %{name}
