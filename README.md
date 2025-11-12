@@ -134,18 +134,14 @@ sudo dracut -f
 
 ### scx-scheds
 ```bash
-sudo dnf install scx-scheds
+sudo dnf install scx-scheds scx-tools
 #or
-sudo dnf install scx-scheds-git # For -git package
+sudo dnf install scx-scheds-git scx-tools-git # For -git package
 
-# Choose which scx scheduler to use by editting `/etc/default/scx`
-sudo nano /etc/default/scx
-
-# Then enable the systemd service to make it persistent across boots
-sudo systemctl enable --now scx.service
 ```
-Along with the release of scx-scheds 1.0.11 (this is already possible in scx-scheds-git),
-it will be available to use [scxctl](https://github.com/sched-ext/scx/blob/main/tools/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
+You can use [scxctl](https://github.com/sched-ext/scx-loader/blob/main/crates/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
+
+📖 Usage guide available in the [CachyOS wiki](https://wiki.cachyos.org/configuration/sched-ext/).
 
 ### scx-manager
 
