@@ -7,7 +7,7 @@
 
 Name:           scx-tools-git
 Version:        1.0.18.%{commitdate}.git.%{shortcommit}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Sched_ext Tools
 
 License:        GPL=2.0
@@ -25,7 +25,7 @@ BuildRequires:  lld >= 17
 BuildRequires:  systemd
 BuildRequires:  bpftool
 BuildRequires:  libseccomp-devel
-Requires:  scx-scheds-git
+Requires:  scx-scheds
 Obsoletes: scxctl = 0.3.4
 Provides: scxctl = %{version}
 Provides: scx-tools = %{version}
