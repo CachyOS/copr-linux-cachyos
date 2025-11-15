@@ -128,24 +128,36 @@ Now you can install the addon packages.
 
 ### CachyOS-Settings
 ```bash
-sudo dnf install cachyos-settings
+sudo dnf swap zram-generator-defaults cachyos-settings
 sudo dracut -f
 ```
 
-### scx-scheds
+### scx-scheds and scx-tools
 ```bash
-sudo dnf install scx-scheds
-#or
-sudo dnf install scx-scheds-git # For -git package
-
-# Choose which scx scheduler to use by editting `/etc/default/scx`
-sudo nano /etc/default/scx
-
-# Then enable the systemd service to make it persistent across boots
-sudo systemctl enable --now scx.service
+sudo dnf install scx-scheds scx-tools
 ```
-Along with the release of scx-scheds 1.0.11 (this is already possible in scx-scheds-git),
-it will be available to use [scxctl](https://github.com/sched-ext/scx/blob/main/tools/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
+or -git packages
+```bash
+sudo dnf install scx-scheds-git scx-tools-git
+
+```
+**For Fedora Silverblue / Kinoite:**
+
+```bash
+sudo rpm-ostree install scx-scheds scx-tools
+sudo systemctl reboot
+```
+or -git packages
+```bash
+sudo rpm-ostree install scx-scheds-git scx-tools-git
+sudo systemctl reboot
+```
+
+You can use [scxctl](https://github.com/sched-ext/scx-loader/blob/main/crates/scxctl/README.md) to start/change the scheduler with profiles/custom flags.
+
+📖 Usage guide available in the [CachyOS wiki](https://wiki.cachyos.org/configuration/sched-ext/).
+
+Starting with version 1.0.18, scx_loader and scxctl have been moved to a separate repository. Remember to install `scx-tools` if you plan to continue using these tools! 
 
 ### scx-manager
 

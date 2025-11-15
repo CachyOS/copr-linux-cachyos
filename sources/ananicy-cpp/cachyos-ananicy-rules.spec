@@ -1,10 +1,10 @@
-%global commit 7b660e4c0e3dccec7ddc4c4dafc1717cb06b7e1e
+%global commit d169cc9415e6e76b56aa528c78e08d88bedcccee
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           cachyos-ananicy-rules
-Version:        20241122.r%{shortcommit}
+Version:        20251013.r%{shortcommit}
 Release:        1%{?dist}
 Summary:        List of rules used to assign specific nice values to specific processes
 
