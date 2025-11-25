@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
-%global commitdate 20251123
-%global commit 874e8f42cd82ad1fb8ec50ac2381cc1699ac54e9
+%global commitdate 20251125
+%global commit 3eba88d4e10441f8752fc91f3627b88a1d8e2e51
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
