@@ -137,6 +137,9 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
+Patch11:        %{_patch_src}/misc/nvidia/0002-Add-IBT-support.patch
+Patch12:        %{_patch_src}/misc/nvidia/0003-nvidia-uvm-Remove-unused-get_devmap_page-parameter.patch
+Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-character-rate-to-3.patch
 %endif
 
 %description
@@ -199,7 +202,9 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
 cd %{_builddir}/%{_nv_pkg}/kernel-open
 %patch -P 10 -p1
 cd ..
-%autopatch -p1 -v -m 11 -M 19
+%patch -P 11 -p1
+%patch -P 12 -p1
+%patch -P 13 -p1
 %endif
 
 %build
