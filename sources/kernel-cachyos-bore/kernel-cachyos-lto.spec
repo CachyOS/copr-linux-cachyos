@@ -34,7 +34,7 @@
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 43
     %define _build_nv 1
-    %define _nv_ver 580.105.08
+    %define _nv_ver 580.95.05
 %elif 0%{?rhel}
     %define _build_nv 0
 %else
@@ -137,9 +137,6 @@ Patch2:         %{_patch_src}/misc/dkms-clang.patch
 
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
-Patch11:        %{_patch_src}/misc/nvidia/0002-Add-IBT-support.patch
-Patch12:        %{_patch_src}/misc/nvidia/0003-nvidia-uvm-Remove-unused-get_devmap_page-parameter.patch
-Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-character-rate-to-3.patch
 %endif
 
 %description
@@ -187,9 +184,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-
     
 
     %if %{_build_lto}
-        scripts/config -d CONFIG_LTO_NONE
-        scripts/config -d CONFIG_LTO_CLANG_FULL
-        scripts/config -e CONFIG_LTO_CLANG_THIN
+        scripts/config -e LTO_CLANG_THIN
     %endif
 
     %if %{_build_minimal}
@@ -204,9 +199,7 @@ Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-
 cd %{_builddir}/%{_nv_pkg}/kernel-open
 %patch -P 10 -p1
 cd ..
-%patch -P 11 -p1
-%patch -P 12 -p1
-%patch -P 13 -p1
+%autopatch -p1 -v -m 11 -M 19
 %endif
 
 %build
