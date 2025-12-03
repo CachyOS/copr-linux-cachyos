@@ -193,19 +193,6 @@ Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-
         scripts/config -e CONFIG_LTO_CLANG_THIN_DIST
     %endif
 
-    # Enable PREEMPT_LAZY as default
-    scripts/config -d CONFIG_PREEMPT
-    scripts/config -d CONFIG_PREEMPT_VOLUNTARY
-    scripts/config -d CONFIG_PREEMPT_RT
-    scripts/config -e CONFIG_PREEMPT_LAZY
-
-    # Force Enable Clang AutoFDO and PROPELLER support
-    scripts/config -e CONFIG_ARCH_SUPPORTS_AUTOFDO_CLANG
-    scripts/config -e CONFIG_ARCH_SUPPORTS_PROPELLER_CLANG
-    scripts/config -e CONFIG_AUTOFDO_CLANG
-    scripts/config -e CONFIG_AUTOFDO_PROFILE_ACCURATE
-    scripts/config -e CONFIG_PROPELLER_CLANG
-
     %if %{_build_minimal}
         %make_build LSMOD=%{SOURCE2} localmodconfig
     %else
