@@ -189,7 +189,8 @@ Patch13:        %{_patch_src}/misc/nvidia/0004-nvkms-Limit-default-maximum-TMDS-
     %if %{_build_lto}
         scripts/config -d CONFIG_LTO_NONE
         scripts/config -d CONFIG_LTO_CLANG_FULL
-        scripts/config -e CONFIG_LTO_CLANG_THIN
+        scripts/config -d CONFIG_LTO_CLANG_THIN
+        scripts/config -e CONFIG_LTO_CLANG_THIN_DIST
     %endif
 
     %if %{_build_minimal}
