@@ -1,8 +1,8 @@
 %define _disable_source_fetch 0
 
 Name:           scx-tools
-Version:        1.0.18
-Release:        2%{?dist}
+Version:        1.0.19
+Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
 License:        GPL=2.0
@@ -57,6 +57,7 @@ find target/release \
 # DBus service and configuration
 %{_datadir}/dbus-1/system-services/org.scx.Loader.service
 %{_datadir}/dbus-1/system.d/org.scx.Loader.conf
+%{_datadir}/dbus-1/interfaces/org.scx.Loader.xml
 
 # Polkit authorization policy for scx-loader
 %{_datadir}/polkit-1/actions/org.scx.Loader.policy
