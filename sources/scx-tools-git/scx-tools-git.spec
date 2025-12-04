@@ -7,7 +7,7 @@
 
 Name:           scx-tools-git
 Version:        1.0.19.%{commitdate}.git.%{shortcommit}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Sched_ext Tools
 
 License:        GPL=2.0
@@ -43,6 +43,7 @@ cargo fetch --locked
 cargo build --release --frozen --all-features --workspace
 
 %install
+export CARGO_TARGET_DIR=%{_builddir}/target
 
 # Install all built executables (skip .so and .d files)
 find target/release \
