@@ -2,7 +2,7 @@
 
 Name:           scx-tools
 Version:        1.0.19
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Sched_ext Tools
 
 License:        GPL=2.0
@@ -23,6 +23,7 @@ BuildRequires:  libseccomp-devel
 Requires:  scx-scheds
 Obsoletes: scxctl = 0.3.4
 Provides: scxctl = %{version}
+Conflicts: scx-tools-git
 
 %description
 scx_loader: A DBUS Interface for Managing sched_ext Schedulers
