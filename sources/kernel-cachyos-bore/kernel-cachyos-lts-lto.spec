@@ -186,6 +186,9 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     scripts/config -e CONFIG_IMA_APPRAISE
     scripts/config -e CONFIG_IMA_ARCH_POLICY
 
+    # Include BTRFS in kernel build so BTRFS on root is able to boot
+    scripts/config -e BTRFS_FS
+
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
     %endif
