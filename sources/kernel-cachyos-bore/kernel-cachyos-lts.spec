@@ -11,7 +11,7 @@
 
 # Linux Kernel Versions
 %define _basekver 6.12
-%define _stablekver 62
+%define _stablekver 63
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -77,7 +77,7 @@
 Name:           kernel-cachyos-lts%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachylts2%{?_lto_args:.lto}%{?dist}
+Release:        cachylts1%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -119,7 +119,7 @@ BuildRequires:  gcc-c++
 
 # Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
-Source1:        https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/lts-btrfs-fix/sources/kernel-cachyos-bore/config/lts/config
+Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos-lts/config
 
 %if %{_build_minimal}
 # The default modprobed.db provided is used for linux-cachyos CI.
@@ -185,6 +185,9 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     scripts/config -e CONFIG_IMA_APPRAISE_BOOTPARAM
     scripts/config -e CONFIG_IMA_APPRAISE
     scripts/config -e CONFIG_IMA_ARCH_POLICY
+
+    # Include BTRFS in kernel build so BTRFS on root is able to boot
+    scripts/config -e BTRFS_FS
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
