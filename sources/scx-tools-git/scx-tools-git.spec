@@ -1,13 +1,13 @@
 %global _default_patch_fuzz 2
-%global commitdate 20251208
-%global commit 122cdb289d09fc960ba7e24dc6bec10326b424e9
+%global commitdate 20260113
+%global commit 067e525ce8592a79f8efaf1b4480b802edfe2969
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-tools-git
 Version:        1.0.19.%{commitdate}.git.%{shortcommit}
-Release:        2%{?dist}
+Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
 License:        GPL=2.0
