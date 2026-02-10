@@ -10,8 +10,8 @@
 %undefine _include_frame_pointers
 
 # Linux Kernel Versions
-%define _basekver 6.12
-%define _stablekver 73
+%define _basekver 6.18
+%define _stablekver 13
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -185,9 +185,7 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     scripts/config -e CONFIG_IMA_APPRAISE_BOOTPARAM
     scripts/config -e CONFIG_IMA_APPRAISE
     scripts/config -e CONFIG_IMA_ARCH_POLICY
-
-    # Include BTRFS in kernel build so BTRFS on root is able to boot
-    scripts/config -e BTRFS_FS
+    
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
@@ -400,7 +398,7 @@ Provides:       kernel-modules-extra = %{_rpmver}
 Provides:       kernel-modules-uname-r = %{_kver}
 Provides:       kernel-modules-core-uname-r = %{_kver}
 Provides:       kernel-modules-extra-uname-r = %{_kver}
-Provides:       v4l2loopback-kmod = 0.13.1
+Provides:       v4l2loopback-kmod = 0.14.0
 Provides:       installonlypkg(kernel-module)
 Requires:       kernel-uname-r = %{_kver}
 
