@@ -170,7 +170,7 @@ sudo dnf install scx-manager
 
 ### ananicy-cpp
 
-> [It is advised against running `ananicy-cpp` and a scheduler from the `sched-ext` framework *simultaneously*. Use one but not the other.](https://wiki.cachyos.org/configuration/sched-ext/#disable-ananicy-cpp)
+> [After further development of the sched-ext schedulers, ananicy-cpp is usually okay to be used alongside them. However, if you experience any stalls or instability, consider disabling it as a troubleshooting step.](https://wiki.cachyos.org/configuration/sched-ext/#ananicy-cpp--sched-ext)
 
 ```bash
 sudo dnf install ananicy-cpp
