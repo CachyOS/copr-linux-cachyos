@@ -1,23 +1,10 @@
-
 **FEDORA WORKSTATION**
 
 > *sudo dnf copr enable bieszczaders/kernel-cachyos-addons*
 
-INSTALL REQUIRED PACKAGES
+INSTALL ADDON PACKAGES
 
-> *sudo dnf install libcap-ng libcap-ng-devel procps-ng procps-ng-devel*
-
-INSTALL UKSMD
-
-> *sudo dnf install uksmd*
-
-ENABLE SERVICE
-
-> *sudo systemctl enable --now uksmd.service*
-
-CHECKING THE CORRECT OPERATION OF THE UKSMD
-
-> *uksmdstats*
+> *sudo dnf install cachyos-settings scx-scheds scx-tools scx-manager ananicy-cpp*
 
 **FEDORA SILVERBLUE**
 
@@ -25,49 +12,32 @@ CHECKING THE CORRECT OPERATION OF THE UKSMD
 
 > *sudo wget https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/repo/fedora-$(rpm -E %fedora)/bieszczaders-kernel-cachyos-addons-fedora-$(rpm -E %fedora).repo*
 
-INSTALL REQUIRED PACKAGES
+INSTALL ADDON PACKAGES
 
-> *sudo rpm-ostree install libcap-ng-devel procps-ng-devel*
-
-INSTALL UKSMD
-
-> *sudo rpm-ostree install uksmd*
+> *sudo rpm-ostree install cachyos-settings scx-scheds scx-tools ananicy-cpp*
 
 > *sudo systemctl reboot*
 
-ENABLE SERVICE
 
-> *sudo systemctl enable --now uksmd.service*
+# **Configuration and Usage**
 
-CHECKING THE CORRECT OPERATION OF THE UKSMD
+**CachyOS-Settings**
+To fully apply CachyOS settings, you may need to regenerate your dracut image:
+> *sudo dracut -f*
 
-> *uksmdstats*
-
-# **Sched-ext schedulers**
-The stable branch kernels have support for sched-ext schedulers. In order to use them, you need to install the package, which contains the schedulers using the following instructions:
-
-In order to install the package, run the following command:
-
-**FEDORA WORKSTATION**
-
-> *sudo dnf install scx-scheds*
-
-**FEDORA SILVERBLUE**
-
-> *sudo rpm-ostree install scx-scheds*
-
-On Silverblue version 39 or 40 you will also have to upgrade the libbpf package to the latest version from our repo:
-> *sudo rpm-ostree override replace --experimental --from repo=copr:copr.fedorainfracloud.org:bieszczaders:kernel-cachyos-addons libbpf*
-
-If you have previously run the above command and want to upgrade to Silverblue 41 or 42, you will need to reset the override of libbpf before the upgrade:
-> *rpm-ostree override reset libbpf*
-
-In order to run a scheduler, you can run the executable for the specific scheduler, you want. For example scx_bpfland:
-
+**Sched-ext (scx)**
+You can start a scheduler manually or via systemd. For example, to run `scx_bpfland`:
 > *sudo scx_bpfland*
 
-If you want to use the systemd service, you can enable and run it, and it will also start, when the system boots:
-
+To enable the systemd service (defaults to scx_bpfland, configurable in `/etc/default/scx`):
 > *sudo systemctl enable --now scx.service*
 
-The default scheduler is scx_bpfland, but you can change it in the configuration file, which is located under /etc/default/scx
+You can use `scxctl` to manage profiles and monitor schedulers.
+
+**Ananicy-cpp**
+To enable the auto-nice daemon:
+> *sudo systemctl enable --now ananicy-cpp*
+
+🚨 **WARNING**: It is advised against running `ananicy-cpp` and a scheduler from the `sched-ext` framework simultaneously. Use one or the other for the best results.
+
+📖 More information is available in the [CachyOS Wiki](https://wiki.cachyos.org/configuration/sched-ext/).

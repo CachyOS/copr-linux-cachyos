@@ -1,29 +1,35 @@
-# **Announcement 2024/06/16: Sched-ext schedulers support has been added to the stable branch kernels. Instructions can be found below.**
+# **CachyOS Addons for Fedora**
 
-# **Userspace KSM helper daemon.**
+![CachyOS](https://lingruby.ovh/images/cachyos_logo.png)
 
-The daemon goes through the list of userspace tasks (once per 5 seconds) and hints them to apply MADV_MERGEABLE to anonymous mappings for ksmd kthread to merge memory pages with the same content. Only long-living tasks are hinted (those that were launched more than 10 seconds ago).
+# [Meet CachyOS team!](https://cachyos.org/about/#company)
 
-This requires pmadv_ksm() syscall, which is available in [pf-kernel](https://codeberg.org/pf-kernel/linux).
+# **CachyOS Settings**
 
-# **Configuration**
+Settings used in CachyOS, including modprobe configurations and udev rules, specifically packaged and optimized for Fedora.
+* [GitHub CachyOS-Settings](https://github.com/CachyOS/CachyOS-Settings).
 
-The daemon requires zero configuration.
+# **scx-scheds and scx-tools**
 
-# **Distribution and Contribution**
+The `scx-scheds` package provides Various sched-ext (BPF) schedulers. `scx-tools` includes `scxctl` for managing and monitoring these schedulers.
+* [GitHub scx-scheds](https://github.com/sched-ext/scx).
 
-Distributed under terms and conditions of GNU GPL v3 (only).
+# **scx-manager**
+
+A simple and intuitive GUI for managing and switching between different sched-ext schedulers via scx_loader.
+* [GitHub scx-manager](https://github.com/CachyOS/scx-manager/).
+
+# **Ananicy-cpp**
+
+An auto-nice daemon with CachyOS-specific rules to improve system responsiveness by automatically adjusting process priorities.
+* [GitHub ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/).
+
+# **Contribution and Development**
 
 Developers:
-
-* Oleksandr Natalenko <oleksandr@natalenko.name>
-
-# **CachyOS branding**
-
-The special version for CachyOS also includes uksmdstats .
-* [GitHub uksmd](https://github.com/CachyOS/uksmd).
+* [andersrh](https://github.com/andersrh)
+* [TrixieUA](https://github.com/TrixieUA)
 
 Contributors:
-
 * Piotr Gorski <piotrgorski@cachyos.org>
 * Damian N. <nycko123@gmail.com>
