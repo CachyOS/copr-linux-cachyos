@@ -1,9 +1,5 @@
 # **CachyOS Addons for Fedora**
 
-![CachyOS](https://lingruby.ovh/images/cachyos_logo.png)
-
-# [Meet CachyOS team!](https://cachyos.org/about/#company)
-
 # **CachyOS Settings**
 
 Settings used in CachyOS, including modprobe configurations and udev rules, specifically packaged and optimized for Fedora.
@@ -11,7 +7,7 @@ Settings used in CachyOS, including modprobe configurations and udev rules, spec
 
 # **scx-scheds and scx-tools**
 
-The `scx-scheds` package provides Various sched-ext (BPF) schedulers. `scx-tools` includes `scxctl` for managing and monitoring these schedulers.
+The `scx-scheds` package provides various sched-ext (BPF) schedulers. `scx-tools` includes `scxctl` for managing and monitoring these schedulers.
 * [GitHub scx-scheds](https://github.com/sched-ext/scx).
 
 # **scx-manager**
@@ -21,10 +17,10 @@ A simple and intuitive GUI for managing and switching between different sched-ex
 
 # **Ananicy-cpp**
 
-An auto-nice daemon with CachyOS-specific rules to improve system responsiveness by automatically adjusting process priorities. Note: It is usually okay to use alongside sched-ext, but can be disabled as a troubleshooting step if instability occurs.
+An auto-nice daemon with CachyOS-specific rules to improve system responsiveness by automatically adjusting process priorities. Note: After further development of the sched-ext schedulers, it is usually okay to use alongside them, but can be disabled as a troubleshooting step if instability occurs.
 * [GitHub ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/).
 
-# **Contribution and Development**
+# **Distribution and Contribution**
 
 Developers:
 * [andersrh](https://github.com/andersrh)
