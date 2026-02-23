@@ -38,6 +38,6 @@ You can use `scxctl` to manage profiles and monitor schedulers.
 To enable the auto-nice daemon:
 > *sudo systemctl enable --now ananicy-cpp*
 
-🚨 **WARNING**: It is advised against running `ananicy-cpp` and a scheduler from the `sched-ext` framework simultaneously. Use one or the other for the best results.
+🚨 **NOTE**: After further development of the sched-ext schedulers, ananicy-cpp is usually okay to be used alongside them. However, if you experience any stalls or instability, consider disabling it as a troubleshooting step.
 
 📖 More information is available in the [CachyOS Wiki](https://wiki.cachyos.org/configuration/sched-ext/).

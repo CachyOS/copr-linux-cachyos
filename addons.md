@@ -21,7 +21,7 @@ A simple and intuitive GUI for managing and switching between different sched-ex
 
 # **Ananicy-cpp**
 
-An auto-nice daemon with CachyOS-specific rules to improve system responsiveness by automatically adjusting process priorities.
+An auto-nice daemon with CachyOS-specific rules to improve system responsiveness by automatically adjusting process priorities. Note: It is usually okay to use alongside sched-ext, but can be disabled as a troubleshooting step if instability occurs.
 * [GitHub ananicy-cpp](https://gitlab.com/ananicy-cpp/ananicy-cpp/).
 
 # **Contribution and Development**
