@@ -27,13 +27,16 @@ We offer a variety of CachyOS kernels ported to Fedora:
 
 For Fedora Workstation and Silverblue we recommend `kernel-cachyos` and for Fedora Server, Cloud and CoreOS we recommend `kernel-cachyos-server`. The LTS and Real-time kernels are for special use cases (think embedded systems) and are not recommended unless your application requires them.
 
+## 📢 Announcement 2026/02/23
+**We have removed the support for prebuilt Nvidia drivers with the kernels.**
+The reason for this decision is a mismatch of release schedules between RPMFusion, Fedora and CachyOS. Following this decision we advise users to switch to either RPMFusion or Negativo17's Nvidia drivers.
+
 ## 🌟 Features
 - Choose between `GCC` and `LLVM-ThinLTO`
 - Optimized for `x86-64v3` CPUs for `kernel-cachyos` and `x86-64v2` for `kernel-cachyos-lts` and `kernel-cachyos-server`
 - BORE scheduler with sched-ext support (excl. `kernel-cachyos-server`, sched-ext support only for `kernel-cachyos`)
 - AMD P-State Preferred Core, AMD CPB Switch and upstream `amd-pstate` enchancements (exclusive to `kernel-cachyos`)
 - Cachy Sauce - Provides tweaks for the scheduler and other settings
-- Prebuilt `nvidia-open` kernel modules
 - Latest & improved ZSTD patchset
 - Improved BFQ Scheduler
 - BBRv3 tcp_congestion_control
