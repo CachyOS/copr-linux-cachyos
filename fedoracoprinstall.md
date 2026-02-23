@@ -6,14 +6,19 @@
 
 OR for realtime kernel
 
->*sudo dnf install kernel-cachyos-rt kernel-cachyos-rt-devel-matched*
+> *sudo dnf install kernel-cachyos-rt kernel-cachyos-rt-devel-matched*
 
 OR for LTS kernel
->*sudo dnf install kernel-cachyos-lts kernel-cachyos-lts-devel-matched*
 
-LTS kernel works with x86_64v2 cpu's and legacy nvidia drivers
+> *sudo dnf install kernel-cachyos-lts kernel-cachyos-lts-devel-matched*
 
- **FEDORA SILVERBLUE**
+OR for Server kernel
+
+> *sudo dnf install kernel-cachyos-server kernel-cachyos-server-devel-matched*
+
+LTS and Server kernels work with x86_64v2 CPUs.
+
+**FEDORA SILVERBLUE**
 
 > *cd /etc/yum.repos.d/*
 
@@ -31,13 +36,17 @@ OR for realtime kernel
 
 OR for LTS kernel
 
->*sudo rpm-ostree override remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra --install  kernel-cachyos-lts*
+> *sudo rpm-ostree override remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra --install kernel-cachyos-lts*
 
 > *sudo systemctl reboot*
 
-LTS kernel works with x86_64v2 cpu's and legacy nvidia drivers
+OR for Server kernel
+
+> *sudo rpm-ostree override remove kernel kernel-core kernel-modules kernel-modules-core kernel-modules-extra --install kernel-cachyos-server*
+
+> *sudo systemctl reboot*
 
 
 **OPTIONAL (HIGHLY RECOMMENDED) FOR BETTER PERFORMANCE**
 
-> *Install [UKSMD](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/).*
+> *Install [CachyOS Addons](https://copr.fedorainfracloud.org/coprs/bieszczaders/kernel-cachyos-addons/) for additional optimizations and settings.*
