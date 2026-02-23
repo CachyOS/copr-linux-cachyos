@@ -29,19 +29,6 @@
 # ThinLTO
 %define _build_lto 0
 
-# Builds nvidia-open kernel modules with
-# the kernel
-%define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
-%if 0%{?fedora} >= 43
-    %define _build_nv 1
-    %define _nv_ver 580.119.02
-%elif 0%{?rhel}
-    %define _build_nv 0
-%else
-    %define _build_nv 1
-    %define _nv_ver 580.119.02
-    %define _nv_old 1
-%endif
 
 # Define the tickrate used by the kernel
 # Valid values: 100, 250, 300, 500, 600, 750 and 1000
@@ -109,11 +96,9 @@ BuildRequires:  lld
 BuildRequires:  llvm
 %endif
 
-%if %{_build_nv}
-BuildRequires:  gcc-c++
-%endif
 
-# Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
+# Indexes 0-9 are reserved for the kernel.
+
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos-server/config
 
@@ -124,9 +109,6 @@ Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/l
 Source2:        https://raw.githubusercontent.com/Frogging-Family/linux-tkg/master/linux-tkg-config/%{_basekver}/minimal-modprobed.db
 %endif
 
-%if %{_build_nv}
-Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_pkg}.tar.gz
-%endif
 
 Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
 
@@ -134,15 +116,12 @@ Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
 Patch2:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
-%if %{_build_nv}
-Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
-%endif
 
 %description
     The meta package for %{name}.
 
 %prep
-%setup -q %{?SOURCE10:-b 10} -n linux-%{_tarkver}
+%setup -q -n linux-%{_tarkver}
 %autopatch -p1 -v -M 9
 
     cp %{SOURCE1} .config
@@ -196,21 +175,11 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
 
     diff -u %{SOURCE1} .config || :
 
-%if %{_build_nv}
-cd %{_builddir}/%{_nv_pkg}/kernel-open
-%patch -P 10 -p1
-cd ..
-%autopatch -p1 -v -m 11 -M 19
-%endif
 
 %build
     %make_build EXTRAVERSION=-%{release}.%{_arch} all
     %make_build -C tools/bpf/bpftool vmlinux.h feature-clang-bpf-co-re=1
 
-    %if %{_build_nv}
-        cd %{_builddir}/%{_nv_pkg}
-        CFLAGS= CXXFLAGS= LDFLAGS= %make_build %{_module_args} IGNORE_CC_MISMATCH=yes modules
-    %endif
 
 %install
     echo "Installing the kernel image..."
@@ -322,13 +291,6 @@ cd ..
     install -dm755 %{buildroot}/boot
     dd if=/dev/zero of=%{buildroot}/boot/initramfs-%{_kver}.img bs=1M count=90
 
-    %if %{_build_nv}
-        cd %{_builddir}/%{_nv_pkg}
-        echo "Installing NVIDIA open kernel modules..."
-        install -Dt %{buildroot}%{_kernel_dir}/nvidia -m644 kernel-open/*.ko
-        find %{buildroot}%{_kernel_dir}/nvidia -name '*.ko' -exec zstd --rm -19 {} +
-        install -Dt %{buildroot}/%{_defaultlicensedir}/%{name}-nvidia-open -m644 COPYING
-    %endif
 
 %package core
 Summary:        Linux EEVDF scheduler Kernel by CachyOS targeted for Servers workloads
@@ -477,24 +439,5 @@ Requires:       %{name}-devel = %{_rpmver}
 
 %files devel-matched
 
-%if %{_build_nv}
-%package nvidia-open
-Summary:        nvidia-open %{_nv_ver} kernel modules for %{name}
-Provides:       nvidia-kmod >= %{_nv_ver}
-Provides:       installonlypkg(kernel-module)
-Requires:       kernel-uname-r = %{_kver}
-Conflicts:      akmod-nvidia
-Recommends:     xorg-x11-drv-nvidia >= %{_nv_ver}
-
-%description nvidia-open
-    This package provides nvidia-open %{_nv_ver} kernel modules for %{name}.
-
-%post nvidia-open
-    /sbin/depmod -a %{_kver}
-
-%files nvidia-open
-    %license %{_defaultlicensedir}/%{name}-nvidia-open/COPYING
-    %{_kernel_dir}/nvidia
-%endif
 
 %files
