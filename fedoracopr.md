@@ -9,7 +9,7 @@
 * BORE - (Burst-Oriented Response Enhancer) CPU Scheduler by [firelzrd (BORE)](https://github.com/firelzrd/bore-scheduler)
 * EEVDF - (Earliest Eligible Virtual Deadline First) Scheduler is used as default in the server kernel.
 
-#**Announcement 2026/02/23: We have removed the support for prebuilt Nvidia drivers with the kernels.**
+# **Announcement 2026/02/23: We have removed the support for prebuilt Nvidia drivers with the kernels.**
 The reason for this decision is a mismatch of release schedules between RPMFusion, Fedora and CachyOS. Following this decision we advise users to switch to either RPMFusion or Negativo17's Nvidia drivers.
 
 # **GCC and LLVM-ThinLTO kernels**
