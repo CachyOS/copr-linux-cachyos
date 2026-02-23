@@ -4,7 +4,19 @@
 
 INSTALL ADDON PACKAGES
 
-> *sudo dnf install cachyos-settings scx-scheds scx-tools scx-manager ananicy-cpp*
+**CachyOS-Settings**
+> *sudo dnf swap zram-generator-defaults cachyos-settings*
+
+> *sudo dracut -f*
+
+**scx-scheds and scx-tools**
+> *sudo dnf install scx-scheds scx-tools*
+
+**scx-manager**
+> *sudo dnf install scx-manager*
+
+**ananicy-cpp**
+> *sudo dnf install ananicy-cpp*
 
 **FEDORA SILVERBLUE**
 
@@ -14,27 +26,21 @@ INSTALL ADDON PACKAGES
 
 INSTALL ADDON PACKAGES
 
-> *sudo rpm-ostree install cachyos-settings scx-scheds scx-tools ananicy-cpp*
+> *sudo rpm-ostree install scx-scheds scx-tools*
 
 > *sudo systemctl reboot*
 
 
 # **Configuration and Usage**
 
-**CachyOS-Settings**
-To fully apply CachyOS settings, you may need to regenerate your dracut image:
-> *sudo dracut -f*
-
 **Sched-ext (scx)**
-You can start a scheduler manually or via systemd. For example, to run `scx_bpfland`:
-> *sudo scx_bpfland*
 
-To enable the systemd service (defaults to scx_bpfland, configurable in `/etc/default/scx`):
-> *sudo systemctl enable --now scx.service*
+You can use `scxctl` to start/change the scheduler with profiles/custom flags. To see all available options, run:
 
-You can use `scxctl` to manage profiles and monitor schedulers.
+> *scxctl --help*
 
 **Ananicy-cpp**
+
 To enable the auto-nice daemon:
 > *sudo systemctl enable --now ananicy-cpp*
 
