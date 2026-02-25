@@ -1,0 +1,9 @@
+--- a/scripts/Makefile.vmlinux_a
++++ b/scripts/Makefile.vmlinux_a
+@@ -18,5 +18,5 @@ quiet_cmd_vmlinux_a = AR      $@
+       cmd_vmlinux_a = \
+ 	rm -f $@; \
+-	$(AR) cDPrS --thin $@ $(KBUILD_VMLINUX_OBJS); \
+-	$(AR) mPi --thin $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
++	$(AR) cDPrS -T $@ $(KBUILD_VMLINUX_OBJS); \
++	$(AR) mPi -T $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
