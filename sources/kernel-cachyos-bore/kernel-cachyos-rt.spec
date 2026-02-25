@@ -73,7 +73,7 @@
 Name:           kernel-cachyos-rt%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyrt1%{?_lto_args:.lto}%{?dist}
+Release:        cachyrt2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -134,6 +134,10 @@ Patch2:         %{_patch_src}/misc/0001-rt-i915.patch
 
 %if %{_build_lto}
 Patch2:         %{_patch_src}/misc/dkms-clang.patch
+%endif
+
+%if ! %{_build_lto} && 0%{?rhel} == 9
+Patch3:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
 %endif
 
 %if %{_build_nv}

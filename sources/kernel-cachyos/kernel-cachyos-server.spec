@@ -73,7 +73,7 @@
 Name:           kernel-cachyos-server%{?_lto_args:-lto}
 Summary:        Linux %{?_lto_args:+ LTO }EEVDF scheduler Kernel by CachyOS targeted for Servers workloads
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyserver1%{?_lto_args:.lto}%{?dist}
+Release:        cachyserver2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -132,6 +132,10 @@ Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
 
 %if %{_build_lto}
 Patch2:         %{_patch_src}/misc/dkms-clang.patch
+%endif
+
+%if ! %{_build_lto} && 0%{?rhel} == 9
+Patch3:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
 %endif
 
 %if %{_build_nv}
