@@ -1,0 +1,16 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: Wed, 25 Feb 2026 22:07:00 +0000
+Subject: [PATCH] Fix 'ar' unrecognized option '--thin' on EPEL 9
+
+EPEL 9 uses binutils 2.35.2 which does not support the long option '--thin'.
+Replace it with the short option '-T' which is compatible.
+
+--- a/scripts/Makefile.vmlinux_a
++++ b/scripts/Makefile.vmlinux_a
+@@ -18,5 +18,5 @@ quiet_cmd_vmlinux_a = AR      $@
+       cmd_vmlinux_a = \
+ 	rm -f $@; \
+-	$(AR) cDPrS --thin $@ $(KBUILD_VMLINUX_OBJS); \
+-	$(AR) mPi --thin $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
++	$(AR) cDPrS -T $@ $(KBUILD_VMLINUX_OBJS); \
++	$(AR) mPi -T $$($(AR) t $@ | sed -n 1p) $@ $$($(AR) t $@ | grep -F -f $(srctree)/scripts/head-object-list.txt)
