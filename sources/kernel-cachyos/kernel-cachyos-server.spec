@@ -73,7 +73,7 @@
 Name:           kernel-cachyos-server%{?_lto_args:-lto}
 Summary:        Linux %{?_lto_args:+ LTO }EEVDF scheduler Kernel by CachyOS targeted for Servers workloads
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyserver2%{?_lto_args:.lto}%{?dist}
+Release:        cachyserver3%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -102,12 +102,9 @@ BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
 BuildRequires:  python3-pyyaml
 BuildRequires:  python-srpm-macros
-
-%if %{_build_lto}
 BuildRequires:  clang
 BuildRequires:  lld
 BuildRequires:  llvm
-%endif
 
 %if %{_build_nv}
 BuildRequires:  gcc-c++
