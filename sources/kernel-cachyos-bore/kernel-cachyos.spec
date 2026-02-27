@@ -188,11 +188,17 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     scripts/config -e CONFIG_IMA_APPRAISE
     scripts/config -e CONFIG_IMA_ARCH_POLICY
 
+    # Match AlmaLinux 10 graphics configuration
+    scripts/config -d DRM_PANIC
+    scripts/config -e DMABUF_MOVE_NOTIFY
+    scripts/config --set-str CONFIG_DRM_I915_FORCE_PROBE ""
+
     # Add NVIDIA GPU OOT and AlmaLinux signing keys to trusted keyring
     mkdir -p certs
     cat %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} > certs/cachyos.pem
     scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS "certs/cachyos.pem"
     scripts/config -d DRM_I915_GVT_KVMGT
+    scripts/config -d DRM_I915_GVT
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
