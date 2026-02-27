@@ -1,9 +1,13 @@
 %global _default_patch_fuzz 2
-%global commitdate 20260215
-%global commit b1f19b35e75633c7fc6822b4a0b6345fa0c3ab24
+%global commitdate 20260227
+%global commit 08ed41b6a8e64680bd4c6ac90e2b9dfb27b12008
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
+
+%if 0%{?rhel}
+%global debug_package %{nil}
+%endif
 
 Name:           scx-scheds-git
 Version:        1.0.20.%{commitdate}.git.%{shortcommit}

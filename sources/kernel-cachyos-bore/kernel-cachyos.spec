@@ -10,8 +10,8 @@
 %undefine _include_frame_pointers
 
 # Linux Kernel Versions
-%define _basekver 6.18
-%define _stablekver 8
+%define _basekver 6.19
+%define _stablekver 3
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -33,12 +33,12 @@
 # the kernel
 %define _nv_pkg open-gpu-kernel-modules-%{_nv_ver}
 %if 0%{?fedora} >= 43
-    %define _build_nv 1
+    %define _build_nv 0
     %define _nv_ver 580.119.02
 %elif 0%{?rhel}
     %define _build_nv 0
 %else
-    %define _build_nv 1
+    %define _build_nv 0
     %define _nv_ver 580.119.02
     %define _nv_old 1
 %endif
@@ -73,7 +73,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos3%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -102,12 +102,9 @@ BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
 BuildRequires:  python3-pyyaml
 BuildRequires:  python-srpm-macros
-
-%if %{_build_lto}
 BuildRequires:  clang
 BuildRequires:  lld
 BuildRequires:  llvm
-%endif
 
 %if %{_build_nv}
 BuildRequires:  gcc-c++
@@ -133,6 +130,10 @@ Patch1:         %{_patch_src}/sched/0001-bore-cachy.patch
 
 %if %{_build_lto}
 Patch2:         %{_patch_src}/misc/dkms-clang.patch
+%endif
+
+%if ! %{_build_lto} && 0%{?rhel} == 9
+Patch3:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
 %endif
 
 %if %{_build_nv}

@@ -1,5 +1,9 @@
 %define _disable_source_fetch 0
 
+%if 0%{?rhel}
+%global debug_package %{nil}
+%endif
+
 Name:           scx-scheds
 Version:        1.0.20
 Release:        1%{?dist}
