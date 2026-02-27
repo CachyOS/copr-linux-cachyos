@@ -73,7 +73,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos3%{?_lto_args:.lto}%{?dist}
+Release:        cachyos4%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -113,6 +113,11 @@ BuildRequires:  gcc-c++
 # Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
 Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
+Source3:        nvidiagpuoot001.pem
+Source4:        almalinuxnvidia1.pem
+Source5:        almalinuxdup1.pem
+Source6:        almalinuxkpatch1.pem
+Source7:        almalinuximaca1.pem
 
 %if %{_build_minimal}
 # The default modprobed.db provided is used for linux-cachyos CI.
@@ -182,6 +187,12 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     scripts/config -e CONFIG_IMA_APPRAISE_BOOTPARAM
     scripts/config -e CONFIG_IMA_APPRAISE
     scripts/config -e CONFIG_IMA_ARCH_POLICY
+
+    # Add NVIDIA GPU OOT and AlmaLinux signing keys to trusted keyring
+    mkdir -p certs
+    cat %{SOURCE3} %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} > certs/cachyos.pem
+    scripts/config --set-str CONFIG_SYSTEM_TRUSTED_KEYS "certs/cachyos.pem"
+    scripts/config -d DRM_I915_GVT_KVMGT
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
