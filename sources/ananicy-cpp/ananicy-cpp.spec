@@ -14,6 +14,7 @@ Summary:        Rewrite of ananicy in c++ for lower cpu and memory usage
 License:        GPLv3
 URL:            https://gitlab.com/ananicy-cpp/ananicy-cpp
 Source0:        %{url}/-/archive/v%{version}/ananicy-cpp-v%{version}.tar.gz
+Patch0:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/ananicy-cpp-glibc-2.41.patch
 
 ExcludeArch:    s390x i686 ppc64le
 
@@ -44,7 +45,7 @@ Rewrite of ananicy in c++ for lower cpu and memory usage
 
 
 %prep
-%autosetup -n ananicy-cpp-v%{version}
+%autosetup -n ananicy-cpp-v%{version} -p1
 
 %build
 %cmake \
