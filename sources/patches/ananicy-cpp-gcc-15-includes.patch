@@ -1,0 +1,14 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: Fri, 27 Feb 2026 21:08:00 +0000
+Subject: [PATCH] Fix missing include for GCC 15/16
+
+--- ananicy-cpp-v1.1.1/include/core/worker.hpp
++++ ananicy-cpp-v1.1.1/include/core/worker.hpp
+@@ -4,6 +4,7 @@
+ #include <condition_variable>
+ #include <thread>
+ #include <vector>
++#include <utility>
+ #include <memory>
+ 
+ #include "config.hpp"

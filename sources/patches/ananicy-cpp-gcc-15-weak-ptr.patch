@@ -1,0 +1,17 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: 2026-02-27T17:59:00Z
+Subject: Fix missing weak_ptr cast for GCC 15/16
+
+--- ananicy-cpp-v1.1.1/include/core/weak_ptr.hpp
++++ ananicy-cpp-v1.1.1/include/core/weak_ptr.hpp
+@@ -16,6 +16,10 @@
+     return !expired();
+   }
+ 
++  operator std::weak_ptr<Class>() const noexcept {
++    return ptr;
++  }
++
+   std::shared_ptr<Class> lock() const noexcept {
+     return ptr.lock();
+   }

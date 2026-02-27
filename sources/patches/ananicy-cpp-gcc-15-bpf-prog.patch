@@ -1,0 +1,28 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: Fri, 27 Feb 2026 21:08:00 +0000
+Subject: [PATCH] Fix reorder warnings for GCC 15/16
+
+--- ananicy-cpp-v1.1.1/libananicycpp_bpf/include_cpp/bpf_program.hpp
++++ ananicy-cpp-v1.1.1/libananicycpp_bpf/include_cpp/bpf_program.hpp
+@@ -52,10 +52,10 @@
+   process_filter*    m_process_filter{nullptr};
+   struct bpf_object* m_bpf_obj{nullptr};
+ 
+-  bool               m_verbose{false};
+   std::uint64_t      m_min_us{30};
++  bool               m_verbose{false};
+ };
+ 
+ #endif // ANANICY_CPP_BPF_PROGRAM
+--- ananicy-cpp-v1.1.1/include/core/process.hpp
++++ ananicy-cpp-v1.1.1/include/core/process.hpp
+@@ -45,8 +45,8 @@
+   std::mutex m_mutex;
+   std::condition_variable m_cv;
+   std::map<process_id_t, process_t> m_queue;
+-  bool       m_verbose{false};
+   uint64_t   m_min_us{60};
++  bool       m_verbose{false};
+ };
+ 
+ #endif

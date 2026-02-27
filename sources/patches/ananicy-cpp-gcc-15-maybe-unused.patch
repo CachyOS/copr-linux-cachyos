@@ -1,0 +1,15 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: 2026-02-27T17:59:00Z
+Subject: Fix unused variable for GCC 15/16
+
+--- ananicy-cpp-v1.1.1/src/worker.cpp
++++ ananicy-cpp-v1.1.1/src/worker.cpp
+@@ -34,7 +34,7 @@
+   while (m_queue.pop(p)) {
+ 
+     if constexpr (enable_bpf) {
+-      const bool is_kernel = process_info::is_kernel_process(p.pid);
++      [[maybe_unused]] const bool is_kernel = process_info::is_kernel_process(p.pid);
+       const bool is_root = process_info::get_user_id(p.pid) == 0;
+ 
+       if (bpf_prog) {

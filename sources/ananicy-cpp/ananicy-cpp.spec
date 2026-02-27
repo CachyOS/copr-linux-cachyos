@@ -8,13 +8,19 @@
 %define _disable_source_fetch 0
 
 Name:           ananicy-cpp
-Release:        12%{?dist}
+Release:        13%{?dist}
 Version:	    1.1.1
 Summary:        Rewrite of ananicy in c++ for lower cpu and memory usage
 License:        GPLv3
 URL:            https://gitlab.com/ananicy-cpp/ananicy-cpp
 Source0:        %{url}/-/archive/v%{version}/ananicy-cpp-v%{version}.tar.gz
 Patch0:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/ananicy-buildfix/sources/patches/ananicy-cpp-glibc-2.41.patch
+%if 0%{?fedora} >= 44
+Patch1:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/ananicy-buildfix/sources/patches/ananicy-cpp-gcc-15-weak-ptr.patch
+Patch2:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/ananicy-buildfix/sources/patches/ananicy-cpp-gcc-15-maybe-unused.patch
+Patch3:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/ananicy-buildfix/sources/patches/ananicy-cpp-gcc-15-includes.patch
+Patch4:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/ananicy-buildfix/sources/patches/ananicy-cpp-gcc-15-bpf-prog.patch
+%endif
 
 ExcludeArch:    s390x i686 ppc64le
 
