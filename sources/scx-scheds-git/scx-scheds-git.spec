@@ -5,6 +5,10 @@
 
 %define _disable_source_fetch 0
 
+%if 0%{?rhel}
+%global debug_package %{nil}
+%endif
+
 Name:           scx-scheds-git
 Version:        1.0.20.%{commitdate}.git.%{shortcommit}
 Release:        1%{?dist}
