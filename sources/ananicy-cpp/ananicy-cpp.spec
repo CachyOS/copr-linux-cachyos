@@ -8,7 +8,7 @@
 %define _disable_source_fetch 0
 
 Name:           ananicy-cpp
-Release:        11%{?dist}
+Release:        12%{?dist}
 Version:	    1.1.1
 Summary:        Rewrite of ananicy in c++ for lower cpu and memory usage
 License:        GPLv3
