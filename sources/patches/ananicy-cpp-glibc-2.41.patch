@@ -1,0 +1,112 @@
+From: Anders da Silva Rytter Hansen <andersrh@users.noreply.github.com>
+Date: Fri, 27 Feb 2026 20:36:29 +0000
+Subject: [PATCH] Fix build with glibc >= 2.41
+
+diff -urN ananicy-cpp-v1.1.1/src/platform/linux/priority.cpp ananicy-cpp-v1.1.1-patch/src/platform/linux/priority.cpp
+--- ananicy-cpp-v1.1.1/src/platform/linux/priority.cpp	2023-08-24 19:29:39.000000000 -0300
++++ ananicy-cpp-v1.1.1-patch/src/platform/linux/priority.cpp	2026-02-27 17:37:13.310982213 -0300
+@@ -185,12 +185,12 @@
+ 
+   // Use this here instead of function,
+   // to suppress errors from function call.
+-  struct sched_attr attr = {
+-      .size = sizeof(struct sched_attr),
++  struct ananicy_sched_attr attr = {
++      .size = sizeof(struct ananicy_sched_attr),
+       .sched_flags = SCHED_FLAG_LATENCY_NICE | SCHED_FLAG_KEEP_PARAMS,
+       .sched_latency_nice = latency_nice,
+   };
+-  const std::int32_t err = sched_setattr(pid, &attr, 0);
++  const std::int32_t err = ananicy_sched_setattr(pid, &attr, 0);
+   bool               is_supported{};
+   if (err == 0 && errno == 0) {
+     set_latnice(pid, saved_latnice);
+diff -urN ananicy-cpp-v1.1.1/src/platform/linux/process_info.cpp ananicy-cpp-v1.1.1-patch/src/platform/linux/process_info.cpp
+--- ananicy-cpp-v1.1.1/src/platform/linux/process_info.cpp	2023-08-24 19:29:39.000000000 -0300
++++ ananicy-cpp-v1.1.1-patch/src/platform/linux/process_info.cpp	2026-02-27 17:37:13.311818006 -0300
+@@ -104,16 +104,16 @@
+   }
+ }
+ 
+-static sched_attr get_sched_attributes(process_id_t pid) {
++static ananicy_sched_attr get_sched_attributes(process_id_t pid) {
+ 
+-  ::sched_attr attr{};
+-  sched_getattr(static_cast<pid_t>(pid), &attr, sizeof(attr), 0);
++  ::ananicy_sched_attr attr{};
++  ananicy_sched_getattr(static_cast<pid_t>(pid), &attr, sizeof(attr), 0);
+ 
+   return attr;
+ }
+ 
+ bool is_realtime(process_id_t pid) {
+-  const sched_attr attr = get_sched_attributes(pid);
++  const ananicy_sched_attr attr = get_sched_attributes(pid);
+   return attr.sched_priority > 0;
+ }
+ 
+diff -urN ananicy-cpp-v1.1.1/src/platform/linux/syscalls.h ananicy-cpp-v1.1.1-patch/src/platform/linux/syscalls.h
+--- ananicy-cpp-v1.1.1/src/platform/linux/syscalls.h	2023-08-24 19:29:39.000000000 -0300
++++ ananicy-cpp-v1.1.1-patch/src/platform/linux/syscalls.h	2026-02-27 17:37:13.313123613 -0300
+@@ -69,7 +69,7 @@
+ #define SCHED_FLAG_KEEP_POLICY          0x08
+ #endif
+ 
+-struct [[gnu::packed]] sched_attr {
++struct [[gnu::packed]] ananicy_sched_attr {
+   uint32_t size;
+ 
+   uint32_t sched_policy; // SCHED_(FIFO,RR,DEADLINE,OTHER,BATCH,IDLE, etc.)
+@@ -94,42 +94,42 @@
+   int32_t sched_latency_nice;
+ };
+ 
+-static int sched_setattr(pid_t pid, const struct sched_attr *attr,
++static int ananicy_sched_setattr(pid_t pid, const struct ananicy_sched_attr *attr,
+                          unsigned int flags) {
+   return static_cast<int>(syscall(__NR_sched_setattr, pid, attr, flags));
+ }
+ 
+-static int sched_getattr(pid_t pid, struct sched_attr *attr, unsigned int size,
++static int ananicy_sched_getattr(pid_t pid, struct ananicy_sched_attr *attr, unsigned int size,
+                          unsigned int flags) {
+   return static_cast<int>(syscall(__NR_sched_getattr, pid, attr, size, flags));
+ }
+ 
+ static int get_latnice(pid_t pid) {
+   // pid==0 refers to calling thread
+-  struct sched_attr attr = { .size = sizeof(struct sched_attr) };
+-  if (sched_getattr(pid, &attr, sizeof(attr), 0) < 0) {
+-      std::perror("sched_getattr");
++  struct ananicy_sched_attr attr = { .size = sizeof(struct ananicy_sched_attr) };
++  if (ananicy_sched_getattr(pid, &attr, sizeof(attr), 0) < 0) {
++      std::perror("ananicy_sched_getattr");
+   }
+   return attr.sched_latency_nice; // defaults to 0
+ }
+ 
+ static int set_latnice(pid_t pid, int latency_nice) {
+   // pid==0 refers to calling thread
+-  struct sched_attr attr = {
+-    .size = sizeof(struct sched_attr),
++  struct ananicy_sched_attr attr = {
++    .size = sizeof(struct ananicy_sched_attr),
+     .sched_flags = SCHED_FLAG_LATENCY_NICE | SCHED_FLAG_KEEP_PARAMS,
+     .sched_latency_nice = latency_nice,
+   };
+-  const int err = sched_setattr(pid, &attr, 0);
++  const int err = ananicy_sched_setattr(pid, &attr, 0);
+   if (err < 0) {
+-    // sched_setattr failed
++    // ananicy_sched_setattr failed
+     if (errno == EINVAL) {
+       // Don't print strerror for EINVAL
+       errno = 0;
+       return err;
+     }
+     // Other error occurred
+-    std::perror("sched_setattr");
++    std::perror("ananicy_sched_setattr");
+   }
+   return err;
+ }
