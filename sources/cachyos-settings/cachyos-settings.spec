@@ -27,6 +27,9 @@ Obsoletes:      bore-sysctl
     install -d %{buildroot}/%{_prefix}/lib
     cp %{_builddir}/CachyOS-Settings-%{version}/usr/{bin,lib} %{buildroot}/%{_prefix} -r
     mv %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia.conf %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia_cachyos.conf
+%if 0%{?rhel}
+    rm -f %{buildroot}/%{_prefix}/lib/NetworkManager/conf.d/dns.conf
+%endif
     chmod +x %{buildroot}/%{_bindir}/*
 
 %files
