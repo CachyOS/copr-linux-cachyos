@@ -11,7 +11,7 @@
 
 # Linux Kernel Versions
 %define _basekver 6.19
-%define _stablekver 3
+%define _stablekver 5
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
@@ -128,6 +128,10 @@ Patch0:         %{_patch_src}/sched/0001-bore-cachy.patch
 
 %if %{_build_lto}
 Patch1:         %{_patch_src}/misc/dkms-clang.patch
+%endif
+
+%if ! %{_build_lto} && 0%{?rhel} == 9
+Patch2:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
 %endif
 
 %if %{_build_nv}
