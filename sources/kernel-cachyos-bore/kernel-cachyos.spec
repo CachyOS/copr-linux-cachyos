@@ -15,11 +15,9 @@
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
-%if %{_stablekver} == 0
-    %define _tarkver %{_basekver}
-%else
-    %define _tarkver %{version}
-%endif
+
+%define _tarkver %{version}
+
 %define _tag cachyos-%{_tarkver}-1
 
 # Build a minimal a kernel via modprobed.db
