@@ -11,15 +11,13 @@
 
 # Linux Kernel Versions
 %define _basekver 6.19
-%define _stablekver 5
+%define _stablekver 6
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
-%if %{_stablekver} == 0
-    %define _tarkver %{_basekver}
-%else
-    %define _tarkver %{version}
-%endif
+%define _tarkver %{version}
+
+%define _tag cachyos-%{_tarkver}-1
 
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times
@@ -68,7 +66,7 @@
     %define _lto_args CC=clang CXX=clang++ LD=ld.lld LLVM=1 LLVM_IAS=1
 %endif
 
-%define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{_tarkver} SYSOUT=%{_builddir}/linux-%{_tarkver}
+%define _module_args KERNEL_UNAME=%{_kver} IGNORE_PREEMPT_RT_PRESENCE=1 SYSSRC=%{_builddir}/linux-%{_tag} SYSOUT=%{_builddir}/linux-%{_tag}
 
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
@@ -111,7 +109,7 @@ BuildRequires:  gcc-c++
 %endif
 
 # Indexes 0-9 are reserved for the kernel. 10-19 will be reserved for NVIDIA
-Source0:        https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-%{_tarkver}.tar.xz
+Source0:        https://github.com/CachyOS/linux/archive/refs/tags/%{_tag}.tar.gz
 Source1:        https://raw.githubusercontent.com/CachyOS/linux-cachyos/master/linux-cachyos/config
 
 %if %{_build_minimal}
@@ -125,15 +123,14 @@ Source2:        https://raw.githubusercontent.com/Frogging-Family/linux-tkg/mast
 Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_ver}/%{_nv_pkg}.tar.gz
 %endif
 
-Patch0:         %{_patch_src}/all/0001-cachyos-base-all.patch
-Patch1:         %{_patch_src}/sched/0001-bore-cachy.patch
+Patch0:         %{_patch_src}/sched/0001-bore-cachy.patch
 
 %if %{_build_lto}
-Patch2:         %{_patch_src}/misc/dkms-clang.patch
+Patch1:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
 %if ! %{_build_lto} && 0%{?rhel} == 9
-Patch3:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
+Patch2:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
 %endif
 
 %if %{_build_nv}
@@ -144,7 +141,7 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     The meta package for %{name}.
 
 %prep
-%setup -q %{?SOURCE10:-b 10} -n linux-%{_tarkver}
+%setup -q %{?SOURCE10:-b 10} -n linux-%{_tag}
 %autopatch -p1 -v -M 9
 
     cp %{SOURCE1} .config
