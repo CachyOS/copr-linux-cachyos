@@ -27,12 +27,13 @@ Obsoletes:      bore-sysctl
     install -d %{buildroot}/%{_prefix}/lib
     cp %{_builddir}/CachyOS-Settings-%{version}/usr/{bin,lib} %{buildroot}/%{_prefix} -r
     mv %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia.conf %{buildroot}/%{_prefix}/lib/modprobe.d/nvidia_cachyos.conf
-    
+%if 0%{?rhel}
+    rm -f %{buildroot}/%{_prefix}/lib/NetworkManager/conf.d/dns.conf
+%endif
     # Rename conflicting sbctl-batch-sign to avoid conflict with Fedora sbctl package
     if [ -f %{buildroot}/%{_bindir}/sbctl-batch-sign ]; then
         mv %{buildroot}/%{_bindir}/sbctl-batch-sign %{buildroot}/%{_bindir}/sbctl-batch-sign-cachyos
     fi
-    
     chmod +x %{buildroot}/%{_bindir}/*
 
 %files
