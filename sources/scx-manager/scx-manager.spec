@@ -1,8 +1,12 @@
 %define _disable_source_fetch 0
 %global _build_id_links none
 
+%if 0%{?rhel}
+%global debug_package %{nil}
+%endif
+
 Name: scx-manager
-Version: 1.15.9
+Version: 1.15.10
 Release: 1%{?dist}
 Summary: Simple GUI for managing sched-ext schedulers via scx_loader
 

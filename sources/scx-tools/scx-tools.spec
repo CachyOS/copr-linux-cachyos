@@ -1,7 +1,11 @@
 %define _disable_source_fetch 0
 
+%if 0%{?rhel}
+%global debug_package %{nil}
+%endif
+
 Name:           scx-tools
-Version:        1.0.20
+Version:        1.1.0
 Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
