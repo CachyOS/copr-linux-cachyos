@@ -33,7 +33,8 @@ The reason for this decision is a mismatch of release schedules between RPMFusio
 
 ## 🌟 Features
 - Choose between `GCC` and `LLVM-ThinLTO`
-- Optimized for `x86-64v3` CPUs for `kernel-cachyos` and `x86-64v2` for `kernel-cachyos-lts` and `kernel-cachyos-server`
+- Optimized for `x86-64v3` CPUs for `kernel-cachyos` and `x86-64v2` for `kernel-cachyos-server`.
+- For `kernel-cachyos-lts`, `EPEL 10` target has `x86-64v3` optimization, other targets have `x86-64v2`.
 - BORE scheduler with sched-ext support (excl. `kernel-cachyos-server`, sched-ext support only for `kernel-cachyos`)
 - AMD P-State Preferred Core, AMD CPB Switch and upstream `amd-pstate` enchancements (exclusive to `kernel-cachyos`)
 - Cachy Sauce - Provides tweaks for the scheduler and other settings
