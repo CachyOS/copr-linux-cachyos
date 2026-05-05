@@ -2,7 +2,7 @@
 
 Name:           cachyos-ananicy-rules
 Epoch:          1
-Version:        1.1.24
+Version:        1.1.36
 Release:        1%{?dist}
 Summary:        List of rules used to assign specific nice values to specific processes
 
