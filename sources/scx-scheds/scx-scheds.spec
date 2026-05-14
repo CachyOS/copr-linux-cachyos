@@ -5,7 +5,7 @@
 %endif
 
 Name:           scx-scheds
-Version:        1.1.0
+Version:        1.1.1
 Release:        1%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
