@@ -1,13 +1,13 @@
 %global _default_patch_fuzz 2
-%global commitdate 20260422
-%global commit 224c78c7c5e88472b9ad6a66b8ce90c164157786
+%global commitdate 20260518
+%global commit 2a3243161e5ac14f4d7f0b5742c84d6433b81983
 %global revision 1
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-tools-git
-Version:        1.1.0.%{commitdate}.%{revision}.git.%{shortcommit}
+Version:        1.1.1.%{commitdate}.%{revision}.git.%{shortcommit}
 Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
