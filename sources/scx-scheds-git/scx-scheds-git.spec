@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
-%global commitdate 20260523
-%global commit 6a19de9c8fe192c14412c5e1ad7ca6fa259ce168
+%global commitdate 20260617
+%global commit 13d50ce4bbcf574dddfd222bc1d42dfc1949fb32
 %global revision 1
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -70,7 +70,7 @@ cargo build \
      --exclude scx_rlfifo \
      --exclude scx_mitosis \
      --exclude xtask \
-     --exclude scxcash \
+     --exclude scx_characterize \
      --exclude vmlinux_docify \
      --exclude scx_arena_selftests
 
