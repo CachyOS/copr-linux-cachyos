@@ -92,25 +92,20 @@ sudo systemctl reboot
 ```
 
 ### Default Kernel
-By default Fedora will use the kernel that was most recently updated by `dnf` which will lead to inconsistent behaviour if you have multiple kernels installed, but we can tell Fedora to always boot with the latest CachyOS kernel by running a script after kernel updates.
+By default Fedora will use the kernel that was most recently updated by `dnf` which will lead to inconsistent behaviour if you have multiple kernels installed, but we can tell Fedora to always boot with the latest CachyOS kernel by running a command after all kernel updates.
 
-Create a file in `/etc/kernel/postinst.d`:
-```bash
-sudo nano /etc/kernel/postinst.d/99-default
-```
+```sh
+# Install the DNF5 actions plugin
+sudo dnf install libdnf5-plugin-actions
 
-Enter the following content that will set the latest CachyOS kernel as the default kernel:
-```bash
-#!/bin/sh
+# Create the actions directory
+sudo mkdir -p /etc/dnf/libdnf5-plugins/actions.d
 
-set -e
-
-grubby --set-default=/boot/$(ls /boot | grep vmlinuz.*cachy | sort -V | tail -1)
-```
-
-Make `root` the owner and make the script executable:
-```bash
-sudo chown root:root /etc/kernel/postinst.d/99-default ; sudo chmod u+rx /etc/kernel/postinst.d/99-default
+# Create the post_transaction action for kernel* packages
+sudo tee /etc/dnf/libdnf5-plugins/actions.d/cachy-default.actions << 'EOF'
+# After installing any kernel* package, set the latest CachyOS kernel as the default boot entry
+post_transaction:kernel*:in::/usr/bin/sh -c /usr/bin/grubby\ --set-default=/boot/$(ls\ /boot\ |\ grep\ vmlinuz.*cachy\ |\ sort\ -V\ |\ tail\ -1)
+EOF
 ```
 
 The next time any installed kernel (e.g. the official Fedora kernel) gets an update, the system will change default kernel back to the latest CachyOS kernel. This way you can keep the official kernel as a backup in case an update goes wrong and you need to temporarily switch to the official kernel.
