@@ -5,7 +5,7 @@
 %endif
 
 Name:           scx-tools
-Version:        1.1.1
+Version:        1.1.2
 Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
@@ -38,7 +38,7 @@ scx_loader: A DBUS Interface for Managing sched_ext Schedulers
 %build
 export CARGO_HOME=%{_builddir}/.cargo
 cargo fetch --locked
-cargo build --release --frozen --all-features --workspace
+cargo build --release --frozen --workspace
 
 %install
 

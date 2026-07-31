@@ -11,6 +11,7 @@ Source0:        %{url}/archive/refs/tags/%{version}.tar.gz
 
 Requires:       zram-generator
 Requires:       lua-luv
+Requires:       systemd-resolved
 Provides:       zram-generator-defaults
 Provides:       kerver
 Conflicts:      zram-generator-defaults

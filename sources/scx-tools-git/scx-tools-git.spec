@@ -1,13 +1,13 @@
 %global _default_patch_fuzz 2
-%global commitdate 20260528
-%global commit 0e383bcd2889c91f8d5a0829f2944894c94708d8
+%global commitdate 20260729
+%global commit cda5debfdfd529ec9f6d314bf4ff2938d46c27a0
 %global revision 1
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
 
 Name:           scx-tools-git
-Version:        1.1.1.%{commitdate}.%{revision}.git.%{shortcommit}
+Version:        1.1.2.%{commitdate}.%{revision}.git.%{shortcommit}
 Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
@@ -41,7 +41,7 @@ scx_loader: A DBUS Interface for Managing sched_ext Schedulers
 %build
 export CARGO_HOME=%{_builddir}/.cargo
 cargo fetch --locked
-cargo build --release --frozen --all-features --workspace
+cargo build --release --frozen --workspace
 
 %install
 
