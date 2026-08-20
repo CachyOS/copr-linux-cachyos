@@ -6,12 +6,15 @@
 
 Name:           scx-scheds
 Version:        1.1.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Sched_ext Schedulers and Tools
 
 License:        GPL=2.0
 URL:            https://github.com/sched-ext/scx
 Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz
+# Hotfix PR#3755 for scx_cake. TODO: Remove on dot version bump.
+Patch0:         %{URL}/commit/6624f0f178e233b2f733825e5e08549048ca3700.diff
+Patch1:         %{URL}/commit/bdbf5eec541fdd48ed825d8e07cebdf5aad10e63.diff
 
 BuildRequires:  gcc
 BuildRequires:  git
@@ -51,7 +54,7 @@ Provides: rust-scx_utils-devel
 sched_ext is a Linux kernel feature which enables implementing kernel thread schedulers in BPF and dynamically loading them. This repository contains various scheduler implementations and support utilities.
 
 %prep
-%autosetup -n scx-%{version}
+%autosetup -n scx-%{version} -p1
 
 
 %build
