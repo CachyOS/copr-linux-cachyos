@@ -15,6 +15,7 @@ Source0:        %{URL}/archive/refs/tags/v%{version}.tar.gz
 # Hotfix PR#3755 for scx_cake. TODO: Remove on dot version bump.
 Patch0:         %{URL}/commit/6624f0f178e233b2f733825e5e08549048ca3700.diff
 Patch1:         %{URL}/commit/bdbf5eec541fdd48ed825d8e07cebdf5aad10e63.diff
+# Hotfix PR#3756 for scx_pandemonium. TODO: Remove on dot version bump.
 Patch2:         %{URL}/commit/18dbe236217a907a4f165bb89e8f75a3fda9ab46.diff
 
 BuildRequires:  gcc
