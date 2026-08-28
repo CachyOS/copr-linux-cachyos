@@ -357,7 +357,14 @@ Recommends:     linux-firmware
 
 %posttrans core
     rm -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{_kver}
-    if [ ! -e /run/ostree-booted ]; then
+    # Also skip in image builds (bootc-image-builder / buildah / plain
+    # container chroots): /run/ostree-booted only exists on a BOOTED ostree
+    # system, so it does not guard image builds, and kernel-install's grub2
+    # plugins then fail there with grub2-probe/grub2-editenv errors and a
+    # non-zero %posttrans (issue #96). /run/systemd/system exists on any
+    # systemd-booted host and is bind-mounted into anaconda's install chroot,
+    # but is absent in build containers.
+    if [ ! -e /run/ostree-booted ] && [ -d /run/systemd/system ]; then
         /bin/kernel-install add %{_kver} %{_kernel_dir}/vmlinuz || exit $?
         if [[ ! -e "/boot/symvers-%{_kver}.zst" ]]; then
             cp "%{_kernel_dir}/symvers.zst" "/boot/symvers-%{_kver}.zst"
