@@ -1,7 +1,7 @@
 %global _default_patch_fuzz 2
 %global commitdate 20260831
-%global commit 3a016947514bb8e6eefd6f1f913861dd8a667790
-%global revision 1
+%global commit 0d1df6a05bd040107dfcbcaeeaf359cc56e21cb6
+%global revision 2
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 %define _disable_source_fetch 0
@@ -69,6 +69,7 @@ cargo build \
      --workspace \
      --exclude scx_rlfifo \
      --exclude scx_mitosis \
+     --exclude scx_nitosis \
      --exclude xtask \
      --exclude scx_characterize \
      --exclude vmlinux_docify \
