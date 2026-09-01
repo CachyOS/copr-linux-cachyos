@@ -72,7 +72,7 @@
 Name:           kernel-cachyos%{?_lto_args:-lto}
 Summary:        Linux BORE %{?_lto_args:+ LTO }Cachy Sauce Kernel by CachyOS with other patches and improvements.
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyos1%{?_lto_args:.lto}%{?dist}
+Release:        cachyos2%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
@@ -183,6 +183,11 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
 
     %if %{_build_lto}
         scripts/config -e LTO_CLANG_THIN
+    %endif
+
+    %if 0%{?rhel}
+        # Ensure XFS is built for RHEL/AlmaLinux root filesystems
+        scripts/config -e XFS_FS -e XFS_QUOTA -e XFS_POSIX_ACL -e XFS_RT -e XFS_ONLINE_SCRUB -e XFS_ONLINE_REPAIR
     %endif
 
     %if %{_build_minimal}
