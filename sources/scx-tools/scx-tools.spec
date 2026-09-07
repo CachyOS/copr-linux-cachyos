@@ -5,7 +5,7 @@
 %endif
 
 Name:           scx-tools
-Version:        1.1.2
+Version:        1.1.3
 Release:        1%{?dist}
 Summary:        Sched_ext Tools
 
