@@ -6,7 +6,7 @@
 %endif
 
 Name: scx-manager
-Version: 1.15.12
+Version: 1.16.0
 Release: 1%{?dist}
 Summary: Simple GUI for managing sched-ext schedulers via scx_loader
 
