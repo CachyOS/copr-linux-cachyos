@@ -17,7 +17,7 @@
 
 %define _tarkver %{version}
 
-%define _tag cachyos-%{_tarkver}-1
+%define _tag cachyos-%{_tarkver}-3
 
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times
