@@ -11,13 +11,13 @@
 
 # Linux Kernel Versions
 %define _basekver 6.18
-%define _stablekver 51
+%define _stablekver 52
 %define _rpmver %{version}-%{release}
 %define _kver %{_rpmver}.%{_arch}
 
 %define _tarkver %{version}
 
-%define _tag cachyos-%{_tarkver}-3
+%define _tag cachyos-%{_tarkver}-1
 
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times
