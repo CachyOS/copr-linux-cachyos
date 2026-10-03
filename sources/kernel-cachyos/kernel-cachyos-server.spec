@@ -127,10 +127,6 @@ Source10:       https://github.com/NVIDIA/open-gpu-kernel-modules/archive/%{_nv_
 Patch0:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
-%if ! %{_build_lto} && 0%{?rhel} == 9
-Patch1:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
-%endif
-
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
 %endif

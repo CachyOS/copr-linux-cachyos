@@ -129,10 +129,6 @@ Patch0:         %{_patch_src}/sched/0001-bore-cachy.patch
 Patch1:         %{_patch_src}/misc/dkms-clang.patch
 %endif
 
-%if ! %{_build_lto} && 0%{?rhel} == 9
-Patch2:         https://raw.githubusercontent.com/CachyOS/copr-linux-cachyos/refs/heads/master/sources/patches/kernel-el9-ar-thin.patch
-%endif
-
 %if %{_build_nv}
 Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-by-default.patch
 %endif
