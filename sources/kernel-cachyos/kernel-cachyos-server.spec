@@ -17,7 +17,9 @@
 
 %define _tarkver %{version}
 
-%define _tag cachyos-%{_tarkver}-3
+# CachyOS Linux Kernel Release from https://github.com/CachyOS/linux/releases
+%define _cachyos_release 4
+%define _tag cachyos-%{_tarkver}-%{_cachyos_release}
 
 # Build a minimal a kernel via modprobed.db
 # file to reduce build times
@@ -71,7 +73,7 @@
 Name:           kernel-cachyos-server%{?_lto_args:-lto}
 Summary:        Linux %{?_lto_args:+ LTO }EEVDF scheduler Kernel by CachyOS targeted for Servers workloads
 Version:        %{_basekver}.%{_stablekver}
-Release:        cachyserver2%{?_lto_args:.lto}%{?dist}
+Release:        %{_cachyos_release}.cachyserver1%{?_lto_args:.lto}%{?dist}
 License:        GPL-2.0-only
 URL:            https://cachyos.org
 
