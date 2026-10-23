@@ -5,7 +5,7 @@
   <p align="center">Goodies from CachyOS ported to Fedora.</p>
 </div>
 
-This repository is maintained by [@andersrh](https://github.com/andersrh) and [@TrixieUA](https://github.com/TrixieUA).
+This repository is maintained by [@andersrh](https://github.com/andersrh), [@TrixieUA](https://github.com/TrixieUA) and [@mikaeldui](https://github.com/mikaeldui).
 
 - [Kernels](#-kernels)
   - [Features](#-features)
