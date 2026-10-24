@@ -154,9 +154,6 @@ Patch10:        %{_patch_src}/misc/nvidia/0001-Enable-atomic-kernel-modesetting-
     # Do not change the system's hostname
     scripts/config -u DEFAULT_HOSTNAME
 
-    # Disable PREEMP
-    scripts/config -d PREEMPT_DYNAMIC -d PREEMPT -d PREEMPT_VOLUNTARY -d PREEMPT_LAZY -e PREEMPT_NONE
-
     case %{_hz_tick} in
         100|250|300|500|600|750|1000)
             scripts/config -e HZ_%{_hz_tick} --set-val HZ %{_hz_tick};;
