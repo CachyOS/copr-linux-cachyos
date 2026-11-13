@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-ksm-settings
-Release:        3%{?dist}
+Release:        4%{?dist}
 Version:        1
 Summary:        Package for easy configuration of KSM via systemd
 URL:            https://github.com/CachyOS/CachyOS-PKGBUILDS
@@ -28,6 +28,7 @@ Requires:       systemd >= 256
     install -Dm644 %{SOURCE1} "%{buildroot}/%{_prefix}/lib/systemd/system/ly.service.d/10-ksm.conf"
     install -Dm644 %{SOURCE1} "%{buildroot}/%{_prefix}/lib/systemd/system/user@.service.d/10-ksm.conf"
     install -Dm644 %{SOURCE1} "%{buildroot}/%{_prefix}/lib/systemd/system/getty@.service.d/10-ksm.conf"
+    install -Dm644 %{SOURCE1} "%{buildroot}/%{_prefix}/lib/systemd/system/greetd.service.d/10-ksm.conf"
     install -Dm644 %{SOURCE0} "%{buildroot}/%{_prefix}/lib/tmpfiles.d/10-enable-ksm-by-default.conf"
     install -Dm755 %{SOURCE2} "%{buildroot}/%{_bindir}/ksmctl"
     install -Dm755 %{SOURCE3} "%{buildroot}/%{_bindir}/ksmstats"
