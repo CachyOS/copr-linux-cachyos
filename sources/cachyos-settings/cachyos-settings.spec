@@ -2,7 +2,7 @@
 %define debug_package %{nil}
 
 Name:           cachyos-settings
-Release:        1%{?dist}
+Release:        2%{?dist}
 Version:        1.4.5
 Summary:        CachyOS-Settings ported to Fedora
 License:        GPL-3.0-or-later
@@ -14,8 +14,10 @@ Requires:       lua-luv
 %if 0%{?fedora}
 Requires:       systemd-resolved
 %endif
+Provides:       systemd-oomd-defaults
 Provides:       zram-generator-defaults
 Provides:       kerver
+Conflicts:      systemd-oomd-defaults
 Conflicts:      zram-generator-defaults
 Obsoletes:      bore-sysctl
 
