@@ -18,7 +18,7 @@
 %define _tarkver %{version}
 
 # CachyOS Linux Kernel Release from https://github.com/CachyOS/linux/releases
-%define _cachyos_release 1
+%define _cachyos_release 2
 %define _tag cachyos-%{_tarkver}-%{_cachyos_release}
 
 # Build a minimal a kernel via modprobed.db
