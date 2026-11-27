@@ -1,0 +1,74 @@
+name: Update scx git packages
+
+on:
+  schedule:
+    - cron: "17 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out master
+        uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: Update upstream commits
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          git init --quiet "$tmpdir"
+
+          update_spec() {
+            local repository="$1"
+            local spec="$2"
+            local commit commitdate
+
+            git -C "$tmpdir" fetch --quiet --depth=1 \
+              "https://github.com/${repository}.git" HEAD
+            commit="$(git -C "$tmpdir" rev-parse FETCH_HEAD)"
+            commitdate="$(git -C "$tmpdir" show -s --format=%cs FETCH_HEAD | tr -d '-')"
+
+            python3 - "$spec" "$commitdate" "$commit" <<'PY'
+          import pathlib
+          import re
+          import sys
+
+          path = pathlib.Path(sys.argv[1])
+          commitdate, commit = sys.argv[2:]
+          content = path.read_text()
+
+          for name, value in (("commitdate", commitdate), ("commit", commit)):
+              content, replacements = re.subn(
+                  rf"(?m)^(%global {name} ).+$",
+                  rf"\g<1>{value}",
+                  content,
+              )
+              if replacements != 1:
+                  raise SystemExit(
+                      f"Expected exactly one %global {name} in {path}, found {replacements}"
+                  )
+
+          path.write_text(content)
+          PY
+          }
+
+          update_spec sched-ext/scx-loader sources/scx-tools-git/scx-tools-git.spec
+          update_spec sched-ext/scx sources/scx-scheds-git/scx-scheds-git.spec
+
+      - name: Commit and push updates
+        uses: iarekylew00t/verified-bot-commit@v2
+        with:
+          ref: refs/heads/master
+          message: "chore: update scx git package sources"
+          files: |
+            sources/scx-tools-git/scx-tools-git.spec
+            sources/scx-scheds-git/scx-scheds-git.spec
+          if-no-commit: info
